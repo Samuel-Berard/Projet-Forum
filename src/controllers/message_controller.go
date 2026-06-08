@@ -57,6 +57,12 @@ func (c *MessageController) CreateMessage(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	userID, err := strconv.Atoi(claims.UserID)
+	if err != nil {
+		helper.WriteError(w, http.StatusUnauthorized, "Identifiant utilisateur invalide")
+		return
+	}
+
 	
 	filID, err := readMessageId(r)
 	if err != nil {
@@ -70,7 +76,7 @@ func (c *MessageController) CreateMessage(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	msg, err := c.service.CreateMessage(req.Contenu, filID, claims.UserID)
+	msg, err := c.service.CreateMessage(req.Contenu, filID, userID)
 	if err != nil {
 		helper.WriteError(w, http.StatusBadRequest, err.Error())
 		return
@@ -89,6 +95,12 @@ func (c *MessageController) UpdateMessage(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	userID, err := strconv.Atoi(claims.UserID)
+	if err != nil {
+		helper.WriteError(w, http.StatusUnauthorized, "Identifiant utilisateur invalide")
+		return
+	}
+
 	idMessage, err := readMessageId(r)
 	if err != nil {
 		helper.WriteError(w, http.StatusBadRequest, "Identifiant du message invalide")
@@ -101,7 +113,7 @@ func (c *MessageController) UpdateMessage(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	err = c.service.UpdateMessage(idMessage, req.Contenu, claims.UserID)
+	err = c.service.UpdateMessage(idMessage, req.Contenu, userID)
 	if err != nil {
 		helper.WriteError(w, http.StatusForbidden, err.Error())
 		return
@@ -117,13 +129,19 @@ func (c *MessageController) DeleteMessage(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	userID, err := strconv.Atoi(claims.UserID)
+	if err != nil {
+		helper.WriteError(w, http.StatusUnauthorized, "Identifiant utilisateur invalide")
+		return
+	}
+
 	idMessage, err := readMessageId(r)
 	if err != nil {
 		helper.WriteError(w, http.StatusBadRequest, "Identifiant du message invalide")
 		return
 	}
 
-	err = c.service.DeleteMessage(idMessage, claims.UserID, claims.Role)
+	err = c.service.DeleteMessage(idMessage, userID, claims.Role)
 	if err != nil {
 		helper.WriteError(w, http.StatusForbidden, err.Error())
 		return
@@ -139,6 +157,12 @@ func (c *MessageController) React(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userID, err := strconv.Atoi(claims.UserID)
+	if err != nil {
+		helper.WriteError(w, http.StatusUnauthorized, "Identifiant utilisateur invalide")
+		return
+	}
+
 	idMessage, err := readMessageId(r)
 	if err != nil {
 		helper.WriteError(w, http.StatusBadRequest, "Identifiant du message invalide")
@@ -151,7 +175,7 @@ func (c *MessageController) React(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = c.service.ReactToMessage(claims.UserID, idMessage, req.Type)
+	err = c.service.ReactToMessage(userID, idMessage, req.Type)
 	if err != nil {
 		helper.WriteError(w, http.StatusBadRequest, err.Error())
 		return

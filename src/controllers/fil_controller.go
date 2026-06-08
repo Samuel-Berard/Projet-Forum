@@ -62,13 +62,19 @@ func (c *FilController) CreateFil(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userID, err := strconv.Atoi(claims.UserID)
+	if err != nil {
+		helper.WriteError(w, http.StatusUnauthorized, "Identifiant utilisateur invalide")
+		return
+	}
+
 	var req models.CreateFilRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		helper.WriteError(w, http.StatusBadRequest, "Requête invalide")
 		return
 	}
 
-	fil, err := c.service.CreateFil(req.Titre, claims.UserID, req.CategoriesID)
+	fil, err := c.service.CreateFil(req.Titre, userID, req.CategoriesID)
 	if err != nil {
 		helper.WriteError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -87,6 +93,12 @@ func (c *FilController) UpdateFil(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userID, err := strconv.Atoi(claims.UserID)
+	if err != nil {
+		helper.WriteError(w, http.StatusUnauthorized, "Identifiant utilisateur invalide")
+		return
+	}
+
 	idFil, err := readFilId(r)
 	if err != nil {
 		helper.WriteError(w, http.StatusBadRequest, "Identifiant du fil invalide")
@@ -99,7 +111,7 @@ func (c *FilController) UpdateFil(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = c.service.UpdateFil(idFil, req.Titre, claims.UserID, claims.Role)
+	err = c.service.UpdateFil(idFil, req.Titre, userID, claims.Role)
 	if err != nil {
 		helper.WriteError(w, http.StatusForbidden, err.Error())
 		return
@@ -115,13 +127,19 @@ func (c *FilController) DeleteFil(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userID, err := strconv.Atoi(claims.UserID)
+	if err != nil {
+		helper.WriteError(w, http.StatusUnauthorized, "Identifiant utilisateur invalide")
+		return
+	}
+
 	idFil, err := readFilId(r)
 	if err != nil {
 		helper.WriteError(w, http.StatusBadRequest, "Identifiant du fil invalide")
 		return
 	}
 
-	err = c.service.DeleteFil(idFil, claims.UserID, claims.Role)
+	err = c.service.DeleteFil(idFil, userID, claims.Role)
 	if err != nil {
 		helper.WriteError(w, http.StatusForbidden, err.Error())
 		return

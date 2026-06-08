@@ -2,10 +2,12 @@ package services
 
 import (
 	"errors"
+	"projet-forum/src/auth"
 	"projet-forum/src/models"
 	"projet-forum/src/repositories"
 	"projet-forum/src/utils"
 	"regexp"
+	"strconv"
 )
 
 type UtilisateurService struct {
@@ -54,7 +56,7 @@ func (s *UtilisateurService) Login(req *models.LoginRequest) (string, error) {
 		return "", errors.New("identifiants incorrects")
 	}
 
-	token, err := utils.GenerateJWT(user.ID, user.Username, user.Role)
+	token, err := auth.GenerateToken(strconv.Itoa(user.ID), user.Role)
 	if err != nil {
 		return "", errors.New("erreur lors de la génération du token")
 	}

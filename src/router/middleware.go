@@ -3,6 +3,7 @@ package router
 import (
 	"context"
 	"net/http"
+	"projet-forum/src/auth"
 	"projet-forum/src/helper"
 	"projet-forum/src/utils"
 	"strings"
@@ -23,7 +24,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		}
 
 		tokenString := parts[1]
-		claims, err := utils.ValidateJWT(tokenString)
+		claims, err := auth.ValidateToken(tokenString)
 		if err != nil {
 			helper.WriteError(w, http.StatusUnauthorized, "Token invalide ou expiré")
 			return

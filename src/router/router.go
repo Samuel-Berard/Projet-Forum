@@ -1,31 +1,20 @@
 package router
 
 import (
-	"database/sql"
 	"net/http"
 
 	"projet-forum/src/controllers"
 	"projet-forum/src/helper"
-	"projet-forum/src/repositories"
-	"projet-forum/src/services"
 
 	"github.com/gorilla/mux"
 )
 
-func NewRouter(db *sql.DB) *mux.Router {
+func NewRouter(
+	userController *controllers.UtilisateurController,
+	filController *controllers.FilController,
+	messageController *controllers.MessageController,
+) *mux.Router {
 	r := mux.NewRouter()
-
-	userRepo := repositories.NewUtilisateurRepository(db)
-	filRepo := repositories.NewFilRepository(db)
-	messageRepo := repositories.NewMessageRepository(db)
-
-	userService := services.NewUtilisateurService(userRepo)
-	filService := services.NewFilService(filRepo)
-	messageService := services.NewMessageService(messageRepo, filRepo)
-
-	userController := controllers.NewUtilisateurController(userService)
-	filController := controllers.NewFilController(filService)
-	messageController := controllers.NewMessageController(messageService)
 
 	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		helper.WriteJSON(w, http.StatusOK, map[string]string{"status": "ok"})
