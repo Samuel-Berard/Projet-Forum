@@ -1,24 +1,32 @@
 package router
 
 import (
+	"database/sql"
 	"net/http"
 
 	"projet-forum/src/controllers"
 	"projet-forum/src/helper"
+	"projet-forum/src/repositories"
+	"projet-forum/src/services"
 
 	"github.com/gorilla/mux"
 )
 
-// NewRouter reçoit les contrôleurs déjà initialisés par app.go
-func NewRouter(
-	userController *controllers.UtilisateurController,
-	filController *controllers.FilController,
-	messageController *controllers.MessageController,
-) *mux.Router {
-
+func NewRouter(db *sql.DB) *mux.Router {
 	r := mux.NewRouter()
 
-	// --- ROUTES PUBLIQUES ---
+	userRepo := repositories.NewUtilisateurRepository(db)
+	filRepo := repositories.NewFilRepository(db)
+	messageRepo := repositories.NewMessageRepository(db)
+
+	userService := services.NewUtilisateurService(userRepo)
+	filService := services.NewFilService(filRepo)
+	messageService := services.NewMessageService(messageRepo, filRepo)
+
+	userController := controllers.NewUtilisateurController(userService)
+	filController := controllers.NewFilController(filService)
+	messageController := controllers.NewMessageController(messageService)
+
 	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		helper.WriteJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 	}).Methods("GET")
@@ -30,7 +38,6 @@ func NewRouter(
 	r.HandleFunc("/threads/{id}", filController.GetFil).Methods("GET")
 	r.HandleFunc("/threads/{id}/messages", messageController.GetMessages).Methods("GET")
 
-	// --- ROUTES PROTÉGÉES (authentification requise) ---
 	api := r.PathPrefix("/api").Subrouter()
 	api.Use(AuthMiddleware)
 
@@ -43,7 +50,6 @@ func NewRouter(
 	api.HandleFunc("/messages/{id}", messageController.DeleteMessage).Methods("DELETE")
 	api.HandleFunc("/messages/{id}/react", messageController.React).Methods("POST")
 
-	// --- ROUTES ADMIN ---
 	admin := api.PathPrefix("/admin").Subrouter()
 	admin.Use(AdminMiddleware)
 	admin.HandleFunc("/threads/{id}/state", filController.ChangeState).Methods("PUT")
