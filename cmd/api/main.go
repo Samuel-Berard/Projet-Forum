@@ -1,16 +1,58 @@
-package api
+package main
 
 import (
+	"log"
 	"net/http"
+
+	"projet-forum/src/config"
+	"projet-forum/src/controllers"
+	"projet-forum/src/repositories"
+	"projet-forum/src/router"
+	"projet-forum/src/services"
+
+	"github.com/gorilla/mux"
 )
 
-func main() {
-	app := appInitApp()
-	defer app.Close()
+type App struct {
+	Router *mux.Router
+	Port   string
+}
 
-	logPrintf("Serveur lancé sur le port %d", app.Config.Port)
-	serverErr := http.ListenAndServe(":8080", app.Router)
+func InitApp() *App {
+
+	config.LoadEnv()
+
+	db := config.InitDB()
+
+	userRepo := repositories.NewUtilisateurRepository(db)
+	filRepo := repositories.NewFilRepository(db)
+	messageRepo := repositories.NewMessageRepository(db)
+
+	userService := services.NewUtilisateurService(userRepo)
+	filService := services.NewFilService(filRepo)
+	messageService := services.NewMessageService(messageRepo, filRepo)
+
+	userController := controllers.NewUtilisateurController(userService)
+	filController := controllers.NewFilController(filService)
+	messageController := controllers.NewMessageController(messageService)
+
+	r := router.NewRouter(userController, filController, messageController)
+
+	port := config.GetEnvWithDefault("PORT", "8080")
+
+	log.Printf("Serveur lancé sur le port %s", port)
+
+	return &App{
+		Router: r,
+		Port:   port,
+	}
+}
+
+func main() {
+	app := InitApp()
+
+	serverErr := http.ListenAndServe(":"+app.Port, app.Router)
 	if serverErr != nil {
-		logFatal("Erreur lors du démarrage du serveur: %v", serverErr)
+		log.Fatalf("Erreur lors du démarrage du serveur: %v", serverErr)
 	}
 }
