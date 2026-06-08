@@ -10,7 +10,7 @@ type Categorie struct {
 type FilDeDiscussion struct {
 	ID        int       `json:"id"`
 	Titre     string    `json:"titre"`
-	Etat      string    `json:"etat"` // ouvert, ferme, archive
+	Etat      string    `json:"etat"` 
 	AuteurID  int       `json:"auteur_id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`

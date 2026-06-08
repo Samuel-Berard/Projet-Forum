@@ -20,13 +20,13 @@ func NewMessageController(service *services.MessageService) *MessageController {
 	return &MessageController{service: service}
 }
 
-// readMessageId lit l'identifiant du message depuis l'URL (méthode du prof)
+
 func readMessageId(r *http.Request) (int, error) {
 	return strconv.Atoi(mux.Vars(r)["id"])
 }
 
 func (c *MessageController) GetMessages(w http.ResponseWriter, r *http.Request) {
-	// L'ID ici c'est celui du fil (route: /threads/{id}/messages)
+	
 	filID, err := readMessageId(r)
 	if err != nil {
 		helper.WriteError(w, http.StatusBadRequest, "Identifiant du fil invalide")
@@ -35,10 +35,10 @@ func (c *MessageController) GetMessages(w http.ResponseWriter, r *http.Request) 
 
 	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
 	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
-	sortBy := r.URL.Query().Get("sort") // "chronologique" ou "popularite"
+	sortBy := r.URL.Query().Get("sort") 
 
 	if sortBy == "" {
-		sortBy = "chronologique" // par défaut FT-8
+		sortBy = "chronologique" 
 	}
 
 	messages, err := c.service.GetMessagesByFil(filID, page, limit, sortBy)
@@ -57,7 +57,7 @@ func (c *MessageController) CreateMessage(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	// L'ID ici c'est celui du fil (route: /threads/{id}/messages)
+	
 	filID, err := readMessageId(r)
 	if err != nil {
 		helper.WriteError(w, http.StatusBadRequest, "Identifiant du fil invalide")

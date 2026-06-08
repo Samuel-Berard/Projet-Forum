@@ -34,7 +34,7 @@ func (r *UtilisateurRepository) FindByUsernameOrEmail(identifiant string) (*mode
 	row := r.db.QueryRow(query, identifiant, identifiant)
 
 	u := &models.Utilisateur{}
-	var createdAt []uint8 // Temporary handle for MySQL timestamp mapping to time.Time
+	var createdAt []uint8 
 	err := row.Scan(&u.ID, &u.Username, &u.Email, &u.PasswordHash, &u.Role, &u.Banned, &createdAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -42,8 +42,7 @@ func (r *UtilisateurRepository) FindByUsernameOrEmail(identifiant string) (*mode
 		}
 		return nil, err
 	}
-	// Note: We ignore createdAt parsing for simplicity here if not strictly needed, 
-	// or we can use time.Parse depending on MySQL driver config (parseTime=true).
+	
 	return u, nil
 }
 

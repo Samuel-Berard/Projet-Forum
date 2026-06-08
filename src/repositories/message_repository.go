@@ -91,7 +91,7 @@ func (r *MessageRepository) React(userID, messageID int, typeReaction string) er
 		return err
 	}
 
-	// Chercher s'il y a déjà une réaction
+	
 	var existType string
 	err = tx.QueryRow(`SELECT type FROM reactions WHERE utilisateur_id = ? AND message_id = ?`, userID, messageID).Scan(&existType)
 
@@ -102,7 +102,7 @@ func (r *MessageRepository) React(userID, messageID int, typeReaction string) er
 
 	scoreChange := 0
 	if err == sql.ErrNoRows {
-		// Nouvelle réaction
+	
 		_, err = tx.Exec(`INSERT INTO reactions (utilisateur_id, message_id, type) VALUES (?, ?, ?)`, userID, messageID, typeReaction)
 		if err != nil {
 			tx.Rollback()
@@ -115,20 +115,20 @@ func (r *MessageRepository) React(userID, messageID int, typeReaction string) er
 		}
 	} else {
 		if existType == typeReaction {
-			// L'utilisateur refait la même action : on pourrait annuler la réaction ou renvoyer une erreur
+			
 			tx.Rollback()
 			return errors.New("vous avez déjà réagi de cette manière à ce message")
 		} else {
-			// Change le like en dislike ou dislike en like
+			
 			_, err = tx.Exec(`UPDATE reactions SET type = ? WHERE utilisateur_id = ? AND message_id = ?`, typeReaction, userID, messageID)
 			if err != nil {
 				tx.Rollback()
 				return err
 			}
 			if typeReaction == "like" {
-				scoreChange = 2 // -1 -> +1
+				scoreChange = 2 
 			} else {
-				scoreChange = -2 // +1 -> -1
+				scoreChange = -2 
 			}
 		}
 	}

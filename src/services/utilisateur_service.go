@@ -17,13 +17,11 @@ func NewUtilisateurService(repo *repositories.UtilisateurRepository) *Utilisateu
 }
 
 func (s *UtilisateurService) Register(req *models.RegisterRequest) (*models.Utilisateur, error) {
-	// Validate password constraints
+	
 	if !isValidPassword(req.Password) {
 		return nil, errors.New("le mot de passe doit contenir au moins 12 caractères, une majuscule et un caractère spécial")
 	}
 
-	// Validate email and username (we can let DB handle uniqueness, but better check before if needed)
-	// For simplicity, we rely on DB unique constraints.
 
 	hashedPassword := utils.HashPasswordSHA512(req.Password)
 

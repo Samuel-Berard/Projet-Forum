@@ -20,7 +20,6 @@ func NewFilController(service *services.FilService) *FilController {
 	return &FilController{service: service}
 }
 
-// readFilId lit l'identifiant du fil depuis l'URL (méthode du prof)
 func readFilId(r *http.Request) (int, error) {
 	return strconv.Atoi(mux.Vars(r)["id"])
 }

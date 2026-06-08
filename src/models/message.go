@@ -22,7 +22,7 @@ type UpdateMessageRequest struct {
 }
 
 type ReactionRequest struct {
-	Type string `json:"type"` // "like" ou "dislike"
+	Type string `json:"type"` 
 }
 
 type Reaction struct {
