@@ -20,7 +20,6 @@ func NewUtilisateurController(service *services.UtilisateurService) *Utilisateur
 	return &UtilisateurController{service: service}
 }
 
-// readUtilisateurId lit l'identifiant de l'utilisateur depuis l'URL (méthode du prof)
 func readUtilisateurId(r *http.Request) (int, error) {
 	return strconv.Atoi(mux.Vars(r)["id"])
 }
