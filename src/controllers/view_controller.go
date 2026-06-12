@@ -16,7 +16,7 @@ func AfficherAccueil(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = tmpl.Execute(w, nil)
+	err = tmpl.ExecuteTemplate(w, "index", nil)
 	if err != nil {
 		http.Error(w, "Erreur lors de l'affichage de la page", http.StatusInternalServerError)
 	}
