@@ -5,26 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/static/css/login.css">
 </head>
 
 <body>
     <div class="main">
         <input type="checkbox" id="chk" aria-hidden="true">
         <div class="signup">
-            <form>
-                <label for="chk" aria-hidden="true">Sign up</label>
-                <input type="text" name="txt" placeholder="User name" required="">
+            <form action="/signup" method="POST">
+                <label for="chk" aria-hidden="true">S'inscrire</label>
+                <input type="text" name="username" placeholder="Nom d'utilisateur" required="">
                 <input type="email" name="email" placeholder="Email" required="">
-                <input type="password" name="pswd" placeholder="Password" required="">
-                <button>Sign up</button>
+                <input type="password" name="password" placeholder="Mot de passe" required=""
+                       minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+                       title="Doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre">
+                <span class="password-criteria">8 caractères min., 1 majuscule, 1 minuscule, 1 chiffre.</span>
+                <button type="submit">S'inscrire</button>
             </form>
         </div>
         <div class="login">
-            <form>
-                <label for="chk" aria-hidden="true">Login</label>
-                <input type="text" name="txt" placeholder="User name" required="">
-                <input type="password" name="pswd" placeholder="Password" required="">
-                <button>Login</button>
+            <form action="/login" method="POST">
+                <label for="chk" aria-hidden="true">Se connecter</label>
+                <input type="text" name="username" placeholder="Nom d'utilisateur ou Email" required="">
+                <input type="password" name="password" placeholder="Mot de passe" required="">
+                <button type="submit">Se connecter</button>
             </form>
         </div>
     </div>

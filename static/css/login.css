@@ -1,17 +1,122 @@
 body {
     margin: 0;
     padding: 0;
+    display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     font-family: 'Jost', sans-serif;
-    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    background-color: #22252a; /* Fond JVC */
+    color: #e0e0e0;
 }
 
 .main {
-    width: 350px;
-    height: 500px;
-    background: aqua;
+    width: 400px;
+    background: #2e3238; /* Block JVC */
+    border: 1px solid #4a4c4f;
     overflow: hidden;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0; /* Pas d'arrondi selon les specs JVC précédentes */
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
 }
+
+#chk {
+    display: none;
+}
+
+.signup, .login {
+    width: 100%;
+    transition: .5s ease-in-out;
+}
+
+label {
+    color: #fff;
+    font-size: 1.5em;
+    justify-content: center;
+    display: flex;
+    margin: 30px 0;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .5s ease-in-out;
+}
+
+.signup label {
+    color: #3d87f5; /* JVC text-primary */
+}
+
+input {
+    width: 70%;
+    height: 40px;
+    background: #272a30; /* JVC input bg */
+    color: #fff;
+    display: flex;
+    margin: 15px auto;
+    padding: 0 15px;
+    border: 1px solid #4a4c4f; /* JVC border */
+    outline: none;
+    border-radius: 0;
+}
+
+input:focus {
+    border-color: #9e9e9e;
+}
+
+.password-criteria {
+    width: 70%;
+    margin: 0 auto;
+    font-size: 0.75em;
+    color: #9e9e9e;
+    text-align: left;
+    display: block;
+}
+
+button {
+    width: 75%;
+    height: 40px;
+    margin: 30px auto;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 1em;
+    font-weight: bold;
+    background: #3d87f5; /* JVC text-primary */
+    outline: none;
+    border: none;
+    border-radius: 0;
+    transition: .2s ease-in;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #5596f6;
+}
+
+/* Mécanisme du toggle Login / Signup */
+.login {
+    background: #363e49; /* JVC block-even-bg */
+    transform: translateY(-90px);
+}
+
+.login label {
+    color: #fff;
+    transform: scale(.8);
+}
+
+#chk:checked ~ .login {
+    transform: translateY(-460px);
+}
+
+#chk:checked ~ .login label {
+    transform: scale(1);
+    color: #3d87f5;
+}
+
+#chk:checked ~ .signup label {
+    transform: scale(.8);
+    color: #fff;
+}
+
+
+
