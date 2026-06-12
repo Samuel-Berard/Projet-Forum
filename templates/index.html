@@ -5,832 +5,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forum Gaming — La communauté des joueurs</title>
-    <meta name="description"
-        content="Rejoignez la plus grande communauté de gamers francophones. Discutez de vos jeux préférés, partagez vos avis et retrouvez les dernières actualités gaming.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Condensed:wght@400;700&display=swap"
-        rel="stylesheet">
+    <title>Accueil</title>
     <link rel="stylesheet" href="/static/css/style.css">
-    <link rel="stylesheet" href="/static/css/home.css">
 </head>
 
 <body>
-
-    <!-- ===== NAVBAR STYLE JVC ===== -->
-    <header class="jv-header" id="main-navbar">
-
-        <!-- Barre principale -->
-        <div class="jv-topbar">
-            <div class="jv-topbar__inner">
-
-                <!-- Logo -->
-                <a href="/" class="jv-logo" id="site-logo" aria-label="Forum Gaming">
-                    <img src="/static/img/logo.png" alt="FG" class="jv-logo__img">
-                </a>
-
-                <!-- Navigation principale -->
-                <nav class="jv-nav" id="main-nav" aria-label="Navigation principale">
-                    <ul class="jv-nav__list">
-                        <li class="jv-nav__item">
-                            <a href="/jeux" class="jv-nav__link" id="nav-jeux">JEUX
-                                <svg class="jv-nav__caret" width="10" height="6" viewBox="0 0 10 6">
-                                    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none"
-                                        stroke-linecap="round" />
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="jv-nav__item">
-                            <a href="/news" class="jv-nav__link" id="nav-actu">ACTU GAMING
-                                <svg class="jv-nav__caret" width="10" height="6" viewBox="0 0 10 6">
-                                    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none"
-                                        stroke-linecap="round" />
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="jv-nav__item">
-                            <a href="/bons-plans" class="jv-nav__link" id="nav-bons-plans">BONS PLANS
-                                <svg class="jv-nav__caret" width="10" height="6" viewBox="0 0 10 6">
-                                    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none"
-                                        stroke-linecap="round" />
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="jv-nav__item">
-                            <a href="/tech" class="jv-nav__link" id="nav-tech">JVTECH
-                                <svg class="jv-nav__caret" width="10" height="6" viewBox="0 0 10 6">
-                                    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none"
-                                        stroke-linecap="round" />
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="jv-nav__item">
-                            <a href="/culture" class="jv-nav__link" id="nav-culture">CULTURE
-                                <svg class="jv-nav__caret" width="10" height="6" viewBox="0 0 10 6">
-                                    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none"
-                                        stroke-linecap="round" />
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="jv-nav__item">
-                            <a href="/videos" class="jv-nav__link" id="nav-videos">VID&Eacute;OS
-                                <svg class="jv-nav__caret" width="10" height="6" viewBox="0 0 10 6">
-                                    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none"
-                                        stroke-linecap="round" />
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="jv-nav__item jv-nav__item--accent">
-                            <a href="/forums" class="jv-nav__link" id="nav-forums">FORUMS
-                                <svg class="jv-nav__caret" width="10" height="6" viewBox="0 0 10 6">
-                                    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none"
-                                        stroke-linecap="round" />
-                                </svg>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-
-                <!-- Actions droite -->
-                <div class="jv-topbar__actions">
-                    <button class="jv-icon-btn" id="navbar-search-toggle" aria-label="Rechercher">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2.2">
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="m21 21-4.35-4.35" />
-                        </svg>
-                    </button>
-                    <a href="/login" class="jv-topbar__connexion" id="nav-login-btn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                            <circle cx="12" cy="7" r="4" />
-                        </svg>
-                        <span>CONNEXION</span>
-                    </a>
-                    <button class="jv-icon-btn" id="theme-toggle" aria-label="Mode sombre">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                        </svg>
-                    </button>
-                    <button class="navbar__burger" id="navbar-burger" aria-label="Menu" aria-expanded="false">
-                        <span></span><span></span><span></span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Barre de recherche escamotable -->
-            <div class="jv-search-drop" id="jv-search-drop" aria-hidden="true">
-                <div class="jv-search-drop__inner">
-                    <form action="/search" method="GET" id="navbar-search-form">
-                        <input type="text" name="q" id="navbar-search-input"
-                            placeholder="Rechercher un forum, un jeu, une news..." autocomplete="off">
-                        <button type="submit" id="navbar-search-btn" aria-label="Rechercher">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2.5">
-                                <circle cx="11" cy="11" r="8" />
-                                <path d="m21 21-4.35-4.35" />
-                            </svg>
-                        </button>
-                    </form>
-                </div>
-            </div>
+    <header>
+        <div class="header_top">
+            <nav class="navbar">
+                <ul>
+                    <li><a href="/">Accueil</a></li>
+                    <li><a href="/actus">Actus gaming</a></li>
+                    <li><a href="/jeux">Jeux</a></li>
+                    <li><a href="/video">Video</a></li>
+                    <li><a href="/forum">Forum</a></li>
+                </ul>
+                <a href="/login" class="btn-connect">Se connecter</a>
+            </nav>
         </div>
-
-        <!-- Sous-barre plateformes -->
-        <div class="jv-subbar" id="jv-subbar">
-            <div class="jv-subbar__inner">
-                <a href="/plateformes/pc" class="jv-subbar__link" id="sub-pc">PC</a>
-                <a href="/plateformes/ps5" class="jv-subbar__link" id="sub-ps5">PS5</a>
-                <a href="/plateformes/xbox" class="jv-subbar__link" id="sub-xbox">Xbox Series</a>
-                <a href="/plateformes/switch2" class="jv-subbar__link" id="sub-switch2">Switch 2</a>
-                <a href="/plateformes/ps4" class="jv-subbar__link" id="sub-ps4">PS4</a>
-                <a href="/plateformes/one" class="jv-subbar__link" id="sub-one">One</a>
-                <a href="/plateformes/switch" class="jv-subbar__link" id="sub-switch">Switch</a>
-                <a href="/plateformes/ios" class="jv-subbar__link" id="sub-ios">iOS</a>
-                <a href="/plateformes/android" class="jv-subbar__link" id="sub-android">Android</a>
-                <span class="jv-subbar__sep"></span>
-                <a href="/genres/mmo" class="jv-subbar__link" id="sub-mmo">MMO</a>
-                <a href="/genres/rpg" class="jv-subbar__link" id="sub-rpg">RPG</a>
-                <a href="/genres/fps" class="jv-subbar__link" id="sub-fps">FPS</a>
-            </div>
+    </header>
+    <header>
+        <div class="header_top">
+            <nav class="navbar-2">
+                <ul>
+                    <li><a href="/PC">PC</a></li>
+                    <li><a href="/PS5">PS5</a></li>
+                    <li><a href="/Xbox">Xbox series</a></li>
+                    <li><a href="/Switch">Switch 2</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
-    <!-- HERO BANNER -->
-    <div class="hero-banner">
-        <div class="hero-banner__inner">
-            <div class="hero-banner__content">
-                <h1 class="hero-banner__title">Bienvenue sur les Forums de <span class="hero-banner__highlight">Forum
-                        Gaming</span></h1>
-                <p class="hero-banner__sub">La communaut&eacute; francophone des passionn&eacute;s de jeux vid&eacute;o.
-                    D&eacute;bats, actualit&eacute;s, guides et bien plus.</p>
-                <form class="jv-main-search" action="/search" method="GET" id="hero-search-form">
-                    <input type="text" name="q" placeholder="Rechercher un forum" id="hero-search-input"
-                        autocomplete="off">
-                    <button type="submit" id="hero-search-btn" aria-label="Rechercher">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2.5">
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="m21 21-4.35-4.35" />
-                        </svg>
-                    </button>
-                </form>
-            </div>
-        </div>
+    <h1>Bienvenue sur notre site de jeux vidéo !</h1>
+    <p>Découvrez les dernières actualités, des vidéos test, preview, gameplay, nos soluces et participez à notre forum
+        pour échanger avec d'autres passionnés de gaming.</p>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Rechercher un jeu, une actu...">
+        <button type="submit">🔍 Rechercher</button>
     </div>
 
-    <!-- ===== MAIN LAYOUT ===== -->
-    <div class="page-layout">
-
-        <!-- ===== MAIN CONTENT ===== -->
-        <main class="page-layout__main" id="main-content">
-
-            <!-- TITRE DÉCORATIF STYLE JVC -->
-            <div class="jv-section-divider">
-                <span class="jv-section-divider__line"></span>
-                <span class="jv-section-divider__text">Forums de jeux</span>
-                <span class="jv-section-divider__line"></span>
-            </div>
-
-            <!-- CARROUSEL TOP FORUMS -->
-            <section class="content-block" id="top-forums-carousel">
-                <div class="content-block__header">
-                    <span class="content-block__icon">🏆</span>
-                    <h2 class="content-block__title">TOP FORUMS DE JEUX</h2>
-                </div>
-                <div class="jv-carousel-wrap">
-                    <button class="jv-carousel__btn jv-carousel__btn--prev" id="carousel-prev"
-                        aria-label="Précédent">&#8249;</button>
-                    <div class="jv-carousel__viewport" id="carousel-viewport">
-                        <div class="jv-carousel__track" id="carousel-track">
-
-                            <div class="jv-carousel__item">
-                                <a href="/forums/lol" class="jv-carousel__cover-link">
-                                    <span class="jv-carousel__rank">1</span>
-                                    <img src="https://static-cdn.jtvnw.net/ttv-boxart/League%20of%20Legends-272x380.jpg"
-                                        alt="League of Legends" class="jv-carousel__img" loading="lazy">
-                                </a>
-                                <span class="jv-carousel__name">League of Legends</span>
-                            </div>
-
-                            <div class="jv-carousel__item">
-                                <a href="/forums/genshin" class="jv-carousel__cover-link">
-                                    <span class="jv-carousel__rank">2</span>
-                                    <img src="https://static-cdn.jtvnw.net/ttv-boxart/Genshin%20Impact-272x380.jpg"
-                                        alt="Genshin Impact" class="jv-carousel__img" loading="lazy">
-                                </a>
-                                <span class="jv-carousel__name">Genshin Impact</span>
-                            </div>
-
-                            <div class="jv-carousel__item">
-                                <a href="/forums/fm26" class="jv-carousel__cover-link">
-                                    <span class="jv-carousel__rank">3</span>
-                                    <img src="https://static-cdn.jtvnw.net/ttv-boxart/Football%20Manager%202024-272x380.jpg"
-                                        alt="Football Manager 26" class="jv-carousel__img" loading="lazy">
-                                </a>
-                                <span class="jv-carousel__name">Football Manager 26</span>
-                            </div>
-
-                            <div class="jv-carousel__item">
-                                <a href="/forums/ff7" class="jv-carousel__cover-link">
-                                    <span class="jv-carousel__rank">4</span>
-                                    <img src="https://static-cdn.jtvnw.net/ttv-boxart/Final%20Fantasy%20XVI-272x380.jpg"
-                                        alt="Final Fantasy" class="jv-carousel__img" loading="lazy">
-                                </a>
-                                <span class="jv-carousel__name">Final Fantasy VII Revelation</span>
-                            </div>
-
-                            <div class="jv-carousel__item">
-                                <a href="/forums/sf6" class="jv-carousel__cover-link">
-                                    <span class="jv-carousel__rank">5</span>
-                                    <img src="https://static-cdn.jtvnw.net/ttv-boxart/Street%20Fighter%206-272x380.jpg"
-                                        alt="Street Fighter 6" class="jv-carousel__img" loading="lazy">
-                                </a>
-                                <span class="jv-carousel__name">Street Fighter VI</span>
-                            </div>
-
-                            <div class="jv-carousel__item">
-                                <a href="/forums/gtavi" class="jv-carousel__cover-link">
-                                    <span class="jv-carousel__rank">6</span>
-                                    <img src="https://static-cdn.jtvnw.net/ttv-boxart/Grand%20Theft%20Auto%20V-272x380.jpg"
-                                        alt="GTA" class="jv-carousel__img" loading="lazy">
-                                </a>
-                                <span class="jv-carousel__name">Grand Theft Auto VI</span>
-                            </div>
-
-                            <div class="jv-carousel__item">
-                                <a href="/forums/hsr" class="jv-carousel__cover-link">
-                                    <span class="jv-carousel__rank">7</span>
-                                    <img src="https://static-cdn.jtvnw.net/ttv-boxart/Honkai%3A%20Star%20Rail-272x380.jpg"
-                                        alt="Honkai Star Rail" class="jv-carousel__img" loading="lazy">
-                                </a>
-                                <span class="jv-carousel__name">Honkai : Star Rail</span>
-                            </div>
-
-                            <div class="jv-carousel__item">
-                                <a href="/forums/wuwa" class="jv-carousel__cover-link">
-                                    <span class="jv-carousel__rank">8</span>
-                                    <img src="https://static-cdn.jtvnw.net/ttv-boxart/Wuthering%20Waves-272x380.jpg"
-                                        alt="Wuthering Waves" class="jv-carousel__img" loading="lazy">
-                                </a>
-                                <span class="jv-carousel__name">Wuthering Waves</span>
-                            </div>
-
-                        </div>
-                    </div>
-                    <button class="jv-carousel__btn jv-carousel__btn--next" id="carousel-next"
-                        aria-label="Suivant">&#8250;</button>
-                </div>
-            </section>
-
-            <!-- HOT TOPICS -->
-            <section class="content-block" id="hot-topics">
-                <div class="content-block__header">
-                    <span class="content-block__icon">🔥</span>
-                    <h2 class="content-block__title">Sujets Populaires</h2>
-                    <a href="/forums" class="content-block__more">Voir tout</a>
-                </div>
-                <div class="forum-table-wrap">
-                    <table class="forum-table">
-                        <thead>
-                            <tr>
-                                <th>Sujet</th>
-                                <th>Forum</th>
-                                <th class="text-center">Rép.</th>
-                                <th class="text-center">Vues</th>
-                                <th class="text-right">Dernière activité</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="forum-table__row">
-                                <td><span class="topic-badge topic-badge--hot">HOT</span><a href="/threads/1"
-                                        class="topic-link">[Blabla] Le topic des gamers — édition été 2026</a></td>
-                                <td><span class="forum-tag">Général Jeux Vidéo</span></td>
-                                <td class="text-center text-muted">5 837</td>
-                                <td class="text-center text-muted">128 K</td>
-                                <td class="text-right text-muted text-sm">Il y a 2 min</td>
-                            </tr>
-                            <tr class="forum-table__row">
-                                <td><span class="topic-badge topic-badge--new">NEW</span><a href="/threads/2"
-                                        class="topic-link">Avis sur la Nintendo Switch 2 après 1 mois ?</a></td>
-                                <td><span class="forum-tag">Guerre des Consoles</span></td>
-                                <td class="text-center text-muted">213</td>
-                                <td class="text-center text-muted">14 K</td>
-                                <td class="text-right text-muted text-sm">Il y a 8 min</td>
-                            </tr>
-                            <tr class="forum-table__row">
-                                <td><a href="/threads/3" class="topic-link">Recherche joueurs pour file classée
-                                        Diamond+</a></td>
-                                <td><span class="forum-tag">League of Legends</span></td>
-                                <td class="text-center text-muted">170</td>
-                                <td class="text-center text-muted">8,3 K</td>
-                                <td class="text-right text-muted text-sm">Il y a 25 min</td>
-                            </tr>
-                            <tr class="forum-table__row">
-                                <td><span class="topic-badge topic-badge--hot">HOT</span><a href="/threads/4"
-                                        class="topic-link">GTA VI — date de sortie confirmée le 19 nov. 2026</a></td>
-                                <td><span class="forum-tag">GTA VI</span></td>
-                                <td class="text-center text-muted">4 201</td>
-                                <td class="text-center text-muted">310 K</td>
-                                <td class="text-right text-muted text-sm">Il y a 1 min</td>
-                            </tr>
-                            <tr class="forum-table__row">
-                                <td><a href="/threads/5" class="topic-link">Config PC gaming pour moins de 1000€ en 2026
-                                        ?</a></td>
-                                <td><span class="forum-tag">Hardware PC</span></td>
-                                <td class="text-center text-muted">89</td>
-                                <td class="text-center text-muted">5,6 K</td>
-                                <td class="text-right text-muted text-sm">Il y a 42 min</td>
-                            </tr>
-                            <tr class="forum-table__row">
-                                <td><span class="topic-badge topic-badge--new">NEW</span><a href="/threads/6"
-                                        class="topic-link">The Witcher IV — premières impressions après la démo</a></td>
-                                <td><span class="forum-tag">The Witcher IV</span></td>
-                                <td class="text-center text-muted">312</td>
-                                <td class="text-center text-muted">22 K</td>
-                                <td class="text-right text-muted text-sm">Il y a 15 min</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- CATEGORIES -->
-            <section class="content-block" id="categories">
-                <div class="content-block__header">
-                    <span class="content-block__icon">📂</span>
-                    <h2 class="content-block__title">Catégories Principales</h2>
-                </div>
-                <div class="category-grid">
-
-                    <a href="/category/jeux-video" class="category-card" id="cat-jeux-video">
-                        <div class="category-card__icon">🎮</div>
-                        <div class="category-card__body">
-                            <h3 class="category-card__title">Jeux Vidéo</h3>
-                            <p class="category-card__desc">RPG, FPS, Action, Indépendants, MOBA…</p>
-                            <span class="category-card__meta">2 410 forums · 3,8 M messages</span>
-                        </div>
-                        <span class="category-card__arrow">›</span>
-                    </a>
-
-                    <a href="/category/machines" class="category-card" id="cat-machines">
-                        <div class="category-card__icon">🖥️</div>
-                        <div class="category-card__body">
-                            <h3 class="category-card__title">Machines</h3>
-                            <p class="category-card__desc">PC, PS5, Xbox Series X, Switch 2…</p>
-                            <span class="category-card__meta">480 forums · 1,2 M messages</span>
-                        </div>
-                        <span class="category-card__arrow">›</span>
-                    </a>
-
-                    <a href="/category/informatique" class="category-card" id="cat-informatique">
-                        <div class="category-card__icon">💻</div>
-                        <div class="category-card__body">
-                            <h3 class="category-card__title">Informatique</h3>
-                            <p class="category-card__desc">Hardware, Programmation, Dépannage…</p>
-                            <span class="category-card__meta">310 forums · 740 K messages</span>
-                        </div>
-                        <span class="category-card__arrow">›</span>
-                    </a>
-
-                    <a href="/category/blabla" class="category-card" id="cat-blabla">
-                        <div class="category-card__icon">💬</div>
-                        <div class="category-card__body">
-                            <h3 class="category-card__title">Blabla</h3>
-                            <p class="category-card__desc">Discussion libre, humour, actualités…</p>
-                            <span class="category-card__meta">890 forums · 5,1 M messages</span>
-                        </div>
-                        <span class="category-card__arrow">›</span>
-                    </a>
-
-                    <a href="/category/cinema-series" class="category-card" id="cat-cinema">
-                        <div class="category-card__icon">🎬</div>
-                        <div class="category-card__body">
-                            <h3 class="category-card__title">Cinéma &amp; Séries</h3>
-                            <p class="category-card__desc">Films, Netflix, Disney+, Anime…</p>
-                            <span class="category-card__meta">220 forums · 620 K messages</span>
-                        </div>
-                        <span class="category-card__arrow">›</span>
-                    </a>
-
-                    <a href="/category/sport" class="category-card" id="cat-sport">
-                        <div class="category-card__icon">⚽</div>
-                        <div class="category-card__body">
-                            <h3 class="category-card__title">Sport</h3>
-                            <p class="category-card__desc">Football, F1, NBA, eSport…</p>
-                            <span class="category-card__meta">175 forums · 480 K messages</span>
-                        </div>
-                        <span class="category-card__arrow">›</span>
-                    </a>
-
-                </div>
-            </section>
-
-
-            <section class="content-block" id="recent-activity">
-                <div class="content-block__header">
-                    <span class="content-block__icon">⚡</span>
-                    <h2 class="content-block__title">Activité Récente</h2>
-                    <a href="/recent" class="content-block__more">Tout voir</a>
-                </div>
-                <div class="activity-feed">
-                    <div class="activity-item">
-                        <div class="activity-item__avatar">
-                            <img src="/static/img/user-svgrepo-com.svg" alt="Utilisateur"
-                                class="activity-item__avatar-img">
-                        </div>
-                        <div class="activity-item__body">
-                            <span class="activity-item__user">xXDarkGamerXx</span>
-                            <span class="activity-item__action">a répondu dans</span>
-                            <a href="/threads/4" class="activity-item__link">GTA VI — date de sortie confirmée</a>
-                        </div>
-                        <span class="activity-item__time">il y a 1 min</span>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-item__avatar">
-                            <img src="/static/img/user-svgrepo-com.svg" alt="Utilisateur"
-                                class="activity-item__avatar-img">
-                        </div>
-                        <div class="activity-item__body">
-                            <span class="activity-item__user">MarieLune92</span>
-                            <span class="activity-item__action">a créé</span>
-                            <a href="/threads/7" class="activity-item__link">Mon avis sur Elden Ring DLC — après 80h</a>
-                        </div>
-                        <span class="activity-item__time">il y a 5 min</span>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-item__avatar">
-                            <img src="/static/img/user-svgrepo-com.svg" alt="Utilisateur"
-                                class="activity-item__avatar-img">
-                        </div>
-                        <div class="activity-item__body">
-                            <span class="activity-item__user">ShadowPC</span>
-                            <span class="activity-item__action">a répondu dans</span>
-                            <a href="/threads/5" class="activity-item__link">Config PC gaming pour moins de 1000€</a>
-                        </div>
-                        <span class="activity-item__time">il y a 12 min</span>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-item__avatar">
-                            <img src="/static/img/user-svgrepo-com.svg" alt="Utilisateur"
-                                class="activity-item__avatar-img">
-                        </div>
-                        <div class="activity-item__body">
-                            <span class="activity-item__user">NinjaStriker</span>
-                            <span class="activity-item__action">a créé</span>
-                            <a href="/threads/8" class="activity-item__link">[Recrutement] Clan Call of Duty cherche
-                                membres sérieux</a>
-                        </div>
-                        <span class="activity-item__time">il y a 18 min</span>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-item__avatar">
-                            <img src="/static/img/user-svgrepo-com.svg" alt="Utilisateur"
-                                class="activity-item__avatar-img">
-                        </div>
-                        <div class="activity-item__body">
-                            <span class="activity-item__user">Luciole_77</span>
-                            <span class="activity-item__action">a répondu dans</span>
-                            <a href="/threads/6" class="activity-item__link">The Witcher IV — premières impressions
-                                après la démo</a>
-                        </div>
-                        <span class="activity-item__time">il y a 30 min</span>
-                    </div>
-                </div>
-            </section>
-
-        </main>
-
-
-        <aside class="page-layout__sidebar" id="sidebar">
-
-
-            <div class="side-module" id="side-latest-news">
-                <div class="side-module__header">
-                    <span class="side-module__icon">📰</span>
-                    <span class="side-module__title">Dernières actualités</span>
-                </div>
-                <div class="side-module__body">
-                    <div class="side-news-item">
-                        <div class="side-news-item__thumb"
-                            style="background-image: url('https://image.jeuxvideo.com/medias-sm/178110/1781100338-809-card.jpg')">
-                        </div>
-                        <div class="side-news-item__info">
-                            <a href="#" class="side-news-item__title">Ce gamer s'est monté un PC rétro dans un boîtier
-                                des années 90 : le résultat est très sexy</a>
-                            <span class="side-news-item__date">Il y a 38 minutes</span>
-                        </div>
-                    </div>
-                    <div class="side-news-item">
-                        <div class="side-news-item__thumb"
-                            style="background-image: url('https://image.jeuxvideo.com/medias-sm/178118/1781182434-3213-card.jpg')">
-                        </div>
-                        <div class="side-news-item__info">
-                            <a href="#" class="side-news-item__title">Switch 2 : le système de succès tant attendu n'est
-                                pas comme sur PS5 ou Xbox</a>
-                            <span class="side-news-item__date">Il y a 1 heure</span>
-                        </div>
-                    </div>
-                    <div class="side-news-item">
-                        <div class="side-news-item__thumb"
-                            style="background-image: url('https://image.jeuxvideo.com/medias-sm/178119/1781186248-942-card.jpg')">
-                        </div>
-                        <div class="side-news-item__info">
-                            <a href="#" class="side-news-item__title">Alice au pays des Merveilles rencontre Dark Souls
-                                : un jeu d'action qui tabasse</a>
-                            <span class="side-news-item__date">Il y a 2 heures</span>
-                        </div>
-                    </div>
-                    <div class="side-news-item">
-                        <div class="side-news-item__thumb"
-                            style="background-image: url('https://image.jeuxvideo.com/medias-sm/178119/1781194060-3302-card.jpg')">
-                        </div>
-                        <div class="side-news-item__info">
-                            <a href="#" class="side-news-item__title">1 an et 7 mois d'attente : les derniers épisodes
-                                arrivent en août 2026 sur Netflix</a>
-                            <span class="side-news-item__date">Il y a 3 heures</span>
-                        </div>
-                    </div>
-                    <div class="side-news-item">
-                        <div class="side-news-item__thumb"
-                            style="background-image: url('https://image.jeuxvideo.com/medias-sm/178108/1781077496-5180-card.jpg')">
-                        </div>
-                        <div class="side-news-item__info">
-                            <a href="#" class="side-news-item__title">La Logitech G Superlight 2 fracasse littéralement
-                                son tarif</a>
-                            <span class="side-news-item__date">Il y a 3 heures</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="side-module__footer">
-                    <a href="/news" class="side-module__cta">Toutes les actualités →</a>
-                </div>
-            </div>
-
-
-            <div class="side-module" id="side-top-games">
-                <div class="side-module__header">
-                    <span class="side-module__icon">🔥</span>
-                    <span class="side-module__title">Jeux les plus attendus</span>
-                </div>
-                <div class="side-module__body">
-                    <ol class="side-ranking">
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos side-ranking__pos--gold">1</span>
-                            <div class="side-ranking__body">
-                                <span class="side-ranking__name">Grand Theft Auto VI</span>
-                                <span class="side-ranking__date">19 nov. 2026</span>
-                            </div>
-                        </li>
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos side-ranking__pos--silver">2</span>
-                            <div class="side-ranking__body">
-                                <span class="side-ranking__name">God of War : Laufey</span>
-                                <span class="side-ranking__date">Date inconnue</span>
-                            </div>
-                        </li>
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos side-ranking__pos--bronze">3</span>
-                            <div class="side-ranking__body">
-                                <span class="side-ranking__name">The Witcher IV</span>
-                                <span class="side-ranking__date">Date inconnue</span>
-                            </div>
-                        </li>
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos">4</span>
-                            <div class="side-ranking__body">
-                                <span class="side-ranking__name">1666 Amsterdam</span>
-                                <span class="side-ranking__date">2026</span>
-                            </div>
-                        </li>
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos">5</span>
-                            <div class="side-ranking__body">
-                                <span class="side-ranking__name">Assassin's Creed Black Flag Resynced</span>
-                                <span class="side-ranking__date">09 juil. 2026</span>
-                            </div>
-                        </li>
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos">6</span>
-                            <div class="side-ranking__body">
-                                <span class="side-ranking__name">Gears of War : E-Day</span>
-                                <span class="side-ranking__date">06 oct. 2026</span>
-                            </div>
-                        </li>
-                    </ol>
-                </div>
-                <div class="side-module__footer">
-                    <a href="/jeux" class="side-module__cta">Voir le classement →</a>
-                </div>
-            </div>
-
-            <!-- TOP FORUMS -->
-            <div class="side-module" id="side-top-forums">
-                <div class="side-module__header">
-                    <span class="side-module__icon">🏆</span>
-                    <span class="side-module__title">Top des forums</span>
-                </div>
-                <div class="side-module__body">
-                    <ol class="side-ranking">
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos side-ranking__pos--gold">1</span>
-                            <div class="side-ranking__body">
-                                <a href="/forums/lol" class="side-ranking__name">League of Legends</a>
-                            </div>
-                        </li>
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos side-ranking__pos--silver">2</span>
-                            <div class="side-ranking__body">
-                                <a href="/forums/genshin" class="side-ranking__name">Genshin Impact</a>
-                            </div>
-                        </li>
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos side-ranking__pos--bronze">3</span>
-                            <div class="side-ranking__body">
-                                <a href="/forums/fm26" class="side-ranking__name">Football Manager 26</a>
-                            </div>
-                        </li>
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos">4</span>
-                            <div class="side-ranking__body">
-                                <a href="/forums/ff7" class="side-ranking__name">Final Fantasy VII Revelation</a>
-                            </div>
-                        </li>
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos">5</span>
-                            <div class="side-ranking__body">
-                                <a href="/forums/sf6" class="side-ranking__name">Street Fighter VI</a>
-                            </div>
-                        </li>
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos">6</span>
-                            <div class="side-ranking__body">
-                                <a href="/forums/gtavi" class="side-ranking__name">Grand Theft Auto VI</a>
-                            </div>
-                        </li>
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos">7</span>
-                            <div class="side-ranking__body">
-                                <a href="/forums/re" class="side-ranking__name">Resident Evil : Code Veronica (2027)</a>
-                            </div>
-                        </li>
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos">8</span>
-                            <div class="side-ranking__body">
-                                <a href="/forums/sc" class="side-ranking__name">Star Citizen — Squadron 42</a>
-                            </div>
-                        </li>
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos">9</span>
-                            <div class="side-ranking__body">
-                                <a href="/forums/hsr" class="side-ranking__name">Honkai : Star Rail</a>
-                            </div>
-                        </li>
-                        <li class="side-ranking__item">
-                            <span class="side-ranking__pos">10</span>
-                            <div class="side-ranking__body">
-                                <a href="/forums/wuwa" class="side-ranking__name">Wuthering Waves</a>
-                            </div>
-                        </li>
-                    </ol>
-                </div>
-                <div class="side-module__footer">
-                    <a href="/forums" class="side-module__cta">Tous les forums →</a>
-                </div>
-            </div>
-
-            <!-- DEALS SIDEBAR -->
-            <div class="side-module" id="side-deals">
-                <div class="side-module__header">
-                    <span class="side-module__icon">🏷️</span>
-                    <span class="side-module__title">Bons plans</span>
-                </div>
-                <div class="side-module__body">
-                    <div class="side-news-item">
-                        <div class="side-news-item__thumb"
-                            style="background-image: url('https://image.jeuxvideo.com/medias-sm/178111/1781106495-1433-card.jpg')">
-                        </div>
-                        <div class="side-news-item__info">
-                            <a href="#" class="side-news-item__title">Barre de son JBL Cinema SB550 avec 35% de
-                                réduction !</a>
-                            <span class="side-news-item__date">Il y a 2 heures</span>
-                        </div>
-                    </div>
-                    <div class="side-news-item">
-                        <div class="side-news-item__thumb"
-                            style="background-image: url('https://image.jeuxvideo.com/medias-sm/178108/1781077496-5180-card.jpg')">
-                        </div>
-                        <div class="side-news-item__info">
-                            <a href="#" class="side-news-item__title">Logitech G Superlight 2 — prix fracassé !</a>
-                            <span class="side-news-item__date">Il y a 3 heures</span>
-                        </div>
-                    </div>
-                    <div class="side-news-item">
-                        <div class="side-news-item__thumb"
-                            style="background-image: url('https://image.jeuxvideo.com/medias-sm/178108/1781080510-3556-card.jpg')">
-                        </div>
-                        <div class="side-news-item__info">
-                            <a href="#" class="side-news-item__title">Air Fryer Ninja Double Stack à -30%</a>
-                            <span class="side-news-item__date">Il y a 16 heures</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="side-module__footer">
-                    <a href="/bons-plans" class="side-module__cta">Tous les bons plans →</a>
-                </div>
-            </div>
-
-        </aside>
+    <div class="last-actus">
+        <h1>Dernières actualités :</h1>
+        <!-- FAIRE ENORME FONCTION GO GOUGOUGAGA POUR AFFICHER DERNIERE ACTUS -->
     </div>
 
+    <div class="top-forums">
+        <h1>Top forums :</h1>
+        <ul class="forum-list">
+            {{ if .TopForums }}
+            {{ range .TopForums }}
+            <li class="forum-item">
+                <a href="/threads/{{ .ID }}" class="forum-link">
+                    <span class="forum-title">{{ .Titre }}</span>
+                    {{ if eq .Etat "ferme" }}
+                    <span class="badge">Fermé</span>
+                    {{ end }}
+                </a>
+            </li>
+            {{ end }}
+            {{ else }}
+            <li>
+                <p>Aucun forum pour le moment.</p>
+            </li>
+            {{ end }}
+        </ul>
+    </div>
 
-    <footer class="site-footer" id="jv-footer">
-        <div class="site-footer__top">
-            <div class="site-footer__inner">
-                <div class="site-footer__col">
-                    <div class="site-footer__logo">
-                        <img src="/static/img/logo.png" alt="Forum Gaming" width="36">
-                        <span>Forum<strong>Gaming</strong></span>
+    <div class="footer_container">
+        <footer class="footer">
+            <div class="site-footer__top">
+                <div class="site-footer__inner">
+                    <div class="site-footer__col">
+                        <div class="site-footer__logo">
+                            <img src="/static/img/logo.png" alt="Forum Gaming" width="36">
+                            <span>Forum<strong>Gaming</strong></span>
+                        </div>
+                        <p class="site-footer__tagline">La communauté francophone des passionnés de jeux vidéo.</p>
+                        <div class="site-footer__socials">
+                            <a href="#" class="social-icon" aria-label="Facebook" id="footer-facebook">
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                                </svg>
+                            </a>
+                            <a href="#" class="social-icon" aria-label="Twitter/X" id="footer-twitter">
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                                    <path d="M4 4l16 16M4 20 20 4" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" fill="none" />
+                                </svg>
+                            </a>
+                            <a href="#" class="social-icon" aria-label="Discord" id="footer-discord">
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                                    <path
+                                        d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.04.001-.088-.041-.104a13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z" />
+                                </svg>
+                            </a>
+                            <a href="#" class="social-icon" aria-label="YouTube" id="footer-youtube">
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                                    <path
+                                        d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
+                                    <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#18191b" />
+                                </svg>
+                            </a>
+                        </div>
                     </div>
-                    <p class="site-footer__tagline">La communauté francophone des passionnés de jeux vidéo.</p>
-                    <div class="site-footer__socials">
-                        <a href="#" class="social-icon" aria-label="Facebook" id="footer-facebook">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                            </svg>
-                        </a>
-                        <a href="#" class="social-icon" aria-label="Twitter/X" id="footer-twitter">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                                <path d="M4 4l16 16M4 20 20 4" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" fill="none" />
-                            </svg>
-                        </a>
-                        <a href="#" class="social-icon" aria-label="Discord" id="footer-discord">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                                <path
-                                    d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.04.001-.088-.041-.104a13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z" />
-                            </svg>
-                        </a>
-                        <a href="#" class="social-icon" aria-label="YouTube" id="footer-youtube">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                                <path
-                                    d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
-                                <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#18191b" />
-                            </svg>
-                        </a>
+
+                    <div class="site-footer__col">
+                        <h4 class="site-footer__heading">Navigation</h4>
+                        <ul class="site-footer__links">
+                            <li><a href="/">Accueil</a></li>
+                            <li><a href="/forums">Forums</a></li>
+                            <li><a href="/news">Actualités</a></li>
+                            <li><a href="/jeux">Jeux</a></li>
+                            <li><a href="/guides">Guides</a></li>
+                        </ul>
                     </div>
-                </div>
 
-                <div class="site-footer__col">
-                    <h4 class="site-footer__heading">Navigation</h4>
-                    <ul class="site-footer__links">
-                        <li><a href="/">Accueil</a></li>
-                        <li><a href="/forums">Forums</a></li>
-                        <li><a href="/news">Actualités</a></li>
-                        <li><a href="/jeux">Jeux</a></li>
-                        <li><a href="/guides">Guides</a></li>
-                    </ul>
-                </div>
+                    <div class="site-footer__col">
+                        <h4 class="site-footer__heading">Top Forums</h4>
+                            <ul class="forum-list-footer">
+                                {{ if .TopForums }}
+                                {{ range .TopForums }}
+                                <li class="forum-item-footer">
+                                    <a href="/threads/{{ .ID }}" class="forum-link-footer">
+                                        <span class="forum-title">{{ .Titre }}</span>
+                                        {{ if eq .Etat "ferme" }}
+                                        <span class="badge">Fermé</span>
+                                        {{ end }}
+                                    </a>
+                                </li>
+                                {{ end }}
+                                {{ else }}
+                                <li>
+                                    <p>Aucun forum pour le moment.</p>
+                                </li>
+                                {{ end }}
+                            </ul>
+                    </div>
 
-                <div class="site-footer__col">
-                    <h4 class="site-footer__heading">Top Forums</h4>
-                    <ul class="site-footer__links">
-                        <li><a href="/forums/lol">League of Legends</a></li>
-                        <li><a href="/forums/gtavi">Grand Theft Auto VI</a></li>
-                        <li><a href="/forums/genshin">Genshin Impact</a></li>
-                        <li><a href="/forums/hsr">Honkai : Star Rail</a></li>
-                        <li><a href="/forums/sf6">Street Fighter VI</a></li>
-                    </ul>
-                </div>
-
-                <div class="site-footer__col">
-                    <h4 class="site-footer__heading">Informations</h4>
-                    <ul class="site-footer__links">
-                        <li><a href="/contact">Contact</a></li>
-                        <li><a href="/cgu">C.G.U.</a></li>
-                        <li><a href="/privacy">Confidentialité</a></li>
-                        <li><a href="/moderation">Modération</a></li>
-                        <li><a href="/newsletter">Newsletter</a></li>
-                    </ul>
+                    <div class="site-footer__col">
+                        <h4 class="site-footer__heading">Informations</h4>
+                        <ul class="site-footer__links">
+                            <li><a href="/contact">Contact</a></li>
+                            <li><a href="/cgu">C.G.U.</a></li>
+                            <li><a href="/privacy">Confidentialité</a></li>
+                            <li><a href="/moderation">Modération</a></li>
+                            <li><a href="/newsletter">Newsletter</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="site-footer__bottom">
-            <span>© 2026 Forum Gaming. Tous droits réservés.</span>
-            <div class="site-footer__bottom-links">
-                <a href="/cgu">C.G.U.</a>
-                <a href="/privacy">Confidentialité</a>
-                <a href="/cookies">Cookies</a>
+            <div class="site-footer__bottom">
+                <span>© 2026 Forum Gaming. Tous droits réservés. Inspiré de <a href="https://www.jeuxvideo.com/"
+                        target="_blank" rel="noopener">jeuxvideo.com</a>.
+                </span>
+                <div class="site-footer__bottom-links">
+                    <a href="/cgu">C.G.U.</a>
+                    <a href="/privacy">Confidentialité</a>
+                    <a href="/cookies">Cookies</a>
+                </div>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
-    <script src="/static/js/home.js"></script>
+    <script src="/static/js/main.js"></script>
 </body>
 
 </html>
+
 {{end}}

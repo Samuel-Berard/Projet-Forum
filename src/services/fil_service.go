@@ -45,6 +45,26 @@ func (s *FilService) GetFils(page, limit int, search string, categoryID int) ([]
 	return s.repo.FindAll(page, limit, search, categoryID)
 }
 
+func (s *FilService) GetTotalPages(limit int, search string, categoryID int) (int, error) {
+	if limit <= 0 {
+		limit = 10
+	}
+	totalFils, err := s.repo.CountAll(search, categoryID)
+	if err != nil {
+		return 0, err
+	}
+	
+	totalPages := totalFils / limit
+	if totalFils % limit > 0 {
+		totalPages++
+	}
+	
+	if totalPages == 0 {
+		totalPages = 1
+	}
+	return totalPages, nil
+}
+
 func (s *FilService) GetFilByID(id int) (*models.FilDeDiscussion, error) {
 	fil, err := s.repo.FindByID(id)
 	if err != nil {

@@ -95,6 +95,34 @@ func (r *FilRepository) FindAll(page, limit int, search string, categoryID int) 
 	return fils, nil
 }
 
+func (r *FilRepository) CountAll(search string, categoryID int) (int, error) {
+	args := []interface{}{}
+	query := `SELECT COUNT(DISTINCT f.id) FROM fils_de_discussion f`
+
+	if categoryID > 0 {
+		query += ` INNER JOIN fils_categories fc ON f.id = fc.fil_id `
+	}
+
+	query += ` WHERE f.etat != 'archive' `
+
+	if search != "" {
+		query += ` AND f.titre LIKE ? `
+		args = append(args, "%"+search+"%")
+	}
+
+	if categoryID > 0 {
+		query += ` AND fc.categorie_id = ? `
+		args = append(args, categoryID)
+	}
+
+	var count int
+	err := r.db.QueryRow(query, args...).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
 func (r *FilRepository) FindByID(id int) (*models.FilDeDiscussion, error) {
 	query := `SELECT id, titre, etat, auteur_id, created_at, updated_at FROM fils_de_discussion WHERE id = ?`
 	row := r.db.QueryRow(query, id)

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="container_main">
+            <div class="forum_col">
+                <div class="container_nav_top">
+                    <a href="" class="backTo">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span class="backTo_text">Retour au forum principal</span>
+                    </a>
+                </div>
+                <div class="Title_message">
+                    <div class="Title_message_header">
+                        <h2 class="Title_message_title">Forum</h2>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="forum-actions-bar">
+            <div class="forum-actions-inner">
+                <button class="btn-new-topic" type="button">
+                    <i class="icon-new-topic"></i>
+                    <div class="btn-text">Nouv Sujet</div>
+                </button>
+                <form class="forum-search-form">
+                    <div class="search-select-wrapper">
+                        <select class="search-select">
+                            <option value="topics">Sujet</option>
+                            <option value="authors">Auteur</option>
+                            <option value="messages">Message</option>
+                        </select>
+                    </div>
+                    <div class="search-input-wrapper">
+                        <input class="search-input" type="text" placeholder="Rechercher dans le forum" id="search"
+                            name="q" autocomplete="off" value="">
+                    </div>
+                    <button class="search-btn" type="submit">
+                        <span class="icon-search"></span>
+                    </button>
+                </form>
+                <button class="btn-refresh" type="button">
+                    <i class="icon-refresh"></i>
+                    <div class="btn-text">Actualiser</div>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="forum-table-wrap">
+        <table class="forum-table">
+            <thead>
+                <tr>
+                    <th>Sujet</th>
+                    <th>Auteur</th>
+                    <th>Date</th>
+                    <th>État</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ if .Fils }}
+                {{ range .Fils }}
+                <tr>
+                    <td><a href="/threads/{{ .ID }}">{{ .Titre }}</a></td>
+                    <td>{{ if .Auteur }}{{ .Auteur.NomUtilisateur }}{{ else }}Inconnu{{ end }}</td>
+                    <td>{{ .CreatedAt.Format "02/01/2006 15:04" }}</td>
+                    <td>{{ .Etat }}</td>
+                </tr>
+                {{ end }}
+                {{ else }}
+                <tr>
+                    <td colspan="4" style="text-align: center;">Aucun sujet trouvé.</td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination-container">
+        <div class="pagination">
+            <nav class="pagination-nav">
+                {{ if .HasPrev }}
+                <a href="/forums?page={{ .PrevPage }}" class="page-prev">
+                    <i class="icon-arrow-left"></i>
+                </a>
+                {{ else }}
+                <span class="page-prev disabled">
+                    <i class="icon-arrow-left"></i>
+                </span>
+                {{ end }}
+
+                <div class="page-dropdown">
+                    <button class="page-current" type="button">{{ .Page }}</button>
+                    <div class="page-dropdown-wrapper">
+                        <div class="page-dropdown-list">
+                            {{ range .Pages }}
+                            {{ if eq . $.Page }}
+                            <span class="page-item current">{{ . }}</span>
+                            {{ else }}
+                            <a href="/forums?page={{ . }}" class="page-item">{{ . }}</a>
+                            {{ end }}
+                            {{ end }}
+                        </div>
+                    </div>
+                </div>
+
+                <span class="page-more">
+                    <i class="icon-more"></i>
+                </span>
+
+                <a href="/forums?page={{ .TotalPages }}" class="page-last">{{ .TotalPages }}</a>
+
+                {{ if .HasNext }}
+                <a href="/forums?page={{ .NextPage }}" class="page-next">
+                    <i class="icon-arrow-right"></i>
+                </a>
+                {{ else }}
+                <span class="page-next disabled">
+                    <i class="icon-arrow-right"></i>
+                </span>
+                {{ end }}
+            </nav>
+        </div>
+    </div>
+
+    <div class="topic-editor-container">
+        <div id="topic-editor">
+            <div class="editor-box">
+                <div class="editor-title">Nouveau sujet</div>
+                <form>
+                    <div class="input-group">
+                        <input tabindex="1" name="input-topic-title" id="input-topic-title" type="text"
+                            placeholder="Saisir le titre du sujet" class="input-title" maxlength="100" value="">
+                    </div>
+                    <div class="editor-main">
+                        <textarea tabindex="1" name="message_topic" id="message_topic" class="input-textarea"
+                            placeholder="Écris ton message ici..." style="height: 160px;"></textarea>
+                        <div class="editor-toolbar">
+                            <div class="toolbar-actions">
+                                <div class="toolbar-group">
+                                    <button class="toolbar-btn" type="button" title="Gras"><span
+                                            class="icon-bold"></span></button>
+                                    <button class="toolbar-btn" type="button" title="Italique"><span
+                                            class="icon-italic"></span></button>
+                                    <button class="toolbar-btn" type="button" title="Souligné"><span
+                                            class="icon-underline"></span></button>
+                                    <button class="toolbar-btn" type="button" title="Barré"><span
+                                            class="icon-strike"></span></button>
+                                </div>
+                                <div class="toolbar-group">
+                                    <button class="toolbar-btn" type="button" title="Liste"><span
+                                            class="icon-list"></span></button>
+                                    <button class="toolbar-btn" type="button" title="Listes numérotées"><span
+                                            class="icon-numbered-list"></span></button>
+                                    <button class="toolbar-btn" type="button" title="Citation"><span
+                                            class="icon-quotes"></span></button>
+                                    <button class="toolbar-btn" type="button" title="Code"><span
+                                            class="icon-code"></span></button>
+                                    <button class="toolbar-btn" type="button" title="Spoiler"><span
+                                            class="icon-spoiler"></span></button>
+                                </div>
+                                <div class="toolbar-group">
+                                    <button class="toolbar-btn" type="button" title="Smileys"><span
+                                            class="icon-smiley"></span></button>
+                                    <button class="toolbar-btn" type="button" title="Image"><span
+                                            class="icon-image"></span></button>
+                                    <button class="toolbar-btn" type="button" title="Vidéo"><span
+                                            class="icon-video"></span></button>
+                                </div>
+                                <div class="toolbar-preview">
+                                    <div class="preview-label">Prévisu</div>
+                                    <button type="button" class="btn-switch active"><span
+                                            class="switch-caret"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="editor-preview-box"></div>
+                    <div class="editor-submit">
+                        <button class="btn-submit" tabindex="3" type="button">
+                            <span class="submit-label">Poster</span>
+                            <i class="icon-send"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

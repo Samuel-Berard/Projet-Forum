@@ -13,11 +13,12 @@ func NewRouter(
 	userController *controllers.UtilisateurController,
 	filController *controllers.FilController,
 	messageController *controllers.MessageController,
-
+	viewController *controllers.ViewController,
 ) *mux.Router {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/", controllers.AfficherAccueil).Methods("GET")
+	r.HandleFunc("/", viewController.AfficherAccueil).Methods("GET")
+	r.HandleFunc("/forum", viewController.AfficherForum).Methods("GET")
 
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 

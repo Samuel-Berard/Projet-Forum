@@ -35,8 +35,9 @@ func InitApp() *App {
 	userController := controllers.NewUtilisateurController(userService)
 	filController := controllers.NewFilController(filService)
 	messageController := controllers.NewMessageController(messageService)
+	viewController := controllers.NewViewController(filService)
 
-	r := router.NewRouter(userController, filController, messageController)
+	r := router.NewRouter(userController, filController, messageController, viewController)
 
 	port := config.GetEnvWithDefault("PORT", "8080")
 
