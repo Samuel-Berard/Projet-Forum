@@ -8,14 +8,14 @@ type Categorie struct {
 }
 
 type FilDeDiscussion struct {
-	ID        int       `json:"id"`
-	Titre     string    `json:"titre"`
-	Etat      string    `json:"etat"` 
-	AuteurID  int       `json:"auteur_id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Auteur    *Utilisateur `json:"auteur,omitempty"`
-	Categories []Categorie `json:"categories,omitempty"`
+	ID         int          `json:"id"`
+	Titre      string       `json:"titre"`
+	Etat       string       `json:"etat"`
+	AuteurID   int          `json:"auteur_id"`
+	CreatedAt  time.Time    `json:"created_at"`
+	UpdatedAt  time.Time    `json:"updated_at"`
+	Auteur     *Utilisateur `json:"auteur,omitempty"`
+	Categories []Categorie  `json:"categories,omitempty"`
 }
 
 type CreateFilRequest struct {
