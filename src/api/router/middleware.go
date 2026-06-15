@@ -3,9 +3,9 @@ package router
 import (
 	"context"
 	"net/http"
-	"projet-forum/src/auth"
-	"projet-forum/src/helper"
-	"projet-forum/src/utils"
+	"projet-forum/src/api/auth"
+	"projet-forum/src/api/helper"
+	"projet-forum/src/api/utils"
 	"strings"
 )
 
