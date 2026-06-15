@@ -1,38 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+   <html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/static/css/login.css">
-</head>
+  
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
 
-<body>
-    <div class="main">
-        <input type="checkbox" id="chk" aria-hidden="true">
-        <div class="signup">
-            <form action="/signup" method="POST">
-                <label for="chk" aria-hidden="true">S'inscrire</label>
-                <input type="text" name="username" placeholder="Nom d'utilisateur" required="">
-                <input type="email" name="email" placeholder="Email" required="">
-                <input type="password" name="password" placeholder="Mot de passe" required=""
-                       minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
-                       title="Doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre">
-                <span class="password-criteria">8 caractères min., 1 majuscule, 1 minuscule, 1 chiffre.</span>
-                <button type="submit">S'inscrire</button>
-            </form>
-        </div>
-        <div class="login">
-            <form action="/login" method="POST">
-                <label for="chk" aria-hidden="true">Se connecter</label>
-                <input type="text" name="username" placeholder="Nom d'utilisateur ou Email" required="">
-                <input type="password" name="password" placeholder="Mot de passe" required="">
-                <button type="submit">Se connecter</button>
-            </form>
-        </div>
-    </div>
+  
+      <link rel="stylesheet" href="/static/css/login.css">
 
-</body>
+      <title>Responsive login form with gsap - Bedimcode</title>
+   </head>
+   <body>
+      <section class="login">
+         <div class="login__content">
+            <div>
+               <h2 class="login__title">Welcome back</h2>
+      
+               <form action="" method="post" class="login__form">
+                  <div class="login__group">
+                     <div class="login__box">
+                        <i class="ri-mail-fill login__icon"></i>
+                        <input type="email" name="email" autocomplete="email" required placeholder=" " class="login__input" id="email">
+                        <label for="email" class="login__label">Email</label>
+                     </div>
+                     
+                     <div class="login__box">
+                        <i class="ri-lock-2-fill login__icon"></i>
+                        <input type="password" name="password" autocomplete="current-password" required placeholder=" " class="login__input" id="password">
+                        <label for="password" class="login__label">Password</label>
+                     </div>
+                  </div>
+   
+                  <a href="#" class="login__forgot">Forgot Password?</a>
+   
+                  <button type="submit" class="login__button">
+                     Log In <i class="ri-send-plane-2-fill"></i>
+                  </button>
+   
+                  <p class="login__sign">
+                     Don't have an account? <a href="#">Sign Up</a>
+                  </p>
+               </form>
+            </div>
 
+            <div class="login__image">
+               <img src="/static/img/image_back.png" alt="" class="login__img">
+            </div>
+         </div>
+      </section>
+
+   
+      <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
+
+     
+      <script src="assets/js/main.js"></script>
+   </body>
 </html>

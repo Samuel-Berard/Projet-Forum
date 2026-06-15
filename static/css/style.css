@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&family=Roboto+Condensed:wght@400;700&display=swap');
 
-/*j'espere tu capte le root t pas con */
+
 *,
 *::before,
 *::after {
@@ -12,7 +12,7 @@
 
 :root {
 
-    /* Couleurs JVC dark (source: inspecteur JVC) */
+
     --color-bg-body:          #22252a;
     --color-bg-surface:       #2e3238;
     --color-bg-block:         #2e3238;
