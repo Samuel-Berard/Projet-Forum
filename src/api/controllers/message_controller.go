@@ -3,10 +3,10 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
-	"projet-forum/src/helper"
+	"projet-forum/src/api/helper"
 	"projet-forum/src/models"
-	"projet-forum/src/services"
-	"projet-forum/src/utils"
+	"projet-forum/src/api/services"
+	"projet-forum/src/api/utils"
 	"strconv"
 
 	"github.com/gorilla/mux"

@@ -2,7 +2,7 @@ package utils
 
 import (
 	"net/http"
-	"projet-forum/src/auth"
+	"projet-forum/src/api/auth"
 )
 
 type contextKey string

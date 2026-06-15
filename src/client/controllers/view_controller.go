@@ -4,22 +4,22 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"projet-forum/src/client/services"
 	"projet-forum/src/models"
-	"projet-forum/src/services"
 	"strconv"
 )
 
 type ViewController struct {
-	filService *services.FilService
+	forumService *services.ForumClientService
 }
 
-func NewViewController(filService *services.FilService) *ViewController {
-	return &ViewController{filService: filService}
+func NewViewController(forumService *services.ForumClientService) *ViewController {
+	return &ViewController{forumService: forumService}
 }
 
 type AccueilData struct {
 	TopForums []models.FilDeDiscussion
-	LastActus []models.Actualite
+	LastActus []models.FilDeDiscussion
 }
 
 func (c *ViewController) AfficherAccueil(w http.ResponseWriter, r *http.Request) {
@@ -31,9 +31,13 @@ func (c *ViewController) AfficherAccueil(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	fils, _ := c.filService.GetFils(1, 10, "", 0)
-	lastActus, _ := c.filService.GetLastActus(10)
+	res, err := c.forumService.GetFils(1, 10)
+	var fils []models.FilDeDiscussion
+	if err == nil && res != nil {
+		fils = res.Fils
+	}
 
+	lastActus, _ := c.forumService.GetLastActus(10)
 
 	data := AccueilData{
 		TopForums: fils,
@@ -71,8 +75,17 @@ func (c *ViewController) AfficherForum(w http.ResponseWriter, r *http.Request) {
 	}
 
 	limit := 20
-	fils, _ := c.filService.GetFils(page, limit, "", 0)
-	totalPages, _ := c.filService.GetTotalPages(limit, "", 0)
+	res, err := c.forumService.GetFils(page, limit)
+	
+	var fils []models.FilDeDiscussion
+	totalPages := 1
+	
+	if err == nil && res != nil {
+		fils = res.Fils
+		if res.TotalPages > 0 {
+			totalPages = res.TotalPages
+		}
+	}
 
 	var pages []int
 	for i := 1; i <= totalPages; i++ {

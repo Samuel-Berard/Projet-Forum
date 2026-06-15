@@ -4,11 +4,11 @@ import (
 	"log"
 	"net/http"
 
-	"projet-forum/src/config"
-	"projet-forum/src/controllers"
-	"projet-forum/src/repositories"
-	"projet-forum/src/router"
-	"projet-forum/src/services"
+	"projet-forum/src/api/config"
+	"projet-forum/src/api/controllers"
+	"projet-forum/src/api/repositories"
+	"projet-forum/src/api/router"
+	"projet-forum/src/api/services"
 
 	"github.com/gorilla/mux"
 )
@@ -35,9 +35,8 @@ func InitApp() *App {
 	userController := controllers.NewUtilisateurController(userService)
 	filController := controllers.NewFilController(filService)
 	messageController := controllers.NewMessageController(messageService)
-	viewController := controllers.NewViewController(filService)
 
-	r := router.NewRouter(userController, filController, messageController, viewController)
+	r := router.NewRouter(userController, filController, messageController)
 
 	port := config.GetEnvWithDefault("PORT", "8080")
 

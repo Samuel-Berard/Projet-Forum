@@ -3,7 +3,7 @@ package services
 import (
 	"errors"
 	"projet-forum/src/models"
-	"projet-forum/src/repositories"
+	"projet-forum/src/api/repositories"
 )
 
 type MessageService struct {

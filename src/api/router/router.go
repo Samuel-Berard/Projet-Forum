@@ -3,8 +3,8 @@ package router
 import (
 	"net/http"
 
-	"projet-forum/src/controllers"
-	"projet-forum/src/helper"
+	"projet-forum/src/api/controllers"
+	"projet-forum/src/api/helper"
 
 	"github.com/gorilla/mux"
 )
@@ -13,16 +13,8 @@ func NewRouter(
 	userController *controllers.UtilisateurController,
 	filController *controllers.FilController,
 	messageController *controllers.MessageController,
-	viewController *controllers.ViewController,
 ) *mux.Router {
 	r := mux.NewRouter()
-
-	r.HandleFunc("/", viewController.AfficherAccueil).Methods("GET")
-	r.HandleFunc("/login", viewController.AfficherLogin).Methods("GET")
-	r.HandleFunc("/signup", viewController.AfficherSignup).Methods("GET")
-	r.HandleFunc("/forum", viewController.AfficherForum).Methods("GET")
-
-	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	apiPublic := r.PathPrefix("/api").Subrouter()
 

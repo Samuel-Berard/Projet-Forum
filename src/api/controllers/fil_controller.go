@@ -3,10 +3,10 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
-	"projet-forum/src/helper"
+	"projet-forum/src/api/helper"
 	"projet-forum/src/models"
-	"projet-forum/src/services"
-	"projet-forum/src/utils"
+	"projet-forum/src/api/services"
+	"projet-forum/src/api/utils"
 	"strconv"
 
 	"github.com/gorilla/mux"
@@ -26,7 +26,13 @@ func readFilId(r *http.Request) (int, error) {
 
 func (c *FilController) GetFils(w http.ResponseWriter, r *http.Request) {
 	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	if page == 0 {
+		page = 1
+	}
 	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
+	if limit == 0 {
+		limit = 20
+	}
 	search := r.URL.Query().Get("search")
 	categoryID, _ := strconv.Atoi(r.URL.Query().Get("category"))
 
@@ -36,7 +42,18 @@ func (c *FilController) GetFils(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	helper.WriteJSON(w, http.StatusOK, fils)
+	totalPages, err := c.service.GetTotalPages(limit, search, categoryID)
+	if err != nil {
+		totalPages = 1
+	}
+
+	response := map[string]interface{}{
+		"fils":       fils,
+		"totalPages": totalPages,
+		"page":       page,
+	}
+
+	helper.WriteJSON(w, http.StatusOK, response)
 }
 
 func (c *FilController) GetFil(w http.ResponseWriter, r *http.Request) {

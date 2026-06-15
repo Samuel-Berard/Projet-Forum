@@ -2,10 +2,10 @@ package services
 
 import (
 	"errors"
-	"projet-forum/src/auth"
+	"projet-forum/src/api/auth"
 	"projet-forum/src/models"
-	"projet-forum/src/repositories"
-	"projet-forum/src/utils"
+	"projet-forum/src/api/repositories"
+	"projet-forum/src/api/utils"
 	"regexp"
 	"strconv"
 )
