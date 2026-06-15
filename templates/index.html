@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
 </head>
 
 <body>
@@ -20,7 +21,9 @@
                     <li><a href="/video">Video</a></li>
                     <li><a href="/forum">Forum</a></li>
                 </ul>
-                <a href="/login" class="btn-connect">Se connecter</a>
+                <button class="btn-search"><i class="ri-search-line"></i></button>
+                <a href="/login" class="btn-connect"><i class="ri-account-circle-line"></i> Se connecter</a>
+                <button class="darkorlightmode"><i class="ri-moon-line"></i></button>
             </nav>
         </div>
     </header>
@@ -37,58 +40,61 @@
         </div>
     </header>
 
-    <h1>Bienvenue sur notre site de jeux vidéo !</h1>
-    <p>Découvrez les dernières actualités, des vidéos test, preview, gameplay, nos soluces et participez à notre forum
-        pour échanger avec d'autres passionnés de gaming.</p>
+    <main>
+        <section class="main">
+            <h1>Bienvenue sur notre site de jeux vidéo !</h1>
+            <p>Découvrez les dernières actualités, des vidéos test, preview, gameplay, nos soluces et participez à notre forum pour échanger avec d'autres passionnés de gaming.</p>
+        </section>
 
-    <div class="search-bar">
-        <input type="text" placeholder="Rechercher un jeu, une actu...">
-        <button type="submit">Rechercher</button>
-    </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Rechercher un jeu, une actu...">
+            <button type="submit">Rechercher</button>
+        </div>
 
-    <div class="last-actus">
-        <h1>Dernières actualités :</h1>
-        <ul class="last-actus-list">
-            {{ if .LastActus }}
-            {{ range .LastActus }}
-            <li class="last-actus-item">
-                <a href="/threads/{{ .ID }}" class="last-actus-link">
-                    <span class="last-actus-title">{{ .Titre }}</span>
-                    {{ if eq .Etat "ferme" }}
-                    <span class="badge">Fermé</span>
-                    {{ end }}
-                </a>
-            </li>
-            {{ end }}
-            {{ else }}
-            <li>
-                <p>Aucune actualité pour le moment.</p>
-            </li>
-            {{ end }}
-        </ul>
-    </div>
+        <section class="top-forums">
+            <h2><i class="ri-trophy-line"></i> Top forums</h2>
+            <ul class="forum-list">
+                {{ if .TopForums }}
+                {{ range .TopForums }}
+                <li class="forum-item">
+                    <a href="/threads/{{ .ID }}" class="forum-link">
+                        <span class="forum-title">{{ .Titre }}</span>
+                        {{ if eq .Etat "ferme" }}
+                        <span class="badge">Fermé</span>
+                        {{ end }}
+                    </a>
+                </li>
+                {{ end }}
+                {{ else }}
+                <li>
+                    <p>Aucun forum pour le moment.</p>
+                </li>
+                {{ end }}
+            </ul>
+        </section>
 
-    <div class="top-forums">
-        <h1>Top forums :</h1>
-        <ul class="forum-list">
-            {{ if .TopForums }}
-            {{ range .TopForums }}
-            <li class="forum-item">
-                <a href="/threads/{{ .ID }}" class="forum-link">
-                    <span class="forum-title">{{ .Titre }}</span>
-                    {{ if eq .Etat "ferme" }}
-                    <span class="badge">Fermé</span>
-                    {{ end }}
-                </a>
-            </li>
-            {{ end }}
-            {{ else }}
-            <li>
-                <p>Aucun forum pour le moment.</p>
-            </li>
-            {{ end }}
-        </ul>
-    </div>
+        <section class="last-actus">
+            <h2><i class="ri-article-line"></i> Dernières actualités</h2>
+            <ul class="last-actus-list">
+                {{ if .LastActus }}
+                {{ range .LastActus }}
+                <li class="last-actus-item">
+                    <a href="/threads/{{ .ID }}" class="last-actus-link">
+                        <span class="last-actus-title">{{ .Titre }}</span>
+                        {{ if eq .Etat "ferme" }}
+                        <span class="badge">Fermé</span>
+                        {{ end }}
+                    </a>
+                </li>
+                {{ end }}
+                {{ else }}
+                <li>
+                    <p>Aucune actualité pour le moment.</p>
+                </li>
+                {{ end }}
+            </ul>
+        </section>
+    </main>
 
     <div class="footer_container">
         <footer class="footer">
