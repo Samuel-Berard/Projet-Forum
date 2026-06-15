@@ -48,7 +48,24 @@
 
     <div class="last-actus">
         <h1>Dernières actualités :</h1>
-        <!-- FAIRE ENORME FONCTION GO GOUGOUGAGA POUR AFFICHER DERNIERE ACTUS -->
+        <ul class="last-actus-list">
+            {{ if .LastActus }}
+            {{ range .LastActus }}
+            <li class="last-actus-item">
+                <a href="/threads/{{ .ID }}" class="last-actus-link">
+                    <span class="last-actus-title">{{ .Titre }}</span>
+                    {{ if eq .Etat "ferme" }}
+                    <span class="badge">Fermé</span>
+                    {{ end }}
+                </a>
+            </li>
+            {{ end }}
+            {{ else }}
+            <li>
+                <p>Aucune actualité pour le moment.</p>
+            </li>
+            {{ end }}
+        </ul>
     </div>
 
     <div class="top-forums">

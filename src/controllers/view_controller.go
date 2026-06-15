@@ -19,6 +19,7 @@ func NewViewController(filService *services.FilService) *ViewController {
 
 type AccueilData struct {
 	TopForums []models.FilDeDiscussion
+	LastActus []models.Actualite
 }
 
 func (c *ViewController) AfficherAccueil(w http.ResponseWriter, r *http.Request) {
@@ -31,9 +32,12 @@ func (c *ViewController) AfficherAccueil(w http.ResponseWriter, r *http.Request)
 	}
 
 	fils, _ := c.filService.GetFils(1, 10, "", 0)
+	lastActus, _ := c.filService.GetLastActus(10)
+
 
 	data := AccueilData{
 		TopForums: fils,
+		LastActus: lastActus,
 	}
 
 	err = tmpl.ExecuteTemplate(w, "index", data)
