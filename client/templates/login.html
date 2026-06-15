@@ -1,0 +1,68 @@
+{{define "login"}}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+
+
+   <link rel="stylesheet" href="/static/css/theme.css">
+   <link rel="stylesheet" href="/static/css/login.css">
+</head>
+
+<body>
+   <section class="login">
+      <div class="login__content">
+         <div>
+            <h2 class="login__title">Te revoila</h2>
+
+            <form action="" method="post" class="login__form">
+               <div class="login__group">
+                  <div class="login__box">
+                     <i class="ri-mail-fill login__icon"></i>
+                     <input type="email" name="email" autocomplete="email" required placeholder=" " class="login__input"
+                        id="email">
+                     <label for="email" class="login__label">Email</label>
+                  </div>
+
+                  <div class="login__box">
+                     <i class="ri-lock-2-fill login__icon"></i>
+                     <input type="password" name="password" autocomplete="current-password" required placeholder=" "
+                        class="login__input" id="password">
+                     <label for="password" class="login__label">Mots de passe</label>
+                     <i class="ri-eye-off-fill login__eye" id="loginPassword"></i>
+                  </div>
+               </div>
+
+               <a href="#" class="login__forgot">Mots de passe oublié?</a>
+
+               <button type="submit" class="login__button">
+                  Se connecter
+                  <i class="ri-send-plane-2-fill"></i>
+               </button>
+
+               <p class="login__sign">
+                  Tu n'as pas de compte? <a href="/signup" id="loginButtonRegister">Créer un compte</a>
+               </p>
+            </form>
+         </div>
+
+         <div class="login__image">
+            <img src="/static/img/image_back.png" alt="" class="login__img">
+         </div>
+      </div>
+   </section>
+
+
+   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
+
+
+   <script src="/static/js/main.js"></script>
+</body>
+
+</html>
+{{end}}

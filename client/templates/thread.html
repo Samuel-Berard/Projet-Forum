@@ -1,0 +1,52 @@
+{{define "thread"}}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ .Fil.Titre }} — Forum Gaming</title>
+  <link rel="stylesheet" href="/static/css/theme.css">
+  <link rel="stylesheet" href="/static/css/thread.css">
+</head>
+
+<body>
+  <header class="thread-top">
+    <div class="wrap">
+      <a class="brand" href="/"><img src="/static/img/logo.png" alt="Logo Forum Gaming" class="brand-logo"> Forum Gaming</a>
+      <nav>
+        <a href="/">Accueil</a>
+        <a href="/forum">Forums</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap thread">
+    <a class="back" href="/forum">← Retour aux forums</a>
+
+    <h1 class="thread-title">
+      {{ .Fil.Titre }}
+      {{ if eq .Fil.Etat "ferme" }}<span class="badge">Fermé</span>{{ end }}
+    </h1>
+    <div class="thread-meta">Fil n°{{ .Fil.ID }} · état : {{ .Fil.Etat }}</div>
+
+    <section class="messages">
+      {{ if .Messages }}
+      {{ range .Messages }}
+      <article class="msg">
+        <div class="msg-head">
+          <span class="msg-author">Utilisateur n°{{ .AuteurID }}</span>
+          <span class="msg-score">{{ .ScorePopularite }} pts</span>
+        </div>
+        <p class="msg-body">{{ .Contenu }}</p>
+      </article>
+      {{ end }}
+      {{ else }}
+      <div class="empty">Aucun message dans ce fil pour le moment.</div>
+      {{ end }}
+    </section>
+  </main>
+</body>
+
+</html>
+{{end}}

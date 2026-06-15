@@ -1,0 +1,17 @@
+// Package routers configure les routes de l'application cliente.
+package routers
+
+import (
+	"projet-forum/client/controllers"
+
+	"github.com/gorilla/mux"
+)
+
+// RegisterForumRoutes enregistre les routes des pages du forum.
+func RegisterForumRoutes(r *mux.Router, forumController *controllers.ForumControllers) {
+	r.HandleFunc("/", forumController.DisplayAccueil).Methods("GET")
+	r.HandleFunc("/login", forumController.DisplayLogin).Methods("GET")
+	r.HandleFunc("/signup", forumController.DisplaySignup).Methods("GET")
+	r.HandleFunc("/forum", forumController.DisplayForum).Methods("GET")
+	r.HandleFunc("/threads/{id}", forumController.DisplayThread).Methods("GET")
+}

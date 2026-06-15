@@ -1,19 +1,19 @@
-@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap");
+/* La police vient de theme.css (chargé avant cette feuille). */
 
-
+/* Couleurs rattachées au design system commun (theme.css). */
 :root {
 
-  --first-color: hsl(263, 64%, 48%);
-  --first-color-alt: hsl(263, 64%, 44%);
-  --border-color: hsl(0, 0%, 45%);
-  --title-color: hsl(0, 0%, 95%);
-  --text-color: hsl(0, 0%, 55%);
-  --body-color: hsl(0, 0%, 4%);
-  --container-color: hsl(0, 0%, 8%);
+  --first-color: var(--accent);
+  --first-color-alt: var(--accent-ink);
+  --border-color: var(--border);
+  --title-color: var(--ink);
+  --text-color: var(--muted);
+  --body-color: var(--bg);
+  --container-color: var(--surface);
 
 
 
-  --body-font: "Syne", sans-serif;
+  --body-font: var(--font);
   --big-font-size: 1.5rem;
   --normal-font-size: .938rem;
   --small-font-size: .813rem;

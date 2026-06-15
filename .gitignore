@@ -1,0 +1,15 @@
+# Éditeurs / outils
+.vscode/
+.claude/
+.idea/
+
+# Go
+*.exe
+*.exe~
+*.test
+*.out
+/vendor/
+
+# OS
+Thumbs.db
+.DS_Store

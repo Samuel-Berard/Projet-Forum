@@ -1,16 +1,17 @@
-@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap");
+/* La police vient de theme.css (chargé avant cette feuille). */
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css");
 
+/* Couleurs rattachées au design system commun (theme.css). */
 :root {
-    --color-bg: #22252a;
-    --color-bg-surface: #2e3238;
-    --color-border: #4a4c4f;
-    --color-accent: #f66031;
-    --color-accent-hover: #f7734a;
-    --color-text: #e0e0e0;
-    --color-text-strong: #ffffff;
-    --color-text-muted: #9e9e9e;
-    --color-link: #7dc3f7;
+    --color-bg: var(--bg);
+    --color-bg-surface: var(--surface);
+    --color-border: var(--border);
+    --color-accent: var(--accent);
+    --color-accent-hover: var(--accent-ink);
+    --color-text: var(--ink-2);
+    --color-text-strong: var(--ink);
+    --color-text-muted: var(--muted);
+    --color-link: var(--accent-ink);
     --radius-md: 0.5rem;
     --radius-lg: 0.5rem;
 }
@@ -24,7 +25,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Syne', sans-serif;
+    font-family: var(--font);
     background-color: var(--color-bg);
     color: var(--color-text);
     line-height: 1.6;
