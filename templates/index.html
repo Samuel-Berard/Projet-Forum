@@ -141,24 +141,24 @@
 
                     <div class="site-footer__col">
                         <h4 class="site-footer__heading">Top Forums</h4>
-                            <ul class="forum-list-footer">
-                                {{ if .TopForums }}
-                                {{ range .TopForums }}
-                                <li class="forum-item-footer">
-                                    <a href="/threads/{{ .ID }}" class="forum-link-footer">
-                                        <span class="forum-title">{{ .Titre }}</span>
-                                        {{ if eq .Etat "ferme" }}
-                                        <span class="badge">Fermé</span>
-                                        {{ end }}
-                                    </a>
-                                </li>
-                                {{ end }}
-                                {{ else }}
-                                <li>
-                                    <p>Aucun forum pour le moment.</p>
-                                </li>
-                                {{ end }}
-                            </ul>
+                        <ul class="forum-list-footer">
+                            {{ if .TopForums }}
+                            {{ range .TopForums }}
+                            <li class="forum-item-footer">
+                                <a href="/threads/{{ .ID }}" class="forum-link-footer">
+                                    <span class="forum-title">{{ .Titre }}</span>
+                                    {{ if eq .Etat "ferme" }}
+                                    <span class="badge">Fermé</span>
+                                    {{ end }}
+                                </a>
+                            </li>
+                            {{ end }}
+                            {{ else }}
+                            <li>
+                                <p>Aucun forum pour le moment.</p>
+                            </li>
+                            {{ end }}
+                        </ul>
                     </div>
 
                     <div class="site-footer__col">

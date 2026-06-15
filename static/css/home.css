@@ -1,9 +1,3 @@
-/* =============================================
-   HOME PAGE — FORUM GAMING
-   Inspired by JeuxVideo.com's layout
-   ============================================= */
-
-/* ---- JVC-STYLE HEADER ---- */
 .jv-header {
     position: sticky;
     top: 0;
@@ -124,7 +118,7 @@
 
 .jv-icon-btn:hover {
     color: #fff;
-    background: rgba(255,255,255,0.08);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .jv-topbar__connexion {
@@ -146,7 +140,7 @@
 
 .jv-topbar__connexion:hover {
     color: #fff;
-    background: rgba(255,255,255,0.08);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 /* Barre de recherche déroulante */
@@ -231,7 +225,9 @@
     scrollbar-width: none;
 }
 
-.jv-subbar__inner::-webkit-scrollbar { display: none; }
+.jv-subbar__inner::-webkit-scrollbar {
+    display: none;
+}
 
 .jv-subbar__link {
     display: flex;
@@ -290,7 +286,7 @@
 .hero-banner {
     width: 100%;
     background:
-        linear-gradient(135deg, rgba(24,25,27,0.96) 0%, rgba(30,15,5,0.97) 60%, rgba(24,25,27,0.98) 100%),
+        linear-gradient(135deg, rgba(24, 25, 27, 0.96) 0%, rgba(30, 15, 5, 0.97) 60%, rgba(24, 25, 27, 0.98) 100%),
         url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><circle cx="30" cy="30" r="1" fill="%23ff3c0015"/></svg>');
     border-bottom: 1px solid var(--color-border);
     padding: 2.5rem 0 2rem;
@@ -305,7 +301,7 @@
     right: -60px;
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, rgba(255,60,0,0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 60, 0, 0.08) 0%, transparent 70%);
     pointer-events: none;
 }
 
@@ -317,9 +313,9 @@
 
 .hero-banner__badge {
     display: inline-block;
-    background: rgba(255,60,0,0.15);
+    background: rgba(255, 60, 0, 0.15);
     color: var(--color-accent);
-    border: 1px solid rgba(255,60,0,0.3);
+    border: 1px solid rgba(255, 60, 0, 0.3);
     padding: 0.2rem 0.75rem;
     border-radius: 20px;
     font-size: 0.75rem;
@@ -361,12 +357,12 @@
     border-radius: 4px;
     overflow: hidden;
     transition: border-color 0.15s, box-shadow 0.15s;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 .jv-main-search:focus-within {
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgba(255,60,0,0.15);
+    box-shadow: 0 0 0 3px rgba(255, 60, 0, 0.15);
 }
 
 .jv-main-search input {
@@ -401,7 +397,7 @@
 
 .jv-main-search button:hover {
     color: var(--color-accent);
-    background: rgba(255,60,0,0.06);
+    background: rgba(255, 60, 0, 0.06);
 }
 
 
@@ -413,7 +409,7 @@
 }
 
 .hero-stat {
-    background: rgba(255,255,255,0.04);
+    background: rgba(255, 255, 255, 0.04);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     padding: 0.85rem 1.25rem;
@@ -507,7 +503,7 @@
 
 .jv-carousel__cover-link:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
 .jv-carousel__img {
@@ -524,8 +520,8 @@
     left: 6px;
     width: 24px;
     height: 24px;
-    background: rgba(0,0,0,0.75);
-    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 4px;
     font-family: 'Inter', sans-serif;
     font-size: 0.75rem;
@@ -556,7 +552,7 @@
     width: 32px;
     height: 100%;
     min-height: 120px;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
     border: none;
     color: #fff;
     font-size: 1.6rem;
@@ -570,11 +566,16 @@
 }
 
 .jv-carousel__btn:hover {
-    background: rgba(255,60,0,0.7);
+    background: rgba(255, 60, 0, 0.7);
 }
 
-.jv-carousel__btn--prev { border-radius: 4px 0 0 4px; }
-.jv-carousel__btn--next { border-radius: 0 4px 4px 0; }
+.jv-carousel__btn--prev {
+    border-radius: 4px 0 0 4px;
+}
+
+.jv-carousel__btn--next {
+    border-radius: 0 4px 4px 0;
+}
 
 
 /* ---- PAGE LAYOUT (main + sidebar) ---- */
@@ -612,7 +613,7 @@
     overflow: visible;
 }
 
-.content-block + .content-block {
+.content-block+.content-block {
     margin-top: 1.5rem;
 }
 
@@ -670,7 +671,7 @@
 }
 
 .forum-table th {
-    background: rgba(255,255,255,0.02);
+    background: rgba(255, 255, 255, 0.02);
     color: var(--color-text-muted);
     font-size: 0.72rem;
     font-weight: 600;
@@ -682,12 +683,17 @@
     white-space: nowrap;
 }
 
-.forum-table th.text-center { text-align: center; }
-.forum-table th.text-right  { text-align: right; }
+.forum-table th.text-center {
+    text-align: center;
+}
+
+.forum-table th.text-right {
+    text-align: right;
+}
 
 .forum-table__row td {
     padding: 0.75rem 1rem;
-    border-bottom: 1px solid rgba(56,57,59,0.5);
+    border-bottom: 1px solid rgba(56, 57, 59, 0.5);
     vertical-align: middle;
     font-size: 0.875rem;
 }
@@ -697,13 +703,24 @@
 }
 
 .forum-table__row:hover td {
-    background: rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
 }
 
-.forum-table__row td.text-center { text-align: center; }
-.forum-table__row td.text-right  { text-align: right; }
-.forum-table__row td.text-muted  { color: var(--color-text-muted); }
-.forum-table__row td.text-sm     { font-size: 0.8rem; }
+.forum-table__row td.text-center {
+    text-align: center;
+}
+
+.forum-table__row td.text-right {
+    text-align: right;
+}
+
+.forum-table__row td.text-muted {
+    color: var(--color-text-muted);
+}
+
+.forum-table__row td.text-sm {
+    font-size: 0.8rem;
+}
 
 .topic-badge {
     display: inline-block;
@@ -718,15 +735,15 @@
 }
 
 .topic-badge--hot {
-    background: rgba(255,60,0,0.15);
+    background: rgba(255, 60, 0, 0.15);
     color: var(--color-accent);
-    border: 1px solid rgba(255,60,0,0.3);
+    border: 1px solid rgba(255, 60, 0, 0.3);
 }
 
 .topic-badge--new {
-    background: rgba(90,172,255,0.15);
+    background: rgba(90, 172, 255, 0.15);
     color: var(--color-link);
-    border: 1px solid rgba(90,172,255,0.3);
+    border: 1px solid rgba(90, 172, 255, 0.3);
 }
 
 .topic-link {
@@ -745,17 +762,28 @@
     display: inline-block;
     font-size: 0.78rem;
     color: var(--color-text-muted);
-    background: rgba(255,255,255,0.04);
+    background: rgba(255, 255, 255, 0.04);
     border: 1px solid var(--color-border);
     border-radius: 3px;
     padding: 0.1rem 0.45rem;
     white-space: nowrap;
 }
 
-.text-muted { color: var(--color-text-muted); }
-.text-sm    { font-size: 0.8rem; }
-.text-center { text-align: center; }
-.text-right  { text-align: right; }
+.text-muted {
+    color: var(--color-text-muted);
+}
+
+.text-sm {
+    font-size: 0.8rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
 
 
 /* ---- CATEGORY GRID ---- */
@@ -793,7 +821,7 @@
 }
 
 .category-card:hover {
-    background: rgba(255,255,255,0.04);
+    background: rgba(255, 255, 255, 0.04);
 }
 
 .category-card__icon {
@@ -804,9 +832,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255,60,0,0.08);
+    background: rgba(255, 60, 0, 0.08);
     border-radius: var(--radius-md);
-    border: 1px solid rgba(255,60,0,0.15);
+    border: 1px solid rgba(255, 60, 0, 0.15);
 }
 
 .category-card__body {
@@ -835,7 +863,7 @@
 
 .category-card__meta {
     font-size: 0.7rem;
-    color: rgba(133,138,149,0.7);
+    color: rgba(133, 138, 149, 0.7);
 }
 
 .category-card__arrow {
@@ -861,7 +889,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.65rem 1.1rem;
-    border-bottom: 1px solid rgba(56,57,59,0.4);
+    border-bottom: 1px solid rgba(56, 57, 59, 0.4);
     transition: background 0.12s;
 }
 
@@ -870,7 +898,7 @@
 }
 
 .activity-item:hover {
-    background: rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .activity-item__avatar {
@@ -969,7 +997,7 @@
 .side-module__footer {
     padding: 0.65rem 0.9rem;
     border-top: 1px solid var(--color-border);
-    background: rgba(255,255,255,0.01);
+    background: rgba(255, 255, 255, 0.01);
 }
 
 .side-module__cta {
@@ -990,7 +1018,7 @@
     display: flex;
     gap: 0.65rem;
     padding: 0.65rem 0.9rem;
-    border-bottom: 1px solid rgba(56,57,59,0.5);
+    border-bottom: 1px solid rgba(56, 57, 59, 0.5);
     align-items: flex-start;
     transition: background 0.12s;
     cursor: pointer;
@@ -1001,7 +1029,7 @@
 }
 
 .side-news-item:hover {
-    background: rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .side-news-item__thumb {
@@ -1056,7 +1084,7 @@
     align-items: center;
     gap: 0.65rem;
     padding: 0.55rem 0.9rem;
-    border-bottom: 1px solid rgba(56,57,59,0.4);
+    border-bottom: 1px solid rgba(56, 57, 59, 0.4);
     transition: background 0.12s;
 }
 
@@ -1065,7 +1093,7 @@
 }
 
 .side-ranking__item:hover {
-    background: rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .side-ranking__pos {
@@ -1077,14 +1105,28 @@
     border-radius: 50%;
     font-size: 0.72rem;
     font-weight: 700;
-    background: rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.06);
     color: var(--color-text-muted);
     flex-shrink: 0;
 }
 
-.side-ranking__pos--gold   { background: rgba(255,195,0,0.15);  color: #ffc300; border: 1px solid rgba(255,195,0,0.3); }
-.side-ranking__pos--silver { background: rgba(180,188,200,0.15); color: #b4bcc8; border: 1px solid rgba(180,188,200,0.3); }
-.side-ranking__pos--bronze { background: rgba(205,127,50,0.15);  color: #cd7f32; border: 1px solid rgba(205,127,50,0.3); }
+.side-ranking__pos--gold {
+    background: rgba(255, 195, 0, 0.15);
+    color: #ffc300;
+    border: 1px solid rgba(255, 195, 0, 0.3);
+}
+
+.side-ranking__pos--silver {
+    background: rgba(180, 188, 200, 0.15);
+    color: #b4bcc8;
+    border: 1px solid rgba(180, 188, 200, 0.3);
+}
+
+.side-ranking__pos--bronze {
+    background: rgba(205, 127, 50, 0.15);
+    color: #cd7f32;
+    border: 1px solid rgba(205, 127, 50, 0.3);
+}
 
 .side-ranking__body {
     flex: 1;
@@ -1172,7 +1214,7 @@ a.side-ranking__name:hover {
     justify-content: center;
     width: 34px;
     height: 34px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--color-border);
     border-radius: 50%;
     color: var(--color-text-muted);
@@ -1181,8 +1223,8 @@ a.side-ranking__name:hover {
 }
 
 .social-icon:hover {
-    background: rgba(255,60,0,0.12);
-    border-color: rgba(255,60,0,0.4);
+    background: rgba(255, 60, 0, 0.12);
+    border-color: rgba(255, 60, 0, 0.4);
     color: var(--color-accent);
 }
 
