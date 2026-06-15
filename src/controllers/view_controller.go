@@ -4,9 +4,9 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"strconv"
 	"projet-forum/src/models"
 	"projet-forum/src/services"
+	"strconv"
 )
 
 type ViewController struct {
@@ -87,6 +87,34 @@ func (c *ViewController) AfficherForum(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = tmpl.Execute(w, data)
+	if err != nil {
+		http.Error(w, "Erreur lors de l'affichage de la page", http.StatusInternalServerError)
+	}
+}
+
+func (c *ViewController) AfficherLogin(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("templates/login.html")
+	if err != nil {
+		http.Error(w, "Erreur lors du chargement de la page login", http.StatusInternalServerError)
+		log.Println("Erreur Template :", err)
+		return
+	}
+
+	err = tmpl.ExecuteTemplate(w, "login", nil)
+	if err != nil {
+		http.Error(w, "Erreur lors de l'affichage de la page", http.StatusInternalServerError)
+	}
+}
+
+func (c *ViewController) AfficherSignup(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("templates/Signup.html")
+	if err != nil {
+		http.Error(w, "Erreur lors du chargement de la page signup", http.StatusInternalServerError)
+		log.Println("Erreur Template :", err)
+		return
+	}
+
+	err = tmpl.ExecuteTemplate(w, "signup", nil)
 	if err != nil {
 		http.Error(w, "Erreur lors de l'affichage de la page", http.StatusInternalServerError)
 	}
