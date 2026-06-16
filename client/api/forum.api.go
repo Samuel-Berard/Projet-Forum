@@ -116,3 +116,24 @@ func (api *ForumApi) GetMessages(filID int) ([]dto.Message, error) {
 
 	return messages, nil
 }
+
+// Register envoie une demande d'inscription (POST) à l'API.
+func (api *ForumApi) Register(username, email, password string) error {
+	corps, err := json.Marshal(map[string]string{
+		"username": username,
+		"email":    email,
+		"password": password,
+	})
+	if err != nil {
+		return err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, api.baseURL+"/register", bytes.NewBuffer(corps))
+	if err != nil {
+		return err
+	}
+
+	// executeRequest renvoie une erreur (avec le message de l'API) si le statut est >= 400.
+	_, err = api.executeRequest(req, nil)
+	return err
+}

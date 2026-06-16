@@ -1,4 +1,4 @@
--- Suppression et recréation de la base
+
 DROP DATABASE IF EXISTS forum_gaming;
 CREATE DATABASE forum_gaming
     DEFAULT CHARACTER SET utf8mb4
@@ -17,13 +17,13 @@ CREATE TABLE utilisateurs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table des catégories
+--Table des catégories
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL UNIQUE
 );
 
--- Table des fils de discussion
+--Table des fils de discussion
 CREATE TABLE fils_de_discussion (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titre VARCHAR(255) NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE fils_de_discussion (
     FOREIGN KEY (auteur_id) REFERENCES utilisateurs(id) ON DELETE CASCADE
 );
 
--- Table de liaison fils_categories (association n..n entre fils et catégories)
+-- Table de liaison fils_categories
 CREATE TABLE fils_categories (
     fil_id INT NOT NULL,
     categorie_id INT NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE messages (
     FOREIGN KEY (auteur_id) REFERENCES utilisateurs(id) ON DELETE CASCADE
 );
 
--- Table des réactions (association n..n entre utilisateurs et messages)
+-- Table des réactions 
 CREATE TABLE reactions (
     utilisateur_id INT NOT NULL,
     message_id INT NOT NULL,

@@ -1,133 +1,191 @@
 {{define "index"}}
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Forum Gaming — Forum jeux vidéo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="/static/css/theme.css">
-<link rel="stylesheet" href="/static/css/index.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GamingForum — Communauté jeux vidéo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/static/css/theme.css">
+  <link rel="stylesheet" href="/static/css/index.css">
 </head>
+
 <body>
 
-<div class="topwrap">
-  <div class="wrap">
-    <div class="topbar">
-      <div class="topbar-in">
-        <a class="brand" href="/">
-          <img src="/static/img/logo.png" alt="Logo Forum Gaming" class="brand-logo">
-          Forum Gaming
+  <header class="header-wrapper">
+    <div class="container">
+      <div class="header-bar">
+        <a class="logo" href="/">
+          Gaming<b>Forum</b>
         </a>
-        <nav class="main">
-          <a href="/" class="on">Accueil</a>
+        <nav class="nav-menu">
+          <a href="/" class="active">Accueil</a>
           <a href="/forum">Forums</a>
         </nav>
-        <div class="topbar-actions">
-          <a class="btn-ghost" href="/login">Connexion</a>
-          <a class="btn-login" href="/signup">Inscription</a>
+        <div class="header-actions">
+          <a class="btn-secondary" href="/login">Connexion</a>
+          <a class="btn-primary" href="/signup">Inscription</a>
         </div>
       </div>
-    </div>
-    <div class="platrow">
-      <a href="#" class="active">PC</a><a href="#">PS5</a><a href="#">Xbox Series</a><a href="#">Switch 2</a><a href="#">PS4</a><a href="#">Xbox One</a><a href="#">Switch</a><a href="#">iOS</a><a href="#">Android</a><a href="#">MMO</a><a href="#">RPG</a><a href="#">FPS</a><a href="#">Indé</a>
-    </div>
-  </div>
-</div>
-
-<main class="wrap">
-  <section class="hero">
-    <div class="hero-main">
-      <div class="kick">Forums · Forum Gaming</div>
-      <h1>Entre dans l'arène.</h1>
-      <p class="sub">La communauté qui parle jeu vidéo : builds, débats, entraide et bons plans, en un seul endroit.</p>
-      <form class="hero-search" onsubmit="return false">
-        <input type="text" placeholder="Rechercher un forum, un jeu, un topic…">
-        <button type="submit">Rechercher</button>
-      </form>
-    </div>
-    <div class="hero-side">
-      <div class="tile topic">
-        <span class="tag">TOPIC DU MOMENT</span>
-        <h3>Votre top 5 des jeux de 2026</h3>
-        <div class="by">dans <b>Général</b> · 1 234 réponses</div>
+      <div class="categories-bar">
+        <a href="#" class="active">PC</a>
+        <a href="#">PS5</a>
+        <a href="#">Xbox Series</a>
+        <a href="#">Nintendo Switch</a>
+        <a href="#">iOS</a>
+        <a href="#">Android</a>
+        <a href="#">Actus</a>
+        <a href="#">Guides</a>
+        <a href="#">Rumeurs</a>
+        <a href="#">FPS</a>
+        <a href="#">RPG</a>
+        <a href="#">Indés</a>
       </div>
     </div>
-  </section>
+  </header>
 
-  <div class="sh"><h2>Top forums de jeux</h2><a class="link" href="/forum">Voir le classement <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a></div>
-  <div class="bento">
-    {{ if .TopForums }}
-    {{ range $i, $f := .TopForums }}
-    {{ if lt $i 5 }}
-    <a class="bcard{{ if eq $i 0 }} feat{{ end }}" href="/threads/{{ $f.ID }}">
-      <div class="cov ph" data-label="forum"></div>
-      <div class="scrim"></div>
-      <span class="rank">{{ add $i 1 }}</span>
-      <div class="c">
-        <h3>{{ $f.Titre }}</h3>
-        <div class="m"><span class="live"></span> {{ $f.Etat }}</div>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">COMMUNAUTÉ GAMING</div>
+        <h1>Partage ta passion du jeu vidéo.</h1>
+        <p class="hero-description">Rejoins une communauté de passionnés : débats, guides, entraide et actualités sur
+          vos jeux préférés.</p>
+        <form class="hero-search" action="/forum" method="get">
+          <input type="text" name="recherche" placeholder="Rechercher un jeu, un guide, un membre…">
+          <button type="submit">Rechercher</button>
+        </form>
       </div>
-    </a>
-    {{ end }}
-    {{ end }}
-    {{ else }}
-    <div class="empty">Aucun forum pour le moment.</div>
-    {{ end }}
-  </div>
+      <div class="hero-featured">
+        <div class="featured-topic">
+          <span class="tag">TOPIC DU MOMENT</span>
+          <h3>GTA 6 : vos attentes après la dernière bande-annonce</h3>
+          <div class="topic-meta">dans <b>Discussions Générales</b> · 1 428 réponses</div>
+        </div>
+      </div>
+    </section>
 
-  <div class="sh"><h2>Le fil de la commu'</h2><a class="link" href="/forum">Tous les topics <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a></div>
-  <div class="split">
-    <div class="tcard">
+    <div class="section-header">
+      <h2>Top forums de jeux</h2>
+      <a class="link" href="/forum">
+        Voir le classement
+        <span>→</span>
+      </a>
+    </div>
+    <div class="bento-grid">
       {{ if .TopForums }}
       {{ range .TopForums }}
-      <a class="trow" href="/threads/{{ .ID }}">
-        <div class="av ph"></div>
-        <div class="mid">
-          <div class="tt">
-            {{ if eq .Etat "ferme" }}<span class="tag closed">FERMÉ</span>{{ end }}
-            {{ .Titre }}
-          </div>
-          <div class="sub">dans <b>Forums</b></div>
+      <a class="bento-card" href="/threads/{{ .ID }}">
+        <div class="card-cover placeholder" data-label="forum"></div>
+        <div class="card-overlay"></div>
+        <div class="card-body">
+          <h3>{{ .Titre }}</h3>
+          <div class="card-meta"><span class="status-dot"></span> {{ .Etat }}</div>
         </div>
       </a>
       {{ end }}
       {{ else }}
       <div class="empty">Aucun forum pour le moment.</div>
       {{ end }}
-    </div>
-    <div class="acard">
-      {{ if .LastActus }}
-      {{ range $i, $a := .LastActus }}
-      {{ if eq $i 0 }}
-      <a class="lead" href="/threads/{{ $a.ID }}"><div class="img ph" data-label="image actu 16:9"></div><div class="t"><div class="cat">À la une</div><h4>{{ $a.Titre }}</h4></div></a>
-      {{ else }}
-      <a class="anews" href="/threads/{{ $a.ID }}"><div class="t ph"></div><div><h5>{{ $a.Titre }}</h5><div class="ago">actualité</div></div></a>
-      {{ end }}
-      {{ end }}
-      {{ else }}
-      <div class="empty">Aucune actualité pour le moment.</div>
-      {{ end }}
-    </div>
   </div>
 
-  <div class="sh"><h2>Nouveautés & sorties</h2><a class="link" href="#">Calendrier <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a></div>
-  <div class="rels">
-    <article class="rcard"><div class="cv ph" data-label="cover"></div><div class="i"><div class="date">18 JUIN 2026</div><h3>Crown of Embers</h3><div class="p">PC · PS5 · Xbox Series</div></div></article>
-    <article class="rcard"><div class="cv ph" data-label="cover"></div><div class="i"><div class="date">25 JUIN 2026</div><h3>Pixel Tactics</h3><div class="p">Switch 2 · PC</div></div></article>
-    <article class="rcard"><div class="cv ph" data-label="cover"></div><div class="i"><div class="date">02 JUIL. 2026</div><h3>Velocity GP</h3><div class="p">PS5 · Xbox Series</div></div></article>
-  </div>
-</main>
+    <div class="section-header">
+      <h2>Le fil de la commu'</h2>
+      <a class="link" href="/forum">
+        Tous les topics
+        <span>→</span>
+      </a>
+    </div>
+    <div class="split-layout">
+      <div class="threads-card">
+        {{ if .TopForums }}
+        {{ range .TopForums }}
+        <a class="thread-row" href="/threads/{{ .ID }}">
+          <div class="thread-avatar placeholder"></div>
+          <div class="thread-details">
+            <div class="thread-title">
+              {{ if eq .Etat "ferme" }}<span class="tag-closed">FERMÉ</span>{{ end }}
+              {{ .Titre }}
+            </div>
+            <div class="thread-meta">dans <b>Forums</b></div>
+          </div>
+        </a>
+        {{ end }}
+        {{ else }}
+        <div class="empty">Aucun forum pour le moment.</div>
+        {{ end }}
+      </div>
+      <div class="news-card">
+        {{ if .LastActus }}
+        {{ range .LastActus }}
+        <a class="news-item" href="/threads/{{ .ID }}">
+          <div class="news-thumbnail placeholder"></div>
+          <div class="news-body">
+            <h5>{{ .Titre }}</h5>
+            <div class="news-meta">actualité</div>
+          </div>
+        </a>
+        {{ end }}
+        {{ else }}
+        <div class="empty">Aucune actualité pour le moment.</div>
+        {{ end }}
+      </div>
+    </div>
 
-<footer>
-  <div class="wrap foot">
-    <a class="brand" href="/"><img src="/static/img/logo.png" alt="Logo Forum Gaming" class="brand-logo"> Forum Gaming</a>
-    <div class="links"><a href="#">À propos</a><a href="#">Règles</a><a href="#">Aide</a><a href="#">Contact</a><a href="#">Mentions légales</a></div>
-    <div class="cp">© 2026 Forum Gaming — Maquette de démonstration, contenu d'exemple.</div>
-  </div>
-</footer>
+    <div class="section-header">
+      <h2>Nouveautés & sorties</h2>
+      <a class="link" href="#">
+        Calendrier
+        <span>→</span>
+      </a>
+    </div>
+    <div class="releases-grid">
+      <article class="release-card">
+        <div class="release-cover placeholder" data-label="cover"></div>
+        <div class="release-body">
+          <div class="date">18 FÉV. 2025</div>
+          <h3>Monster Hunter Wilds</h3>
+          <div class="platforms">PC · PS5 · Xbox Series</div>
+        </div>
+      </article>
+      <article class="release-card">
+        <div class="release-cover placeholder" data-label="cover"></div>
+        <div class="release-body">
+          <div class="date">AUTOMNE 2025</div>
+          <h3>Grand Theft Auto VI</h3>
+          <div class="platforms">PS5 · Xbox Series</div>
+        </div>
+      </article>
+      <article class="release-card">
+        <div class="release-cover placeholder" data-label="cover"></div>
+        <div class="release-body">
+          <div class="date">COURANT 2025</div>
+          <h3>Metroid Prime 4: Beyond</h3>
+          <div class="platforms">Nintendo Switch</div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-container">
+      <a class="logo" href="/">
+        Gaming<b>Forum</b>
+      </a>
+      <div class="footer-links">
+        <a href="#">À propos</a>
+        <a href="#">Règles</a>
+        <a href="#">Aide</a>
+        <a href="#">Contact</a>
+        <a href="#">Mentions légales</a>
+      </div>
+      <div class="footer-copyright">© 2026 GamingForum — Espace communautaire indépendant.</div>
+    </div>
+  </footer>
 
 </body>
+
 </html>
 {{end}}

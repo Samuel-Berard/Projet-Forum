@@ -17,24 +17,25 @@
             <div>
                 <h2 class="login__title">Crée ton compte</h2>
 
-                <form action="" method="post" class="login__form">
+                <form action="/signup" method="post" class="login__form">
+                    {{ if .Erreur }}<p class="form-error">{{ .Erreur }}</p>{{ end }}
                     <div class="login__group">
                         <div class="login__box">
                             <i class="ri-id-card-fill login__icon"></i>
-                            <input type="text" name="noms" required placeholder=" " class="login__input" id="names">
+                            <input type="text" name="noms" value="{{ .Noms }}" required placeholder=" " class="login__input" id="names">
                             <label for="names" class="login__label">Noms</label>
                         </div>
 
                         <div class="login__box">
                             <i class="ri-id-card-fill login__icon"></i>
-                            <input type="text" name="prenoms" required placeholder=" " class="login__input"
+                            <input type="text" name="prenoms" value="{{ .Prenoms }}" required placeholder=" " class="login__input"
                                 id="surnames">
                             <label for="surnames" class="login__label">Prénoms</label>
                         </div>
 
                         <div class="login__box">
                             <i class="ri-mail-fill login__icon"></i>
-                            <input type="email" name="email" autocomplete="email" required placeholder=" "
+                            <input type="email" name="email" value="{{ .Email }}" autocomplete="email" required placeholder=" "
                                 class="login__input" id="emailCreate">
                             <label for="emailCreate" class="login__label">Email</label>
                         </div>
