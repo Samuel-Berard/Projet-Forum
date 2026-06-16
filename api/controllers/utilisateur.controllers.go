@@ -65,6 +65,62 @@ func (c *UtilisateurControllers) Login(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// Me retourne les informations de l'utilisateur actuellement connecté.
+func (c *UtilisateurControllers) Me(w http.ResponseWriter, r *http.Request) {
+	claims := utils.GetClaims(r)
+	if claims == nil {
+		helper.WriteError(w, http.StatusUnauthorized, "Non autorisé")
+		return
+	}
+
+	id, err := strconv.Atoi(claims.UserID)
+	if err != nil {
+		helper.WriteError(w, http.StatusUnauthorized, "Identifiant utilisateur invalide")
+		return
+	}
+
+	user, err := c.service.GetByID(id)
+	if err != nil {
+		helper.WriteError(w, http.StatusNotFound, "Utilisateur introuvable")
+		return
+	}
+
+	helper.WriteJSON(w, http.StatusOK, user)
+}
+
+// UpdateAvatar met à jour l'avatar de l'utilisateur connecté.
+func (c *UtilisateurControllers) UpdateAvatar(w http.ResponseWriter, r *http.Request) {
+	claims := utils.GetClaims(r)
+	if claims == nil {
+		helper.WriteError(w, http.StatusUnauthorized, "Non autorisé")
+		return
+	}
+
+	id, err := strconv.Atoi(claims.UserID)
+	if err != nil {
+		helper.WriteError(w, http.StatusUnauthorized, "Identifiant utilisateur invalide")
+		return
+	}
+
+	var req struct {
+		Avatar string `json:"avatar"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		helper.WriteError(w, http.StatusBadRequest, "Requête invalide")
+		return
+	}
+
+	if err := c.service.UpdateAvatar(id, req.Avatar); err != nil {
+		helper.WriteError(w, http.StatusInternalServerError, "Erreur lors de la mise à jour de l'avatar")
+		return
+	}
+
+	helper.WriteJSON(w, http.StatusOK, map[string]string{
+		"message": "Avatar mis à jour",
+		"avatar":  req.Avatar,
+	})
+}
+
 // BanUser bannit un utilisateur, reserve aux administrateurs.
 func (c *UtilisateurControllers) BanUser(w http.ResponseWriter, r *http.Request) {
 	claims := utils.GetClaims(r)

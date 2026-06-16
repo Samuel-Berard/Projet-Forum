@@ -1,0 +1,38 @@
+{{define "upload"}}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload d'image — Forum Gaming</title>
+  <link rel="stylesheet" href="/static/css/theme.css">
+  <link rel="stylesheet" href="/static/css/upload.css">
+</head>
+
+<body>
+  <main class="upload-wrap">
+    <a class="back" href="/">← Accueil</a>
+    <h1>Uploader une image</h1>
+    <p class="hint">Formats acceptés : jpg, jpeg, png, gif, webp (max 10 Mo).</p>
+
+    <form class="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" accept="image/*" required>
+      <button type="submit">Envoyer</button>
+    </form>
+
+    {{ if .Erreur }}
+    <p class="upload-error">{{ .Erreur }}</p>
+    {{ end }}
+
+    {{ if .URL }}
+    <div class="upload-result">
+      <p>Image envoyée URL : <a href="{{ .URL }}" target="_blank">{{ .URL }}</a></p>
+      <img src="{{ .URL }}" alt="Image uploadée">
+    </div>
+    {{ end }}
+  </main>
+</body>
+
+</html>
+{{end}}

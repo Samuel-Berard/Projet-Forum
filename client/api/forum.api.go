@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"time"
 
@@ -178,6 +179,86 @@ func (api *ForumApi) CreateMessage(token string, filID int, contenu string) erro
 	}
 
 	// Le token JWT est envoyé dans l'en-tête Authorization au format Bearer (exigé par l'API).
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	_, err = api.executeRequest(req, nil)
+	return err
+}
+
+// UploadFile envoie un fichier à l'API en multipart/form-data (champ "file")
+// et retourne l'URL publique de l'image.
+func (api *ForumApi) UploadFile(filename string, data []byte) (string, error) {
+	// Construction du corps multipart, comme un formulaire de fichier.
+	var corps bytes.Buffer
+	writer := multipart.NewWriter(&corps)
+
+	part, err := writer.CreateFormFile("file", filename)
+	if err != nil {
+		return "", err
+	}
+	if _, err := part.Write(data); err != nil {
+		return "", err
+	}
+	writer.Close()
+
+	req, err := http.NewRequest(http.MethodPost, api.baseURL+"/upload", &corps)
+	if err != nil {
+		return "", err
+	}
+	// Indispensable : le Content-Type multipart avec sa frontière (boundary).
+	// On ne passe donc pas par executeRequest (qui force application/json).
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+
+	client := http.Client{Timeout: time.Second * 10}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, _ := io.ReadAll(resp.Body)
+	if resp.StatusCode >= 400 {
+		return "", fmt.Errorf("Erreur API - %s", string(bytes.TrimSpace(body)))
+	}
+
+	// L'API répond : {"url": "http://..."}.
+	var reponse struct {
+		URL string `json:"url"`
+	}
+	if err := json.Unmarshal(body, &reponse); err != nil {
+		return "", fmt.Errorf("Erreur décodage JSON - %s", err.Error())
+	}
+
+	return reponse.URL, nil
+}
+
+// GetMe récupère les informations de l'utilisateur connecté (route protégée → token Bearer).
+func (api *ForumApi) GetMe(token string) (*dto.Utilisateur, error) {
+	req, err := http.NewRequest(http.MethodGet, api.baseURL+"/me", nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	var user dto.Utilisateur
+	if _, err := api.executeRequest(req, &user); err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+// UpdateAvatar enregistre l'URL de l'avatar pour l'utilisateur connecté (route protégée).
+func (api *ForumApi) UpdateAvatar(token, avatarURL string) error {
+	corps, err := json.Marshal(map[string]string{"avatar": avatarURL})
+	if err != nil {
+		return err
+	}
+
+	req, err := http.NewRequest(http.MethodPut, api.baseURL+"/me/avatar", bytes.NewBuffer(corps))
+	if err != nil {
+		return err
+	}
 	req.Header.Set("Authorization", "Bearer "+token)
 
 	_, err = api.executeRequest(req, nil)

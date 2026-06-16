@@ -8,5 +8,6 @@ type Utilisateur struct {
 	Email     string    `json:"email"`
 	Role      string    `json:"role"`
 	Banned    bool      `json:"banned"`
+	Avatar    string    `json:"avatar"`
 	CreatedAt time.Time `json:"created_at"`
 }

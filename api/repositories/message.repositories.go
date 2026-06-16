@@ -33,7 +33,7 @@ func (r *MessageRepository) Create(m *models.Message) error {
 
 func (r *MessageRepository) FindByID(id int) (*models.Message, error) {
 	query := `
-		SELECT m.id, m.contenu, m.fil_id, m.auteur_id, m.score_popularite, u.username, u.email, u.role, u.banned
+		SELECT m.id, m.contenu, m.fil_id, m.auteur_id, m.score_popularite, u.username, u.email, u.role, u.banned, u.avatar
 		FROM messages m
 		LEFT JOIN utilisateurs u ON m.auteur_id = u.id
 		WHERE m.id = ?
@@ -41,9 +41,9 @@ func (r *MessageRepository) FindByID(id int) (*models.Message, error) {
 	row := r.db.QueryRow(query, id)
 
 	m := &models.Message{}
-	var authorUsername, authorEmail, authorRole string
+	var authorUsername, authorEmail, authorRole, authorAvatar string
 	var authorBanned bool
-	err := row.Scan(&m.ID, &m.Contenu, &m.FilID, &m.AuteurID, &m.ScorePopularite, &authorUsername, &authorEmail, &authorRole, &authorBanned)
+	err := row.Scan(&m.ID, &m.Contenu, &m.FilID, &m.AuteurID, &m.ScorePopularite, &authorUsername, &authorEmail, &authorRole, &authorBanned, &authorAvatar)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.New("message introuvable")
@@ -56,6 +56,7 @@ func (r *MessageRepository) FindByID(id int) (*models.Message, error) {
 		Email:    authorEmail,
 		Role:     authorRole,
 		Banned:   authorBanned,
+		Avatar:   authorAvatar,
 	}
 
 	return m, nil
@@ -71,7 +72,7 @@ func (r *MessageRepository) FindByFilID(filID int, page, limit int, sortBy strin
 	}
 
 	query := `
-		SELECT m.id, m.contenu, m.fil_id, m.auteur_id, m.score_popularite, m.created_at, u.username, u.email, u.role, u.banned
+		SELECT m.id, m.contenu, m.fil_id, m.auteur_id, m.score_popularite, m.created_at, u.username, u.email, u.role, u.banned, u.avatar
 		FROM messages m
 		LEFT JOIN utilisateurs u ON m.auteur_id = u.id
 		WHERE m.fil_id = ?
@@ -88,9 +89,9 @@ func (r *MessageRepository) FindByFilID(filID int, page, limit int, sortBy strin
 	for rows.Next() {
 		var m models.Message
 		var createdAt []uint8
-		var authorUsername, authorEmail, authorRole string
+		var authorUsername, authorEmail, authorRole, authorAvatar string
 		var authorBanned bool
-		if err := rows.Scan(&m.ID, &m.Contenu, &m.FilID, &m.AuteurID, &m.ScorePopularite, &createdAt, &authorUsername, &authorEmail, &authorRole, &authorBanned); err != nil {
+		if err := rows.Scan(&m.ID, &m.Contenu, &m.FilID, &m.AuteurID, &m.ScorePopularite, &createdAt, &authorUsername, &authorEmail, &authorRole, &authorBanned, &authorAvatar); err != nil {
 			return nil, err
 		}
 		if t, err := time.Parse("2006-01-02 15:04:05", string(createdAt)); err == nil {
@@ -102,6 +103,7 @@ func (r *MessageRepository) FindByFilID(filID int, page, limit int, sortBy strin
 			Email:    authorEmail,
 			Role:     authorRole,
 			Banned:   authorBanned,
+			Avatar:   authorAvatar,
 		}
 		messages = append(messages, m)
 	}
