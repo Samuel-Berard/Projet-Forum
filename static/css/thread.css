@@ -32,7 +32,8 @@
 
 .thread-top nav {
    display: flex;
-   gap: 4px;
+   align-items: center;
+   gap: 8px;
    margin-left: auto;
 }
 

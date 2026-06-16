@@ -27,7 +27,13 @@
         </nav>
         <div class="header-actions">
           {{ if .Connecte }}
-          <a class="btn-secondary" href="/settings">Paramètres</a>
+          <a class="nav-profile-link" href="/settings" title="Mon Profil">
+            {{ if .Utilisateur.Avatar }}
+            <img class="nav-avatar" src="{{ .Utilisateur.Avatar }}" alt="Avatar">
+            {{ else }}
+            <span class="nav-avatar-ph">{{ slice .Utilisateur.Username 0 1 }}</span>
+            {{ end }}
+          </a>
           <a class="btn-secondary" href="/logout">Déconnexion</a>
           {{ else }}
           <a class="btn-secondary" href="/login">Connexion</a>
