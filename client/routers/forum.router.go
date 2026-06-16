@@ -12,6 +12,7 @@ func RegisterForumRoutes(r *mux.Router, forumController *controllers.ForumContro
 	r.HandleFunc("/", forumController.DisplayAccueil).Methods("GET")
 	r.HandleFunc("/login", forumController.DisplayLogin).Methods("GET")
 	r.HandleFunc("/signup", forumController.DisplaySignup).Methods("GET")
+	r.HandleFunc("/signup", forumController.RegisterUser).Methods("POST")
 	r.HandleFunc("/forum", forumController.DisplayForum).Methods("GET")
 	r.HandleFunc("/threads/{id}", forumController.DisplayThread).Methods("GET")
 }

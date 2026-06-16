@@ -17,23 +17,23 @@ func (s *ActusService) GetLastActus() []models.Actualite {
 	return []models.Actualite{
 		{
 			ID:      1,
-			Titre:   "Bienvenue sur le forum !",
-			Contenu: "Découvrez les fils de discussion et participez aux échanges de la communauté.",
+			Titre:   "GTA 6 : Rockstar confirme le calendrier de sortie pour l'automne 2025",
+			Contenu: "Take-Two a réaffirmé sa fenêtre de sortie pour le très attendu Grand Theft Auto VI lors de son dernier bilan financier.",
 		},
 		{
 			ID:      2,
-			Titre:   "Les règles de la communauté",
-			Contenu: "Restez courtois et respectez les autres membres pour garder un espace agréable.",
+			Titre:   "Nintendo Switch 2 : Ce que l'on sait sur les caractéristiques de la console",
+			Contenu: "Rumeurs insistantes sur l'écran, la rétrocompatibilité et la puissance de la future console hybride.",
 		},
 		{
 			ID:      3,
-			Titre:   "Nouveautés à venir",
-			Contenu: "De nouvelles fonctionnalités arrivent bientôt sur la plateforme. Restez connectés !",
+			Titre:   "Hollow Knight Silksong : Nouvelle fuite d'une classification par âge",
+			Contenu: "L'attente touche-t-elle à sa fin ? Le jeu a reçu une classification officielle, relançant les spéculations.",
 		},
 		{
 			ID:      4,
-			Titre:   "Astuce du jour",
-			Contenu: "Utilisez la recherche pour retrouver rapidement un sujet qui vous intéresse.",
+			Titre:   "Elden Ring : Un nouveau record de ventes franchi à travers le monde",
+			Contenu: "FromSoftware annonce fièrement plus de 25 millions d'exemplaires vendus avant la sortie du DLC.",
 		},
 	}
 }

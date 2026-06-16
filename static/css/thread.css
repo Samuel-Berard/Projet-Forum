@@ -1,30 +1,142 @@
-/* thread.css — page détail d'un fil de discussion.
-   Couleurs, police et reset viennent de theme.css. */
+.thread-top {
+   background: var(--surface);
+   border-bottom: 1px solid var(--border);
+   position: sticky;
+   top: 0;
+   z-index: 10;
+}
 
-.wrap{ max-width:var(--maxw); margin:0 auto; padding:0 24px; }
+.thread-top .container {
+   display: flex;
+   align-items: center;
+   gap: 24px;
+   height: 64px;
+}
 
-/* en-tête */
-.thread-top{ background:var(--surface); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:10; }
-.thread-top .wrap{ display:flex; align-items:center; gap:24px; height:64px; }
-.brand{ display:flex; align-items:center; gap:10px; font-weight:700; font-size:20px; letter-spacing:-0.03em; }
-.brand-logo{ width:38px; height:38px; border-radius:11px; object-fit:contain; background:#fff; }
-.thread-top nav{ display:flex; gap:4px; margin-left:auto; }
-.thread-top nav a{ font-weight:600; font-size:14px; color:var(--ink-2); padding:8px 13px; border-radius:10px; transition:.15s; }
-.thread-top nav a:hover{ background:var(--accent-tint); color:var(--accent-ink); }
+.logo {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   font-weight: 700;
+   font-size: 20px;
+   letter-spacing: -0.03em;
+}
 
-/* contenu du fil */
-.thread{ padding:32px 24px 60px; }
-.back{ display:inline-block; font-weight:600; font-size:14px; color:var(--accent-ink); margin-bottom:20px; }
-.back:hover{ text-decoration:underline; }
-.thread-title{ font-size:30px; font-weight:700; display:flex; align-items:center; gap:12px; }
-.thread-title .badge{ font-size:12px; font-weight:700; background:var(--surface-2); color:var(--muted); padding:3px 10px; border-radius:30px; }
-.thread-meta{ color:var(--muted); font-size:13.5px; margin-top:8px; margin-bottom:28px; }
+.logo-img {
+   width: 38px;
+   height: 38px;
+   border-radius: 11px;
+   object-fit: contain;
+   background: #fff;
+}
 
-/* messages */
-.messages{ display:flex; flex-direction:column; gap:14px; }
-.msg{ background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:18px 20px; }
-.msg-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-.msg-author{ font-weight:600; font-size:14px; color:var(--ink); }
-.msg-score{ font-weight:600; font-size:12.5px; color:var(--accent-ink); background:var(--accent-soft); padding:3px 10px; border-radius:30px; }
-.msg-body{ font-size:15px; color:var(--ink-2); line-height:1.55; }
-.empty{ padding:22px; background:var(--surface); border:1px solid var(--border); border-radius:var(--r); color:var(--muted); }
+.thread-top nav {
+   display: flex;
+   gap: 4px;
+   margin-left: auto;
+}
+
+.thread-top nav a {
+   font-weight: 600;
+   font-size: 14px;
+   color: var(--ink-2);
+   padding: 8px 13px;
+   border-radius: 10px;
+   transition: .15s;
+}
+
+.thread-top nav a:hover {
+   background: var(--accent-tint);
+   color: var(--accent-ink);
+}
+
+
+.thread {
+   padding: 32px 24px 60px;
+}
+
+.back {
+   display: inline-block;
+   font-weight: 600;
+   font-size: 14px;
+   color: var(--accent-ink);
+   margin-bottom: 20px;
+}
+
+.back:hover {
+   text-decoration: underline;
+}
+
+.thread-title {
+   font-size: 30px;
+   font-weight: 700;
+   display: flex;
+   align-items: center;
+   gap: 12px;
+}
+
+.thread-title .badge {
+   font-size: 12px;
+   font-weight: 700;
+   background: var(--surface-2);
+   color: var(--muted);
+   padding: 3px 10px;
+   border-radius: 30px;
+}
+
+.thread-meta {
+   color: var(--muted);
+   font-size: 13.5px;
+   margin-top: 8px;
+   margin-bottom: 28px;
+}
+
+
+.messages {
+   display: flex;
+   flex-direction: column;
+   gap: 14px;
+}
+
+.msg {
+   background: var(--surface);
+   border: 1px solid var(--border);
+   border-radius: var(--r);
+   padding: 18px 20px;
+}
+
+.msg-head {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   margin-bottom: 10px;
+}
+
+.msg-author {
+   font-weight: 600;
+   font-size: 14px;
+   color: var(--ink);
+}
+
+.msg-score {
+   font-weight: 600;
+   font-size: 12.5px;
+   color: var(--accent-ink);
+   background: var(--accent-soft);
+   padding: 3px 10px;
+   border-radius: 30px;
+}
+
+.msg-body {
+   font-size: 15px;
+   color: var(--ink-2);
+   line-height: 1.55;
+}
+
+.empty {
+   padding: 22px;
+   background: var(--surface);
+   border: 1px solid var(--border);
+   border-radius: var(--r);
+   color: var(--muted);
+}
