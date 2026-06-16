@@ -3,6 +3,7 @@ package repositories
 import (
 	"database/sql"
 	"errors"
+	"time"
 
 	"projet-forum/api/models"
 )
@@ -54,8 +55,9 @@ func (r *FilRepository) FindAll(page, limit int, search string, categoryID int) 
 	args := []interface{}{}
 
 	query := `
-		SELECT DISTINCT f.id, f.titre, f.etat, f.auteur_id, f.created_at, f.updated_at
+		SELECT DISTINCT f.id, f.titre, f.etat, f.auteur_id, f.created_at, f.updated_at, u.username, u.email, u.role, u.banned
 		FROM fils_de_discussion f
+		LEFT JOIN utilisateurs u ON f.auteur_id = u.id
 	`
 
 	if categoryID > 0 {
@@ -87,8 +89,23 @@ func (r *FilRepository) FindAll(page, limit int, search string, categoryID int) 
 	for rows.Next() {
 		var f models.FilDeDiscussion
 		var createdAt, updatedAt []uint8
-		if err := rows.Scan(&f.ID, &f.Titre, &f.Etat, &f.AuteurID, &createdAt, &updatedAt); err != nil {
+		var authorUsername, authorEmail, authorRole string
+		var authorBanned bool
+		if err := rows.Scan(&f.ID, &f.Titre, &f.Etat, &f.AuteurID, &createdAt, &updatedAt, &authorUsername, &authorEmail, &authorRole, &authorBanned); err != nil {
 			return nil, err
+		}
+		if t, err := time.Parse("2006-01-02 15:04:05", string(createdAt)); err == nil {
+			f.CreatedAt = t
+		}
+		if t, err := time.Parse("2006-01-02 15:04:05", string(updatedAt)); err == nil {
+			f.UpdatedAt = t
+		}
+		f.Auteur = &models.Utilisateur{
+			ID:       f.AuteurID,
+			Username: authorUsername,
+			Email:    authorEmail,
+			Role:     authorRole,
+			Banned:   authorBanned,
 		}
 		fils = append(fils, f)
 	}
@@ -125,17 +142,37 @@ func (r *FilRepository) CountAll(search string, categoryID int) (int, error) {
 }
 
 func (r *FilRepository) FindByID(id int) (*models.FilDeDiscussion, error) {
-	query := `SELECT id, titre, etat, auteur_id, created_at, updated_at FROM fils_de_discussion WHERE id = ?`
+	query := `
+		SELECT f.id, f.titre, f.etat, f.auteur_id, f.created_at, f.updated_at, u.username, u.email, u.role, u.banned
+		FROM fils_de_discussion f
+		LEFT JOIN utilisateurs u ON f.auteur_id = u.id
+		WHERE f.id = ?
+	`
 	row := r.db.QueryRow(query, id)
 
 	f := &models.FilDeDiscussion{}
 	var createdAt, updatedAt []uint8
-	err := row.Scan(&f.ID, &f.Titre, &f.Etat, &f.AuteurID, &createdAt, &updatedAt)
+	var authorUsername, authorEmail, authorRole string
+	var authorBanned bool
+	err := row.Scan(&f.ID, &f.Titre, &f.Etat, &f.AuteurID, &createdAt, &updatedAt, &authorUsername, &authorEmail, &authorRole, &authorBanned)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.New("fil introuvable")
 		}
 		return nil, err
+	}
+	if t, err := time.Parse("2006-01-02 15:04:05", string(createdAt)); err == nil {
+		f.CreatedAt = t
+	}
+	if t, err := time.Parse("2006-01-02 15:04:05", string(updatedAt)); err == nil {
+		f.UpdatedAt = t
+	}
+	f.Auteur = &models.Utilisateur{
+		ID:       f.AuteurID,
+		Username: authorUsername,
+		Email:    authorEmail,
+		Role:     authorRole,
+		Banned:   authorBanned,
 	}
 
 	return f, nil

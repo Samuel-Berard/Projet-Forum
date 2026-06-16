@@ -76,7 +76,7 @@
                         {{ range .Fils }}
                         <tr>
                             <td><a href="/threads/{{ .ID }}">{{ .Titre }}</a></td>
-                            <td>{{ if .Auteur }}{{ .Auteur.NomUtilisateur }}{{ else }}Inconnu{{ end }}</td>
+                            <td>{{ if .Auteur }}{{ .Auteur.Username }}{{ else }}Inconnu{{ end }}</td>
                             <td>{{ .CreatedAt.Format "02/01/2006 15:04" }}</td>
                             <td>{{ .Etat }}</td>
                         </tr>
