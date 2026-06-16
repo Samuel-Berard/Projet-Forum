@@ -36,9 +36,9 @@ func (s *ForumService) GetMessages(id int) ([]dto.Message, error) {
 	return s.forumApi.GetMessages(id)
 }
 
-// Register transmet la demande d'inscription à l'API.
-func (s *ForumService) Register(username, email, password string) error {
-	return s.forumApi.Register(username, email, password)
+// Register transmet la demande d'inscription à l'API (avatar = URL de l'image, vide si aucun).
+func (s *ForumService) Register(username, email, password, avatar string) error {
+	return s.forumApi.Register(username, email, password, avatar)
 }
 
 // Login transmet les identifiants à l'API et retourne le token.
