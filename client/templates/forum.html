@@ -1,347 +1,128 @@
 {{define "forum"}}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/static/css/theme.css">
-    <link rel="stylesheet" href="/static/css/forum.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forums — GamingForum</title>
+  <link rel="stylesheet" href="/static/css/theme.css">
+  <link rel="stylesheet" href="/static/css/index.css">
+  <link rel="stylesheet" href="/static/css/forum.css">
 </head>
 
 <body>
-    <div class="page-layout">
-        <main class="page-layout__main">
-            <div class="container">
-                <div class="container_main">
-                    <div class="forum_col">
-                        <div class="container_nav_top">
-                            <a href="/" class="backTo">
-                                <i class="fa-solid fa-arrow-left"></i>
-                                <span class="backTo_text">Retour au forum principal</span>
-                            </a>
-                        </div>
-                        <div class="Title_message">
-                            <div class="Title_message_header">
-                                <h2 class="Title_message_title">Forum</h2>
-                            </div>
-                        </div>
-                    </div>
 
-                </div>
-                <div class="forum-actions-bar">
-                    <div class="forum-actions-inner">
-                        <button class="btn-new-topic" type="button">
-                            <i class="ri-file-add-line"></i>
-                            <div class="btn-text">Nouv Sujet</div>
-                        </button>
-                        <form class="forum-search-form">
-                            <div class="search-select-wrapper">
-                                <select class="search-select">
-                                    <option value="topics">Sujet</option>
-                                    <option value="authors">Auteur</option>
-                                    <option value="messages">Message</option>
-                                </select>
-                            </div>
-                            <div class="search-input-wrapper">
-                                <input class="search-input" type="text" placeholder="Rechercher dans le forum"
-                                    id="search" name="q" autocomplete="off" value="">
-                                    
-                            </div>
-                            <button class="search-btn" type="submit">
-                                <i class="ri-search-line"></i>
-                            </button>
-                        </form>
-                        <button class="btn-refresh" type="button">
-                            <i class="ri-reset-left-line"></i>
-                            <div class="btn-text">Actualiser</div>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="forum-table-wrap">
-                <table class="forum-table">
-                    <thead>
-                        <tr>
-                            <th>Sujet</th>
-                            <th>Auteur</th>
-                            <th>Date</th>
-                            <th>État</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{ if .Fils }}
-                        {{ range .Fils }}
-                        <tr>
-                            <td><a href="/threads/{{ .ID }}">{{ .Titre }}</a></td>
-                            <td>{{ if .Auteur }}{{ .Auteur.Username }}{{ else }}Inconnu{{ end }}</td>
-                            <td>{{ .CreatedAt.Format "02/01/2006 15:04" }}</td>
-                            <td>{{ .Etat }}</td>
-                        </tr>
-                        {{ end }}
-                        {{ else }}
-                        <tr>
-                            <td colspan="4" style="text-align: center;">Aucun sujet trouvé.</td>
-                        </tr>
-                        {{ end }}
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="pagination-container">
-                <div class="pagination">
-                    <nav class="pagination-nav">
-                        {{ if .HasPrev }}
-                        <a href="/forum?page={{ .PrevPage }}" class="page-prev">
-                            <i class="icon-arrow-left"></i>
-                        </a>
-                        {{ else }}
-                        <span class="page-prev disabled">
-                            <i class="icon-arrow-left"></i>
-                        </span>
-                        {{ end }}
-
-                        <div class="page-dropdown">
-                            <button class="page-current" type="button">{{ .Page }}</button>
-                            <div class="page-dropdown-wrapper">
-                                <div class="page-dropdown-list">
-                                    {{ range .Pages }}
-                                    {{ if eq . $.Page }}
-                                    <span class="page-item current">{{ . }}</span>
-                                    {{ else }}
-                                    <a href="/forum?page={{ . }}" class="page-item">{{ . }}</a>
-                                    {{ end }}
-                                    {{ end }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <span class="page-more">
-                            <i class="icon-more"></i>
-                        </span>
-
-                        <a href="/forum?page={{ .TotalPages }}" class="page-last">{{ .TotalPages }}</a>
-
-                        {{ if .HasNext }}
-                        <a href="/forum?page={{ .NextPage }}" class="page-next">
-                            <i class="icon-arrow-right"></i>
-                        </a>
-                        {{ else }}
-                        <span class="page-next disabled">
-                            <i class="icon-arrow-right"></i>
-                        </span>
-                        {{ end }}
-                    </nav>
-                </div>
-            </div>
-
-            <div class="topic-editor-container">
-                <div id="topic-editor">
-                    <div class="editor-box">
-                        <div class="editor-title">NOUVEAU SUJET</div>
-                        <form>
-                            <div class="input-group">
-                                <input tabindex="1" name="input-topic-title" id="input-topic-title" type="text"
-                                    placeholder="Saisir le titre du sujet" class="input-title" maxlength="100" value="">
-                            </div>
-
-                            <button type="button" class="btn-sondage">
-                                Ajouter un sondage <i class="fa-solid fa-circle-plus"></i>
-                            </button>
-
-                            <div class="editor-toolbar-box">
-                                <div class="editor-disclaimer">
-                                    <p class="disclaimer-text">Pour que les discussions restent agréables, nous vous
-                                        remercions de rester poli en toutes circonstances. En postant sur nos espaces,
-                                        vous vous engagez à en respecter la charte d'utilisation. Tout message
-                                        discriminatoire ou incitant à la haine sera supprimé et son auteur sanctionné.
-                                    </p>
-                                </div>
-
-                                <textarea tabindex="1" name="message_topic" id="message_topic" class="input-textarea"
-                                    placeholder=""></textarea>
-
-                                <div class="editor-toolbar">
-                                    <div class="toolbar-actions">
-                                        <div class="toolbar-group">
-                                            <button class="toolbar-btn" type="button" title="Gras"><i
-                                                    class="fa-solid fa-bold"></i></button>
-                                            <button class="toolbar-btn" type="button" title="Italique"><i
-                                                    class="fa-solid fa-italic"></i></button>
-                                            <button class="toolbar-btn" type="button" title="Souligné"><i
-                                                    class="fa-solid fa-underline"></i></button>
-                                            <button class="toolbar-btn" type="button" title="Barré"><i
-                                                    class="fa-solid fa-strikethrough"></i></button>
-                                        </div>
-                                        <div class="toolbar-group">
-                                            <button class="toolbar-btn" type="button" title="Liste"><i
-                                                    class="fa-solid fa-list-ul"></i></button>
-                                            <button class="toolbar-btn" type="button" title="Listes numérotées"><i
-                                                    class="fa-solid fa-list-ol"></i></button>
-                                            <button class="toolbar-btn" type="button" title="Citation"><i
-                                                    class="fa-solid fa-quote-right"></i></button>
-                                            <button class="toolbar-btn" type="button" title="Code"><i
-                                                    class="fa-solid fa-code"></i></button>
-                                            <button class="toolbar-btn" type="button" title="Spoiler"><i
-                                                    class="fa-solid fa-eye-slash"></i></button>
-                                        </div>
-                                        <div class="toolbar-group">
-                                            <button class="toolbar-btn" type="button" title="Smileys"><i
-                                                    class="fa-regular fa-face-smile"></i></button>
-                                            <button class="toolbar-btn" type="button" title="Image"><i
-                                                    class="fa-regular fa-image"></i></button>
-                                            <button class="toolbar-btn" type="button" title="Vidéo"><i
-                                                    class="fa-brands fa-youtube"></i></button>
-                                        </div>
-                                        <div class="toolbar-preview">
-                                            <div class="preview-label">Prévisu</div>
-                                            <div class="toggle-switch active"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="editor-preview-box">
-                            </div>
-
-                            <div class="editor-submit">
-                                <button class="btn-submit" tabindex="3" type="button">
-                                    <span class="submit-label">Poster</span>
-                                    <i class="fa-solid fa-paper-plane"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <aside class="page-layout__sidebar">
-            <div class="sidebar-block">
-                <h3 class="sidebar-title">Sous Forums</h3>
-                <ul class="sidebar-list">
-                    <li><a href="#">Aide à l'achat Mac</a></li>
-                    <li><a href="#">Création de Jeux</a></li>
-                    <li><a href="#">Linux</a></li>
-                    <li><a href="#">Création de sites web</a></li>
-                    <li><a href="#">Programmation</a></li>
-                    <li><a href="#">Internet</a></li>
-                    <li><a href="#">Steam Deck</a></li>
-                    <li><a href="#">Macintosh</a></li>
-                    <li><a href="#">Hardware</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-block">
-                <div class="sidebar-info-header">
-                    <h3 class="sidebar-title">Infos</h3>
-                    <span class="online-count"><i class="fa-solid fa-user-group"></i> 9 connectés</span>
-                </div>
-                <div class="sidebar-info">
-                    <p class="sidebar-info-title">Gestion du forum</p>
-                    <p class="sidebar-info-text">Modérateurs : <a href="#">patou260567</a>, <a href="#">Y3Ti</a>, <a
-                            href="#">adgil</a>, <a href="#">KingofAesthetic</a></p>
-                    <p class="sidebar-info-text"><a href="#">Contacter les modérateurs</a> - <a href="#">Règles du
-                            forum</a></p>
-                </div>
-            </div>
-
-            <div class="sidebar-block">
-                <h3 class="sidebar-title">Sujets à ne pas manquer</h3>
-                <ul class="sidebar-list sidebar-list--small">
-                    <li><a href="#">[Dossier] Qui sont les fondateurs d'Intel, d'AMD e...</a></li>
-                    <li><a href="#">Steam Deck</a></li>
-                    <li><a href="#">[Exclusif] Comment une carte graphique est...</a></li>
-                    <li><a href="#">[Dossier] Comment fonctionne un CPU ?</a></li>
-                    <li><a href="#">[Topic officiel] Photos configs</a></li>
-                    <li><a href="#">Le Topic des Screenshots</a></li>
-                </ul>
-            </div>
-        </aside>
-    </div>
-
-
-    <div id="smiley-modal" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>LES SMILEYS</h2>
-                <button class="modal-close" id="close-smiley-modal"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <p class="modal-instruction">Pour insérer un smiley, tapez son nom pour que l'image associée apparaisse
-                    dans votre message (pas plus de 20 smileys par message).</p>
-                <div class="smiley-grid" id="smiley-grid">
-
-                </div>
-            </div>
+  <header class="header-wrapper">
+    <div class="container">
+      <div class="header-bar">
+        <a class="logo" href="/">
+          <img src="/static/img/logo.png" alt="GamingForum" class="logo-img">
+          Gaming<b>Forum</b>
+        </a>
+        <nav class="nav-menu">
+          <a href="/">Accueil</a>
+          <a href="/forum" class="active">Forums</a>
+        </nav>
+        <div class="header-actions">
+          {{ if .Connecte }}
+          <a class="btn-secondary" href="/logout">Déconnexion</a>
+          {{ else }}
+          <a class="btn-secondary" href="/login">Connexion</a>
+          <a class="btn-primary" href="/signup">Inscription</a>
+          {{ end }}
         </div>
+      </div>
+      <div class="categories-bar">
+        <a href="#" class="active">PC</a>
+        <a href="#">PS5</a>
+        <a href="#">Xbox Series</a>
+        <a href="#">Nintendo Switch</a>
+        <a href="#">iOS</a>
+        <a href="#">Android</a>
+        <a href="#">Actus</a>
+        <a href="#">Guides</a>
+        <a href="#">Rumeurs</a>
+        <a href="#">FPS</a>
+        <a href="#">RPG</a>
+        <a href="#">Indés</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="section-header">
+      <h2>Tous les forums</h2>
+      <a class="link" href="/">
+        Retour à l'accueil
+        <span>→</span>
+      </a>
     </div>
 
-
-    <div id="image-modal" class="modal-overlay" style="display: none;">
-        <div class="modal-content image-modal-content">
-            <div class="modal-header image-modal-header">
-                <h2>ENVOYER DES IMAGES</h2>
-                <button class="modal-close" id="close-image-modal"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body image-modal-body">
-                <div class="image-modal-title-bar">
-                    <span class="noelshack-logo">NoelShack <i class="fa-solid fa-face-laugh-squint"></i></span>
-                    <span class="image-count">0/12</span>
-                </div>
-
-                <div class="image-upload-section">
-                    <label>Depuis votre disque :</label>
-                    <div class="upload-dropzone" id="upload-dropzone">
-                        <p>Parcourir / glisser-déposer / coller</p>
-                    </div>
-                    <p class="upload-formats">Formats autorisés : PNG, JPEG, GIF, SVG, BMP, TIFF. Poids max. : 4 Mo.
-                        Taille min. : 128x128px</p>
-                </div>
-
-                <div class="image-url-section">
-                    <label>Depuis une URL :</label>
-                    <div class="url-input-group">
-                        <input type="text" id="image-url-input" placeholder="Rentrer votre URL">
-                        <button type="button" id="btn-download-url">Télécharger</button>
-                    </div>
-                </div>
-
-                <div class="image-format-section">
-                    <label>Format d'affichage :</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="display-format" value="miniature" checked> Miniature</label>
-                        <label><input type="radio" name="display-format" value="moyen"> Moyen</label>
-                        <label><input type="radio" name="display-format" value="pleine"> Pleine largeur</label>
-                    </div>
-                    <p class="format-preview-text">L'aperçu du format est visible après soumission.</p>
-                </div>
-            </div>
+    <div class="threads-card">
+      {{ if .Fils }}
+      {{ range .Fils }}
+      <a class="thread-row" href="/threads/{{ .ID }}">
+        <div class="thread-avatar placeholder"></div>
+        <div class="thread-details">
+          <div class="thread-title">
+            {{ if eq .Etat "ferme" }}<span class="tag-closed">FERMÉ</span>{{ end }}
+            {{ .Titre }}
+          </div>
+          <div class="thread-meta">
+            par <b>{{ if .Auteur }}{{ .Auteur.Username }}{{ else }}Inconnu{{ end }}</b>
+            · {{ .CreatedAt.Format "02/01/2006" }}
+          </div>
         </div>
+      </a>
+      {{ end }}
+      {{ else }}
+      <div class="empty">Aucun sujet pour le moment.</div>
+      {{ end }}
     </div>
 
+    {{ if .Fils }}
+    <nav class="pagination">
+      {{ if .HasPrev }}
+      <a class="page-btn" href="/forum?page={{ .PrevPage }}">← Précédent</a>
+      {{ else }}
+      <span class="page-btn disabled">← Précédent</span>
+      {{ end }}
 
-    <div id="video-modal" class="modal-overlay" style="display: none;">
-        <div class="modal-content video-modal-content">
-            <div class="modal-header image-modal-header">
-                <h2>AJOUTER UNE VIDÉO</h2>
-                <button class="modal-close" id="close-video-modal"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body video-modal-body">
-                <div class="url-input-group video-input-group">
-                    <input type="text" id="video-url-input"
-                        placeholder="Recherche... ou url d'une page de jeuxvideo.com">
-                    <button type="button" class="btn-blue" id="btn-add-video">Ajouter</button>
-                </div>
-                <p class="upload-formats video-formats">URL acceptées : jeuxvideo.com, YouTube, Dailymotion, Vimeo,
-                    Vine, Twitch.</p>
-            </div>
-        </div>
+      {{ range .Pages }}
+      {{ if .Courante }}
+      <span class="page-num current">{{ .Num }}</span>
+      {{ else }}
+      <a class="page-num" href="/forum?page={{ .Num }}">{{ .Num }}</a>
+      {{ end }}
+      {{ end }}
+
+      {{ if .HasNext }}
+      <a class="page-btn" href="/forum?page={{ .NextPage }}">Suivant →</a>
+      {{ else }}
+      <span class="page-btn disabled">Suivant →</span>
+      {{ end }}
+    </nav>
+    {{ end }}
+  </main>
+
+  <footer>
+    <div class="container footer-container">
+      <a class="logo" href="/">
+        <img src="/static/img/logo.png" alt="GamingForum" class="logo-img">
+        Gaming<b>Forum</b>
+      </a>
+      <div class="footer-links">
+        <a href="#">À propos</a>
+        <a href="#">Règles</a>
+        <a href="#">Aide</a>
+        <a href="#">Contact</a>
+        <a href="#">Mentions légales</a>
+      </div>
+      <div class="footer-copyright">© 2026 GamingForum — Espace communautaire indépendant.</div>
     </div>
+  </footer>
 
-    <script src="/static/js/forum.js"></script>
 </body>
 
 </html>

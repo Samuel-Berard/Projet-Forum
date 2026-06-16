@@ -32,6 +32,7 @@ func (s *UtilisateurService) Register(req *models.RegisterRequest) (*models.Util
 		Email:        req.Email,
 		PasswordHash: hashedPassword,
 		Role:         "user",
+		Avatar:       req.Avatar,
 	}
 
 	err := s.repo.Create(user)

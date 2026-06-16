@@ -16,8 +16,8 @@ func InitUtilisateurRepository(db *sql.DB) *UtilisateurRepository {
 }
 
 func (r *UtilisateurRepository) Create(u *models.Utilisateur) error {
-	query := `INSERT INTO utilisateurs (username, email, password_hash) VALUES (?, ?, ?)`
-	result, err := r.db.Exec(query, u.Username, u.Email, u.PasswordHash)
+	query := `INSERT INTO utilisateurs (username, email, password_hash, avatar) VALUES (?, ?, ?, ?)`
+	result, err := r.db.Exec(query, u.Username, u.Email, u.PasswordHash, u.Avatar)
 	if err != nil {
 		return err
 	}

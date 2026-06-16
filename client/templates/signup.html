@@ -17,7 +17,7 @@
             <div>
                 <h2 class="login__title">Crée ton compte</h2>
 
-                <form action="/signup" method="post" class="login__form">
+                <form action="/signup" method="post" enctype="multipart/form-data" class="login__form">
                     {{ if .Erreur }}<p class="form-error">{{ .Erreur }}</p>{{ end }}
                     <div class="login__group">
                         <div class="login__box">
@@ -47,6 +47,11 @@
                             <label for="passwordCreate" class="login__label">Mots de passe</label>
                             <i class="ri-eye-off-fill login__eye" id="loginPasswordCreate"></i>
                         </div>
+                    </div>
+
+                    <div class="login__file">
+                        <label for="avatar">Avatar (optionnel)</label>
+                        <input type="file" name="avatar" accept="image/*" id="avatar">
                     </div>
 
                     <button type="submit" class="login__button">

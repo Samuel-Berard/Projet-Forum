@@ -96,16 +96,24 @@ func (c *ForumControllers) DisplayAccueil(w http.ResponseWriter, r *http.Request
 	c.template.RenderTemplate(w, r, "index", data)
 }
 
+// PageLien représente un numéro de page de la pagination.
+// On le prépare côté Go (numéro + page courante) pour garder le template simple.
+type PageLien struct {
+	Num      int
+	Courante bool
+}
+
 // ForumData regroupe les données affichées sur la page forum (liste + pagination).
 type ForumData struct {
 	Fils       []dto.FilDeDiscussion
 	Page       int
-	Pages      []int
+	Pages      []PageLien
 	TotalPages int
 	HasPrev    bool
 	PrevPage   int
 	HasNext    bool
 	NextPage   int
+	Connecte   bool
 }
 
 // DisplayForum affiche la liste des fils avec pagination.
@@ -128,9 +136,10 @@ func (c *ForumControllers) DisplayForum(w http.ResponseWriter, r *http.Request) 
 		}
 	}
 
-	var pages []int
+	// On prépare les numéros de page côté Go ; le template n'a plus qu'à les afficher.
+	var pages []PageLien
 	for i := 1; i <= totalPages; i++ {
-		pages = append(pages, i)
+		pages = append(pages, PageLien{Num: i, Courante: i == page})
 	}
 
 	data := ForumData{
@@ -142,6 +151,7 @@ func (c *ForumControllers) DisplayForum(w http.ResponseWriter, r *http.Request) 
 		PrevPage:   page - 1,
 		HasNext:    page < totalPages,
 		NextPage:   page + 1,
+		Connecte:   estConnecte(r),
 	}
 
 	c.template.RenderTemplate(w, r, "forum", data)
@@ -259,11 +269,32 @@ func (c *ForumControllers) RegisterUser(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	// 3. La base n'a qu'un champ "username" : on fusionne prénom + nom pour le construire.
+	// 3. Avatar (optionnel) : si un fichier est envoyé, on l'upload via l'API et on récupère son URL.
+	avatar := ""
+	if file, header, errFile := r.FormFile("avatar"); errFile == nil {
+		defer file.Close()
+		data, errLecture := io.ReadAll(file)
+		if errLecture != nil {
+			c.template.RenderTemplate(w, r, "signup", SignupData{
+				Erreur: "Erreur de lecture de l'avatar.", Noms: noms, Prenoms: prenoms, Email: email,
+			})
+			return
+		}
+		url, errUpload := c.service.UploadImage(header.Filename, data)
+		if errUpload != nil {
+			c.template.RenderTemplate(w, r, "signup", SignupData{
+				Erreur: errUpload.Error(), Noms: noms, Prenoms: prenoms, Email: email,
+			})
+			return
+		}
+		avatar = url
+	}
+
+	// 4. La base n'a qu'un champ "username" : on fusionne prénom + nom pour le construire.
 	username := prenoms + " " + noms
 
-	// 4. Appeler l'API d'inscription.
-	if err := c.service.Register(username, email, password); err != nil {
+	// 5. Appeler l'API d'inscription (avec l'URL de l'avatar, vide si aucun fichier).
+	if err := c.service.Register(username, email, password, avatar); err != nil {
 		c.template.RenderTemplate(w, r, "signup", SignupData{
 			Erreur:  err.Error(),
 			Noms:    noms,

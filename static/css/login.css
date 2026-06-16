@@ -227,6 +227,16 @@ img {
   z-index: 10;
 }
 
+/* Champ d'upload d'avatar sur le formulaire d'inscription. */
+.login__file {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  margin-bottom: 1rem;
+  color: var(--title-color);
+  font-size: var(--small-font-size);
+}
+
 /* Message d'erreur affiché au-dessus du formulaire (inscription / connexion). */
 .form-error {
   color: #c0392b;

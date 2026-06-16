@@ -119,11 +119,12 @@ func (api *ForumApi) GetMessages(filID int) ([]dto.Message, error) {
 }
 
 // Register envoie une demande d'inscription (POST) à l'API.
-func (api *ForumApi) Register(username, email, password string) error {
+func (api *ForumApi) Register(username, email, password, avatar string) error {
 	corps, err := json.Marshal(map[string]string{
 		"username": username,
 		"email":    email,
 		"password": password,
+		"avatar":   avatar,
 	})
 	if err != nil {
 		return err
