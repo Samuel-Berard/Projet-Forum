@@ -4,6 +4,7 @@ package controllers
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"projet-forum/client/dto"
 	"projet-forum/client/services"
@@ -103,9 +104,55 @@ func (c *ForumControllers) DisplayLogin(w http.ResponseWriter, r *http.Request) 
 	c.template.RenderTemplate(w, r, "login", nil)
 }
 
-// DisplaySignup affiche la page d'inscription.
+// SignupData regroupe les données du formulaire d'inscription.
+// Elle sert à réafficher le formulaire (message + valeurs déjà saisies) en cas d'erreur.
+type SignupData struct {
+	Erreur  string
+	Noms    string
+	Prenoms string
+	Email   string
+}
+
+// DisplaySignup affiche la page d'inscription (formulaire vide).
 func (c *ForumControllers) DisplaySignup(w http.ResponseWriter, r *http.Request) {
-	c.template.RenderTemplate(w, r, "signup", nil)
+	c.template.RenderTemplate(w, r, "signup", SignupData{})
+}
+
+// RegisterUser traite l'envoi du formulaire d'inscription.
+func (c *ForumControllers) RegisterUser(w http.ResponseWriter, r *http.Request) {
+	// 1. Récupérer et nettoyer les champs (capsule : normalisation avec TrimSpace).
+	noms := strings.TrimSpace(r.FormValue("noms"))
+	prenoms := strings.TrimSpace(r.FormValue("prenoms"))
+	email := strings.TrimSpace(r.FormValue("email"))
+	password := r.FormValue("password")
+
+	// 2. Valider la présence des champs obligatoires (capsule : validation côté serveur).
+	if noms == "" || prenoms == "" || email == "" || password == "" {
+		c.template.RenderTemplate(w, r, "signup", SignupData{
+			Erreur:  "Tous les champs sont obligatoires.",
+			Noms:    noms,
+			Prenoms: prenoms,
+			Email:   email,
+		})
+		return
+	}
+
+	// 3. La base n'a qu'un champ "username" : on fusionne prénom + nom pour le construire.
+	username := prenoms + " " + noms
+
+	// 4. Appeler l'API d'inscription.
+	if err := c.service.Register(username, email, password); err != nil {
+		c.template.RenderTemplate(w, r, "signup", SignupData{
+			Erreur:  err.Error(),
+			Noms:    noms,
+			Prenoms: prenoms,
+			Email:   email,
+		})
+		return
+	}
+
+	// 5. Succès : redirection vers la page de connexion (redirection après POST).
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
 
 // ThreadData regroupe les données affichées sur la page d'un fil de discussion.

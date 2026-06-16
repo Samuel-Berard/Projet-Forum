@@ -226,3 +226,14 @@ img {
   cursor: pointer;
   z-index: 10;
 }
+
+/* Message d'erreur affiché au-dessus du formulaire (inscription / connexion). */
+.form-error {
+  color: #c0392b;
+  background-color: hsla(0, 60%, 50%, .08);
+  border-radius: .75rem;
+  padding: .75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: var(--small-font-size);
+  text-align: center;
+}
