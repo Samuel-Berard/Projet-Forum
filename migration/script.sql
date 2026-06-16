@@ -18,13 +18,13 @@ CREATE TABLE utilisateurs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
---Table des catégories
+-- Table des catégories
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL UNIQUE
 );
 
---Table des fils de discussion
+-- Table des fils de discussion
 CREATE TABLE fils_de_discussion (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titre VARCHAR(255) NOT NULL,
