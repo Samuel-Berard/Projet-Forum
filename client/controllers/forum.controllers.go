@@ -48,6 +48,7 @@ type AccueilData struct {
 	TopForums   []dto.FilDeDiscussion // liste complète pour "Le fil de la commu'"
 	CartesActu  []CarteActu           // actualités de la colonne de droite
 	Connecte    bool                  // vrai si l'utilisateur est connecté (cookie présent)
+	Utilisateur *dto.Utilisateur      // informations de l'utilisateur connecté
 }
 
 // DisplayAccueil affiche la page d'accueil.
@@ -91,6 +92,7 @@ func (c *ForumControllers) DisplayAccueil(w http.ResponseWriter, r *http.Request
 		TopForums:   fils,
 		CartesActu:  cartesActu,
 		Connecte:    estConnecte(r),
+		Utilisateur: c.getConnecteUser(r),
 	}
 
 	c.template.RenderTemplate(w, r, "index", data)
@@ -105,15 +107,16 @@ type PageLien struct {
 
 // ForumData regroupe les données affichées sur la page forum (liste + pagination).
 type ForumData struct {
-	Fils       []dto.FilDeDiscussion
-	Page       int
-	Pages      []PageLien
-	TotalPages int
-	HasPrev    bool
-	PrevPage   int
-	HasNext    bool
-	NextPage   int
-	Connecte   bool
+	Fils        []dto.FilDeDiscussion
+	Page        int
+	Pages       []PageLien
+	TotalPages  int
+	HasPrev     bool
+	PrevPage    int
+	HasNext     bool
+	NextPage    int
+	Connecte    bool
+	Utilisateur *dto.Utilisateur
 }
 
 // DisplayForum affiche la liste des fils avec pagination.
@@ -143,15 +146,16 @@ func (c *ForumControllers) DisplayForum(w http.ResponseWriter, r *http.Request) 
 	}
 
 	data := ForumData{
-		Fils:       fils,
-		Page:       page,
-		Pages:      pages,
-		TotalPages: totalPages,
-		HasPrev:    page > 1,
-		PrevPage:   page - 1,
-		HasNext:    page < totalPages,
-		NextPage:   page + 1,
-		Connecte:   estConnecte(r),
+		Fils:        fils,
+		Page:        page,
+		Pages:       pages,
+		TotalPages:  totalPages,
+		HasPrev:     page > 1,
+		PrevPage:    page - 1,
+		HasNext:     page < totalPages,
+		NextPage:    page + 1,
+		Connecte:    estConnecte(r),
+		Utilisateur: c.getConnecteUser(r),
 	}
 
 	c.template.RenderTemplate(w, r, "forum", data)
@@ -175,6 +179,19 @@ func tokenDuCookie(r *http.Request) string {
 // estConnecte indique si l'utilisateur possède un cookie "token" (donc connecté).
 func estConnecte(r *http.Request) bool {
 	return tokenDuCookie(r) != ""
+}
+
+// getConnecteUser retourne les informations de l'utilisateur connecté s'il existe.
+func (c *ForumControllers) getConnecteUser(r *http.Request) *dto.Utilisateur {
+	token := tokenDuCookie(r)
+	if token == "" {
+		return nil
+	}
+	user, err := c.service.GetMe(token)
+	if err != nil {
+		return nil
+	}
+	return user
 }
 
 // DisplayLogin affiche la page de connexion (formulaire vide).
@@ -304,16 +321,30 @@ func (c *ForumControllers) RegisterUser(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	// 5. Succès : redirection vers la page de connexion (redirection après POST).
-	http.Redirect(w, r, "/login", http.StatusSeeOther)
+	// 6. Connexion automatique après inscription.
+	token, err := c.service.Login(email, password)
+	if err == nil && token != "" {
+		http.SetCookie(w, &http.Cookie{
+			Name:     "token",
+			Value:    token,
+			Path:     "/",
+			HttpOnly: true,
+			SameSite: http.SameSiteLaxMode,
+			MaxAge:   24 * 60 * 60, // 24 heures
+		})
+	}
+
+	// Redirection après succès vers l'accueil.
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 // ThreadData regroupe les données affichées sur la page d'un fil de discussion.
 type ThreadData struct {
-	Fil      *dto.FilDeDiscussion
-	Messages []dto.Message
-	Connecte bool
-	Erreur   string
+	Fil         *dto.FilDeDiscussion
+	Messages    []dto.Message
+	Connecte    bool
+	Erreur      string
+	Utilisateur *dto.Utilisateur
 }
 
 // renderThread récupère un fil + ses messages et affiche la page (avec un éventuel message d'erreur).
@@ -328,10 +359,11 @@ func (c *ForumControllers) renderThread(w http.ResponseWriter, r *http.Request, 
 	messages, _ := c.service.GetMessages(id)
 
 	c.template.RenderTemplate(w, r, "thread", ThreadData{
-		Fil:      fil,
-		Messages: messages,
-		Connecte: estConnecte(r),
-		Erreur:   erreur,
+		Fil:         fil,
+		Messages:    messages,
+		Connecte:    estConnecte(r),
+		Erreur:      erreur,
+		Utilisateur: c.getConnecteUser(r),
 	})
 }
 
