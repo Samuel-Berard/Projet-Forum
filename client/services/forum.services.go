@@ -35,3 +35,8 @@ func (s *ForumService) GetFil(id int) (*dto.FilDeDiscussion, error) {
 func (s *ForumService) GetMessages(id int) ([]dto.Message, error) {
 	return s.forumApi.GetMessages(id)
 }
+
+// Register transmet la demande d'inscription à l'API.
+func (s *ForumService) Register(username, email, password string) error {
+	return s.forumApi.Register(username, email, password)
+}
