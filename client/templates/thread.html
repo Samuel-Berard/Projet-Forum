@@ -35,7 +35,7 @@
       {{ range .Messages }}
       <article class="msg">
         <div class="msg-head">
-          <span class="msg-author">Utilisateur n°{{ .AuteurID }}</span>
+          <span class="msg-author">{{ if .Auteur }}{{ .Auteur.Username }}{{ else }}Utilisateur n°{{ .AuteurID }}{{ end }}</span>
           <span class="msg-score">{{ .ScorePopularite }} pts</span>
         </div>
         <p class="msg-body">{{ .Contenu }}</p>
