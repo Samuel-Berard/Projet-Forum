@@ -63,7 +63,11 @@
       {{ if .Fils }}
       {{ range .Fils }}
       <a class="thread-row" href="/threads/{{ .ID }}">
-        <div class="thread-avatar placeholder"></div>
+        {{ if and .Auteur .Auteur.Avatar }}
+        <img class="thread-avatar" src="{{ .Auteur.Avatar }}" alt="Avatar" style="object-fit: cover;">
+        {{ else }}
+        <div class="thread-avatar placeholder" style="background-image: url('/static/img/logo.png'); background-size: cover; background-position: center;"></div>
+        {{ end }}
         <div class="thread-details">
           <div class="thread-title">
             {{ if eq .Etat "ferme" }}<span class="tag-closed">FERMÉ</span>{{ end }}
