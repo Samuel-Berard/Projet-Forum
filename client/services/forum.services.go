@@ -40,3 +40,13 @@ func (s *ForumService) GetMessages(id int) ([]dto.Message, error) {
 func (s *ForumService) Register(username, email, password string) error {
 	return s.forumApi.Register(username, email, password)
 }
+
+// Login transmet les identifiants à l'API et retourne le token.
+func (s *ForumService) Login(identifiant, password string) (string, error) {
+	return s.forumApi.Login(identifiant, password)
+}
+
+// CreateMessage publie un message dans un fil via l'API (nécessite le token).
+func (s *ForumService) CreateMessage(token string, filID int, contenu string) error {
+	return s.forumApi.CreateMessage(token, filID, contenu)
+}

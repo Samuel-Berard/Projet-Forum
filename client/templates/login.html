@@ -20,13 +20,14 @@
          <div>
             <h2 class="login__title">Te revoila</h2>
 
-            <form action="" method="post" class="login__form">
+            <form action="/login" method="post" class="login__form">
+               {{ if .Erreur }}<p class="form-error">{{ .Erreur }}</p>{{ end }}
                <div class="login__group">
                   <div class="login__box">
                      <i class="ri-mail-fill login__icon"></i>
-                     <input type="email" name="email" autocomplete="email" required placeholder=" " class="login__input"
-                        id="email">
-                     <label for="email" class="login__label">Email</label>
+                     <input type="text" name="identifiant" value="{{ .Identifiant }}" autocomplete="username" required placeholder=" " class="login__input"
+                        id="identifiant">
+                     <label for="identifiant" class="login__label">Pseudo ou email</label>
                   </div>
 
                   <div class="login__box">

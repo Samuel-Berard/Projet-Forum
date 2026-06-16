@@ -47,6 +47,17 @@
       <div class="empty">Aucun message dans ce fil pour le moment.</div>
       {{ end }}
     </section>
+
+    {{ if .Erreur }}<p class="reply-error">{{ .Erreur }}</p>{{ end }}
+
+    {{ if .Connecte }}
+    <form class="reply-form" action="/threads/{{ .Fil.ID }}/messages" method="post">
+      <textarea name="contenu" rows="4" required placeholder="Écris ta réponse…"></textarea>
+      <button type="submit">Publier</button>
+    </form>
+    {{ else }}
+    <p class="reply-login"><a href="/login">Connecte-toi</a> pour répondre.</p>
+    {{ end }}
   </main>
 </body>
 

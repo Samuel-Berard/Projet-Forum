@@ -18,6 +18,7 @@
     <div class="container">
       <div class="header-bar">
         <a class="logo" href="/">
+          <img src="/static/img/logo.png" alt="GamingForum" class="logo-img">
           Gaming<b>Forum</b>
         </a>
         <nav class="nav-menu">
@@ -25,8 +26,12 @@
           <a href="/forum">Forums</a>
         </nav>
         <div class="header-actions">
+          {{ if .Connecte }}
+          <a class="btn-secondary" href="/logout">Déconnexion</a>
+          {{ else }}
           <a class="btn-secondary" href="/login">Connexion</a>
           <a class="btn-primary" href="/signup">Inscription</a>
+          {{ end }}
         </div>
       </div>
       <div class="categories-bar">
@@ -75,11 +80,12 @@
       </a>
     </div>
     <div class="bento-grid">
-      {{ if .TopForums }}
-      {{ range .TopForums }}
-      <a class="bento-card" href="/threads/{{ .ID }}">
-        <div class="card-cover placeholder" data-label="forum"></div>
+      {{ if .CartesForum }}
+      {{ range .CartesForum }}
+      <a class="bento-card{{ if .EnAvant }} featured{{ end }}" href="/threads/{{ .ID }}">
+        <div class="card-cover placeholder"></div>
         <div class="card-overlay"></div>
+        <span class="card-rank">{{ .Rang }}</span>
         <div class="card-body">
           <h3>{{ .Titre }}</h3>
           <div class="card-meta"><span class="status-dot"></span> {{ .Etat }}</div>
@@ -118,8 +124,17 @@
         {{ end }}
       </div>
       <div class="news-card">
-        {{ if .LastActus }}
-        {{ range .LastActus }}
+        {{ if .CartesActu }}
+        {{ range .CartesActu }}
+        {{ if .EnAvant }}
+        <a class="featured-news" href="/threads/{{ .ID }}">
+          <div class="news-image placeholder"></div>
+          <div class="news-body">
+            <div class="news-category">À la une</div>
+            <h4>{{ .Titre }}</h4>
+          </div>
+        </a>
+        {{ else }}
         <a class="news-item" href="/threads/{{ .ID }}">
           <div class="news-thumbnail placeholder"></div>
           <div class="news-body">
@@ -127,6 +142,7 @@
             <div class="news-meta">actualité</div>
           </div>
         </a>
+        {{ end }}
         {{ end }}
         {{ else }}
         <div class="empty">Aucune actualité pour le moment.</div>
@@ -172,6 +188,7 @@
   <footer>
     <div class="container footer-container">
       <a class="logo" href="/">
+        <img src="/static/img/logo.png" alt="GamingForum" class="logo-img">
         Gaming<b>Forum</b>
       </a>
       <div class="footer-links">

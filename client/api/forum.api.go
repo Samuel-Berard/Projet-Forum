@@ -137,3 +137,49 @@ func (api *ForumApi) Register(username, email, password string) error {
 	_, err = api.executeRequest(req, nil)
 	return err
 }
+
+// Login envoie les identifiants (POST) à l'API et retourne le token JWT en cas de succès.
+func (api *ForumApi) Login(identifiant, password string) (string, error) {
+	corps, err := json.Marshal(map[string]string{
+		"identifiant": identifiant,
+		"password":    password,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, api.baseURL+"/login", bytes.NewBuffer(corps))
+	if err != nil {
+		return "", err
+	}
+
+	// L'API répond : {"message": "...", "token": "..."} — on ne garde que le token.
+	var reponse struct {
+		Token string `json:"token"`
+	}
+	if _, err := api.executeRequest(req, &reponse); err != nil {
+		return "", err
+	}
+
+	return reponse.Token, nil
+}
+
+// CreateMessage publie un message dans un fil (route protégée → token en Bearer).
+func (api *ForumApi) CreateMessage(token string, filID int, contenu string) error {
+	corps, err := json.Marshal(map[string]string{"contenu": contenu})
+	if err != nil {
+		return err
+	}
+
+	url := fmt.Sprintf("%s/threads/%d/messages", api.baseURL, filID)
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(corps))
+	if err != nil {
+		return err
+	}
+
+	// Le token JWT est envoyé dans l'en-tête Authorization au format Bearer (exigé par l'API).
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	_, err = api.executeRequest(req, nil)
+	return err
+}

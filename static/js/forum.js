@@ -41,12 +41,19 @@ document.addEventListener("DOMContentLoaded", () => {
         { code: ":rire:", url: "https://image.jeuxvideo.com/smileys_img/39.gif" },
         { code: ":-((", url: "https://image.jeuxvideo.com/smileys_img/15.gif" },
         { code: ":fou:", url: "https://image.jeuxvideo.com/smileys_img/50.gif" },
-        { code: ":sleep:", url: "https://image.jeuxvideo.com/smileys_img/27.gif" }
+        { code: ":sleep:", url: "https://image.jeuxvideo.com/smileys_img/27.gif" },
+        {code: "drole:", url: "https://image.jeuxvideo.com/smileys_img/62.gif"},
+        {code: "play:", url: "https://image.jeuxvideo.com/smileys_img/play.gif"},
+        {code: ":desole:", url: "https://image.jeuxvideo.com/smileys_img/65.gif"},
+        {code: ":spoiler:", url: "https://image.jeuxvideo.com/smileys_img/63.gif"},
+        {code: ":merci:" , url: "https://image.jeuxvideo.com/smileys_img/58.gif"},
+        {code: ":svp:", url: "https://image.jeuxvideo.com/smileys_img/59.gif"},
+        {code: ":sors:", url: "https://image.jeuxvideo.com/smileys_img/56.gif"}
+
     ];
 
     if (!textarea) return;
 
-    // Config des balises de formatage (Syntaxe JVC)
     const tags = {
         "Gras": { open: "'''", close: "'''" },
         "Italique": { open: "''", close: "''" },

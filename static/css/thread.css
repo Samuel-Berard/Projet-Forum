@@ -140,3 +140,51 @@
    border-radius: var(--r);
    color: var(--muted);
 }
+
+/* Formulaire de réponse (publier un message dans le fil) */
+.reply-form {
+   display: flex;
+   flex-direction: column;
+   gap: 12px;
+   margin-top: 28px;
+}
+
+.reply-form textarea {
+   width: 100%;
+   padding: 12px 14px;
+   border: 1px solid var(--border);
+   border-radius: var(--r);
+   background: var(--surface);
+   color: var(--ink);
+   font-family: inherit;
+   font-size: 15px;
+   resize: vertical;
+}
+
+.reply-form button {
+   align-self: flex-start;
+   background: var(--ink);
+   color: #fff;
+   border: none;
+   border-radius: 10px;
+   padding: 10px 20px;
+   font-weight: 600;
+   font-size: 14px;
+   cursor: pointer;
+}
+
+.reply-error {
+   margin-top: 24px;
+   color: #c0392b;
+   font-weight: 600;
+}
+
+.reply-login {
+   margin-top: 28px;
+   color: var(--muted);
+}
+
+.reply-login a {
+   color: var(--accent-ink);
+   font-weight: 600;
+}
