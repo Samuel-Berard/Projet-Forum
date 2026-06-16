@@ -37,7 +37,14 @@
       {{ range .Messages }}
       <article class="msg">
         <div class="msg-head">
-          <span class="msg-author">{{ if .Auteur }}{{ .Auteur.Username }}{{ else }}Utilisateur n°{{ .AuteurID }}{{ end }}</span>
+          <div class="msg-author">
+            {{ if and .Auteur .Auteur.Avatar }}
+            <img class="msg-avatar" src="{{ .Auteur.Avatar }}" alt="">
+            {{ else }}
+            <span class="msg-avatar msg-avatar-ph">{{ if .Auteur }}{{ slice .Auteur.Username 0 1 }}{{ else }}?{{ end }}</span>
+            {{ end }}
+            <span class="msg-name">{{ if .Auteur }}{{ .Auteur.Username }}{{ else }}Utilisateur n°{{ .AuteurID }}{{ end }}</span>
+          </div>
           <span class="msg-score">{{ .ScorePopularite }} pts</span>
         </div>
         <p class="msg-body">{{ .Contenu }}</p>

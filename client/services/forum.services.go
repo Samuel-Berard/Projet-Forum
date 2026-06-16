@@ -50,3 +50,18 @@ func (s *ForumService) Login(identifiant, password string) (string, error) {
 func (s *ForumService) CreateMessage(token string, filID int, contenu string) error {
 	return s.forumApi.CreateMessage(token, filID, contenu)
 }
+
+// UploadImage envoie une image à l'API et retourne son URL publique.
+func (s *ForumService) UploadImage(filename string, data []byte) (string, error) {
+	return s.forumApi.UploadFile(filename, data)
+}
+
+// GetMe retourne les informations de l'utilisateur connecté.
+func (s *ForumService) GetMe(token string) (*dto.Utilisateur, error) {
+	return s.forumApi.GetMe(token)
+}
+
+// UpdateAvatar enregistre l'URL de l'avatar de l'utilisateur connecté.
+func (s *ForumService) UpdateAvatar(token, avatarURL string) error {
+	return s.forumApi.UpdateAvatar(token, avatarURL)
+}

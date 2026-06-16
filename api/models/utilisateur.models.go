@@ -9,6 +9,7 @@ type Utilisateur struct {
 	PasswordHash string    `json:"-"`
 	Role         string    `json:"role"`
 	Banned       bool      `json:"banned"`
+	Avatar       string    `json:"avatar"`
 	CreatedAt    time.Time `json:"created_at"`
 }
 

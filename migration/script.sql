@@ -14,6 +14,7 @@ CREATE TABLE utilisateurs (
     password_hash VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL DEFAULT 'user',
     banned BOOLEAN NOT NULL DEFAULT FALSE,
+    avatar VARCHAR(255) NOT NULL DEFAULT '',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -1,0 +1,19 @@
+# Éditeurs / outils
+.vscode/
+.claude/
+.idea/
+
+# Go
+*.exe
+*.exe~
+*.test
+*.out
+/vendor/
+
+# Fichiers uploadés (on garde le dossier, pas son contenu)
+uploads/*
+!uploads/.gitkeep
+
+# OS
+Thumbs.db
+.DS_Store

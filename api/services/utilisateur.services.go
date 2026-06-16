@@ -83,3 +83,13 @@ func (s *UtilisateurService) BanUser(id int, role string) error {
 
 	return s.repo.BanUser(id)
 }
+
+// GetByID retourne un utilisateur par son identifiant (utilisé pour /me).
+func (s *UtilisateurService) GetByID(id int) (*models.Utilisateur, error) {
+	return s.repo.FindByID(id)
+}
+
+// UpdateAvatar met à jour l'avatar (URL de l'image) d'un utilisateur.
+func (s *UtilisateurService) UpdateAvatar(id int, avatar string) error {
+	return s.repo.UpdateAvatar(id, avatar)
+}

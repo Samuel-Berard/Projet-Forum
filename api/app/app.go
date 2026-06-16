@@ -2,6 +2,7 @@ package app
 
 import (
 	"database/sql"
+	"net/http"
 
 	"projet-forum/api/config"
 	"projet-forum/api/controllers"
@@ -34,24 +35,31 @@ func InitApp() *App {
 	filService := services.InitFilService(filRepository)
 	messageService := services.InitMessageService(messageRepository, filRepository)
 	actusService := services.InitActusService()
+	uploadService := services.InitUploadService()
 
 	// Initialisation des controllers
 	utilisateurController := controllers.InitUtilisateurController(utilisateurService)
 	filController := controllers.InitFilController(filService)
 	messageController := controllers.InitMessageController(messageService)
 	actusController := controllers.InitActusController(actusService)
+	uploadController := controllers.InitUploadController(uploadService)
 
-	// Enregistrement des routes (avec ajout du préfixe "/api/...")
-	router := mux.NewRouter().PathPrefix("/api").Subrouter()
+	// Routeur racine : sert les fichiers uploadés (/uploads/...) et héberge le sous-routeur /api.
+	rootRouter := mux.NewRouter()
+	rootRouter.PathPrefix("/uploads/").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads/"))))
+
+	// Enregistrement des routes de l'API (avec ajout du préfixe "/api/...")
+	router := rootRouter.PathPrefix("/api").Subrouter()
 
 	routers.RegisterUtilisateurRoutes(router, utilisateurController)
 	routers.RegisterFilRoutes(router, filController)
 	routers.RegisterMessageRoutes(router, messageController)
 	routers.RegisterActusRoutes(router, actusController)
+	routers.RegisterUploadRoutes(router, uploadController)
 
 	return &App{
 		Db:     db,
-		Router: router,
+		Router: rootRouter,
 	}
 }
 

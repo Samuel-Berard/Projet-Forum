@@ -1,0 +1,161 @@
+/* settings.css — page Paramètres / avatar.
+   Couleurs, police et reset viennent de theme.css. */
+
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* en-tête */
+.settings-top {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-top .container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 64px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.03em;
+}
+
+.logo-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  object-fit: contain;
+  background: #fff;
+}
+
+.settings-top nav {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.settings-top nav a {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink-2);
+  padding: 8px 13px;
+  border-radius: 10px;
+  transition: .15s;
+}
+
+.settings-top nav a:hover {
+  background: var(--accent-tint);
+  color: var(--accent-ink);
+}
+
+/* contenu */
+.settings {
+  padding: 40px 24px 60px;
+}
+
+.settings h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.profile-card,
+.avatar-form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.avatar-block {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  flex: none;
+}
+
+.avatar-placeholder {
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: #fff;
+  font-size: 36px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.profile-info .username {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.profile-info .email,
+.profile-info .role {
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.avatar-form-card h2 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 13.5px;
+  margin: 6px 0 18px;
+}
+
+.form-error {
+  color: #c0392b;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.avatar-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.avatar-form input[type="file"] {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+}
+
+.avatar-form button {
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.avatar-form button:hover {
+  background: var(--accent);
+}

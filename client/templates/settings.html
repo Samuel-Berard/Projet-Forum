@@ -1,0 +1,60 @@
+{{define "settings"}}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paramètres — Forum Gaming</title>
+  <link rel="stylesheet" href="/static/css/theme.css">
+  <link rel="stylesheet" href="/static/css/settings.css">
+</head>
+
+<body>
+  <header class="settings-top">
+    <div class="container">
+      <a class="logo" href="/"><img src="/static/img/logo.png" alt="Logo" class="logo-img"> Forum Gaming</a>
+      <nav>
+        <a href="/">Accueil</a>
+        <a href="/forum">Forums</a>
+        <a href="/logout">Déconnexion</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container settings">
+    <h1>Paramètres du profil</h1>
+
+    <section class="profile-card">
+      <div class="avatar-block">
+        {{ if .Utilisateur.Avatar }}
+        <img class="avatar" src="{{ .Utilisateur.Avatar }}" alt="Avatar">
+        {{ else }}
+        <div class="avatar avatar-placeholder">{{ slice .Utilisateur.Username 0 1 }}</div>
+        {{ end }}
+        <div class="profile-info">
+          <div class="username">{{ .Utilisateur.Username }}</div>
+          <div class="email">{{ .Utilisateur.Email }}</div>
+          <div class="role">Rôle : {{ .Utilisateur.Role }}</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="avatar-form-card">
+      <h2>Changer mon avatar</h2>
+      <p class="hint">Formats acceptés : jpg, jpeg, png, gif, webp (max 10 Mo).</p>
+
+      {{ if .Erreur }}
+      <p class="form-error">{{ .Erreur }}</p>
+      {{ end }}
+
+      <form class="avatar-form" action="/settings" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit">Mettre à jour l'avatar</button>
+      </form>
+    </section>
+  </main>
+</body>
+
+</html>
+{{end}}

@@ -48,11 +48,11 @@ func (r *UtilisateurRepository) FindByUsernameOrEmail(identifiant string) (*mode
 }
 
 func (r *UtilisateurRepository) FindByID(id int) (*models.Utilisateur, error) {
-	query := `SELECT id, username, email, password_hash, role, banned FROM utilisateurs WHERE id = ?`
+	query := `SELECT id, username, email, password_hash, role, banned, avatar FROM utilisateurs WHERE id = ?`
 	row := r.db.QueryRow(query, id)
 
 	u := &models.Utilisateur{}
-	err := row.Scan(&u.ID, &u.Username, &u.Email, &u.PasswordHash, &u.Role, &u.Banned)
+	err := row.Scan(&u.ID, &u.Username, &u.Email, &u.PasswordHash, &u.Role, &u.Banned, &u.Avatar)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.New("utilisateur introuvable")
@@ -65,5 +65,11 @@ func (r *UtilisateurRepository) FindByID(id int) (*models.Utilisateur, error) {
 func (r *UtilisateurRepository) BanUser(id int) error {
 	query := `UPDATE utilisateurs SET banned = TRUE WHERE id = ?`
 	_, err := r.db.Exec(query, id)
+	return err
+}
+
+func (r *UtilisateurRepository) UpdateAvatar(id int, avatar string) error {
+	query := `UPDATE utilisateurs SET avatar = ? WHERE id = ?`
+	_, err := r.db.Exec(query, avatar, id)
 	return err
 }

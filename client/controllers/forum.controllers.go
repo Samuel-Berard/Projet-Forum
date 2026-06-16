@@ -2,6 +2,7 @@
 package controllers
 
 import (
+	"io"
 	"net/http"
 	"strconv"
 	"strings"
@@ -343,4 +344,120 @@ func (c *ForumControllers) CreateMessage(w http.ResponseWriter, r *http.Request)
 
 	// Succès : on revient sur le fil, qui affiche le nouveau message.
 	http.Redirect(w, r, "/threads/"+strconv.Itoa(id), http.StatusSeeOther)
+}
+
+// UploadData regroupe le résultat de l'upload (URL de l'image ou message d'erreur).
+type UploadData struct {
+	URL    string
+	Erreur string
+}
+
+// DisplayUpload affiche le formulaire d'upload d'image (page de démonstration).
+func (c *ForumControllers) DisplayUpload(w http.ResponseWriter, r *http.Request) {
+	c.template.RenderTemplate(w, r, "upload", UploadData{})
+}
+
+// HandleUpload reçoit le fichier du formulaire, le transmet à l'API et réaffiche la page avec l'URL.
+func (c *ForumControllers) HandleUpload(w http.ResponseWriter, r *http.Request) {
+	// Taille maximale : 10 Mo.
+	if err := r.ParseMultipartForm(10 << 20); err != nil {
+		c.template.RenderTemplate(w, r, "upload", UploadData{Erreur: "Fichier trop volumineux ou requête invalide"})
+		return
+	}
+
+	file, header, err := r.FormFile("file")
+	if err != nil {
+		c.template.RenderTemplate(w, r, "upload", UploadData{Erreur: "Aucun fichier sélectionné"})
+		return
+	}
+	defer file.Close()
+
+	// On lit le contenu du fichier pour le transmettre à l'API.
+	data, err := io.ReadAll(file)
+	if err != nil {
+		c.template.RenderTemplate(w, r, "upload", UploadData{Erreur: "Erreur de lecture du fichier"})
+		return
+	}
+
+	url, err := c.service.UploadImage(header.Filename, data)
+	if err != nil {
+		c.template.RenderTemplate(w, r, "upload", UploadData{Erreur: err.Error()})
+		return
+	}
+
+	c.template.RenderTemplate(w, r, "upload", UploadData{URL: url})
+}
+
+// SettingsData regroupe les données de la page Paramètres (profil + avatar).
+type SettingsData struct {
+	Utilisateur *dto.Utilisateur
+	Erreur      string
+}
+
+// DisplaySettings affiche la page Paramètres de l'utilisateur connecté.
+func (c *ForumControllers) DisplaySettings(w http.ResponseWriter, r *http.Request) {
+	token := tokenDuCookie(r)
+	if token == "" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	user, err := c.service.GetMe(token)
+	if err != nil {
+		// Token invalide ou expiré → on renvoie vers la connexion.
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	c.template.RenderTemplate(w, r, "settings", SettingsData{Utilisateur: user})
+}
+
+// UpdateAvatarSettings traite l'upload d'un nouvel avatar depuis la page Paramètres.
+func (c *ForumControllers) UpdateAvatarSettings(w http.ResponseWriter, r *http.Request) {
+	token := tokenDuCookie(r)
+	if token == "" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	// On récupère l'utilisateur pour pouvoir réafficher la page en cas d'erreur.
+	user, err := c.service.GetMe(token)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	if err := r.ParseMultipartForm(10 << 20); err != nil {
+		c.template.RenderTemplate(w, r, "settings", SettingsData{Utilisateur: user, Erreur: "Fichier trop volumineux ou invalide"})
+		return
+	}
+
+	file, header, err := r.FormFile("file")
+	if err != nil {
+		c.template.RenderTemplate(w, r, "settings", SettingsData{Utilisateur: user, Erreur: "Aucun fichier sélectionné"})
+		return
+	}
+	defer file.Close()
+
+	data, err := io.ReadAll(file)
+	if err != nil {
+		c.template.RenderTemplate(w, r, "settings", SettingsData{Utilisateur: user, Erreur: "Erreur de lecture du fichier"})
+		return
+	}
+
+	// 1. On envoie l'image à l'API → on récupère son URL.
+	url, err := c.service.UploadImage(header.Filename, data)
+	if err != nil {
+		c.template.RenderTemplate(w, r, "settings", SettingsData{Utilisateur: user, Erreur: err.Error()})
+		return
+	}
+
+	// 2. On enregistre cette URL comme avatar de l'utilisateur.
+	if err := c.service.UpdateAvatar(token, url); err != nil {
+		c.template.RenderTemplate(w, r, "settings", SettingsData{Utilisateur: user, Erreur: err.Error()})
+		return
+	}
+
+	// 3. Redirection vers la page Paramètres, qui affiche le nouvel avatar.
+	http.Redirect(w, r, "/settings", http.StatusSeeOther)
 }
