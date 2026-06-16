@@ -65,11 +65,19 @@
         </form>
       </div>
       <div class="hero-featured">
-        <div class="featured-topic">
-          <span class="tag">TOPIC DU MOMENT</span>
-          <h3>GTA 6 : vos attentes après la dernière bande-annonce</h3>
-          <div class="topic-meta">dans <b>Discussions Générales</b> · 1 428 réponses</div>
-        </div>
+        <a class="featured-topic" href="/threads/6"
+          style="position: relative; overflow: hidden; background-image: url('/static/img/gta6.png'); background-size: cover; background-position: center; border: none;">
+          <div class="card-overlay"
+            style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.25) 100%); z-index: 1;">
+          </div>
+          <span class="tag" style="position: relative; z-index: 2;">TOPIC DU MOMENT</span>
+          <h3
+            style="position: relative; z-index: 2; color: #fff; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); margin-top: 16px;">
+            GTA 6 : vos attentes après la dernière bande-annonce</h3>
+          <div class="topic-meta"
+            style="position: relative; z-index: 2; color: rgba(255, 255, 255, 0.85); border-top: 1px solid rgba(255, 255, 255, 0.25); margin-top: auto; padding-top: 16px;">
+            dans <b style="color: #fff;">Discussions Générales</b> · 1 428 réponses</div>
+        </a>
       </div>
     </section>
 
@@ -84,7 +92,9 @@
       {{ if .CartesForum }}
       {{ range .CartesForum }}
       <a class="bento-card{{ if .EnAvant }} featured{{ end }}" href="/threads/{{ .ID }}">
-        <div class="card-cover placeholder"></div>
+        <div class="card-cover placeholder"
+          style="background-image: url('/static/img/bento_cover_{{ .Rang }}.png'); background-size: cover; background-position: center;">
+        </div>
         <div class="card-overlay"></div>
         <span class="card-rank">{{ .Rang }}</span>
         <div class="card-body">
@@ -96,7 +106,7 @@
       {{ else }}
       <div class="empty">Aucun forum pour le moment.</div>
       {{ end }}
-  </div>
+    </div>
 
     <div class="section-header">
       <h2>Le fil de la commu'</h2>
@@ -110,7 +120,13 @@
         {{ if .TopForums }}
         {{ range .TopForums }}
         <a class="thread-row" href="/threads/{{ .ID }}">
-          <div class="thread-avatar placeholder"></div>
+          {{ if and .Auteur .Auteur.Avatar }}
+          <img class="thread-avatar" src="{{ .Auteur.Avatar }}" alt="Avatar" style="object-fit: cover;">
+          {{ else }}
+          <div class="thread-avatar placeholder"
+            style="background-image: url('/static/img/logo.png'); background-size: cover; background-position: center;">
+          </div>
+          {{ end }}
           <div class="thread-details">
             <div class="thread-title">
               {{ if eq .Etat "ferme" }}<span class="tag-closed">FERMÉ</span>{{ end }}
@@ -129,7 +145,9 @@
         {{ range .CartesActu }}
         {{ if .EnAvant }}
         <a class="featured-news" href="/threads/{{ .ID }}">
-          <div class="news-image placeholder"></div>
+          <div class="news-image placeholder"
+            style="background-image: url('/static/img/news_featured.png'); background-size: cover; background-position: center;">
+          </div>
           <div class="news-body">
             <div class="news-category">À la une</div>
             <h4>{{ .Titre }}</h4>
@@ -137,7 +155,9 @@
         </a>
         {{ else }}
         <a class="news-item" href="/threads/{{ .ID }}">
-          <div class="news-thumbnail placeholder"></div>
+          <div class="news-thumbnail placeholder"
+            style="background-image: url('/static/img/news_item.png'); background-size: cover; background-position: center;">
+          </div>
           <div class="news-body">
             <h5>{{ .Titre }}</h5>
             <div class="news-meta">actualité</div>
@@ -160,7 +180,9 @@
     </div>
     <div class="releases-grid">
       <article class="release-card">
-        <div class="release-cover placeholder" data-label="cover"></div>
+        <div class="release-cover placeholder"
+          style="background-image: url('/static/img/mh_wilds.png'); background-size: cover; background-position: center;"
+          data-label="cover"></div>
         <div class="release-body">
           <div class="date">18 FÉV. 2025</div>
           <h3>Monster Hunter Wilds</h3>
@@ -168,7 +190,9 @@
         </div>
       </article>
       <article class="release-card">
-        <div class="release-cover placeholder" data-label="cover"></div>
+        <div class="release-cover placeholder"
+          style="background-image: url('/static/img/gta6.png'); background-size: cover; background-position: center;"
+          data-label="cover"></div>
         <div class="release-body">
           <div class="date">AUTOMNE 2025</div>
           <h3>Grand Theft Auto VI</h3>
@@ -176,7 +200,9 @@
         </div>
       </article>
       <article class="release-card">
-        <div class="release-cover placeholder" data-label="cover"></div>
+        <div class="release-cover placeholder"
+          style="background-image: url('/static/img/metroid.png'); background-size: cover; background-position: center;"
+          data-label="cover"></div>
         <div class="release-body">
           <div class="date">COURANT 2025</div>
           <h3>Metroid Prime 4: Beyond</h3>
