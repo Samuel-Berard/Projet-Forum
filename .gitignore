@@ -1,0 +1,26 @@
+# Variables d'environnement (ne JAMAIS versionner — contient les identifiants)
+.env
+.env.local
+
+# Binaires Go compilés
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+/api/api
+/client/client
+projet-forum
+
+# Fichiers de test Go
+*.test
+*.out
+
+# Dossiers d'outils / éditeurs
+.vscode/
+.idea/
+*.swp
+
+# Fichiers système
+.DS_Store
+Thumbs.db

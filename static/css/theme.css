@@ -1,36 +1,33 @@
-/* ============================================================
-   theme.css — Design system commun à TOUTES les pages du site.
-   Design épuré, typographie premium et palette sobre.
-   ============================================================ */
+
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* --- Les 3 teintes dominantes du site (sobre & premium) --- */
-  --accent: oklch(0.48 0.11 250);   /* Bleu acier élégant */
-  --ink:    oklch(0.22 0.015 255);  /* Graphite profond pour texte et titres */
-  --bg:     oklch(0.985 0.002 255); /* Fond blanc cassé très doux */
+ 
+  --accent: #246099;
+  --ink:    #161b22;
+  --bg:     #f9fafb;
 
-  /* --- Déclinaisons de teintes --- */
+
   --surface:     #ffffff;
-  --surface-2:   oklch(0.965 0.003 255);
-  --border:      oklch(0.93 0.003 255);
-  --ink-2:       oklch(0.45 0.015 255);
-  --muted:       oklch(0.60 0.01 255);
-  --accent-ink:  oklch(0.40 0.10 250);
-  --accent-soft: oklch(0.95 0.02 250);
-  --accent-tint: oklch(0.975 0.01 250);
+  --surface-2:   #f2f3f5;
+  --border:      #e6e8ea;
+  --ink-2:       #50565e;
+  --muted:       #7c8186;
+  --accent-ink:  #124a7b;
+  --accent-soft: #e5f0fc;
+  --accent-tint: #f2f7fd;
 
-  /* --- Typographie haut de gamme --- */
+ 
   --font:    "Plus Jakarta Sans", system-ui, sans-serif;
   --display: var(--font);
   --body:    var(--font);
 
-  /* --- Tokens de structure et géométrie --- */
-  --r: 14px;      /* Angles affinés pour un aspect plus professionnel */
+ 
+  --r: 14px;      
   --r-sm: 8px;
-  --shadow: 0 4px 24px -6px oklch(0.22 0.015 255 / 0.06);
-  --maxw: 1200px; /* Largeur de conteneur légèrement plus compacte */
+  --shadow: 0 4px 24px -6px rgba(22, 27, 34, 0.06);
+  --maxw: 1200px; 
 }
 
 * { 
@@ -73,7 +70,7 @@ h1, h2, h3, h4, h5 {
   padding: 0 24px;
 }
 
-/* --- Boutons globaux --- */
+
 .btn-primary {
   height: 36px;
   padding: 0 16px;
@@ -119,7 +116,7 @@ h1, h2, h3, h4, h5 {
   border-color: var(--muted);
 }
 
-/* --- Avatar dans la barre de navigation --- */
+
 .nav-profile-link {
   display: flex;
   align-items: center;
