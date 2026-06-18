@@ -19,6 +19,7 @@ func RegisterUtilisateurRoutes(r *mux.Router, utilisateurController *controllers
 	r.Handle("/me", middleware.AuthMiddleware(http.HandlerFunc(utilisateurController.Me))).Methods("GET")
 	r.Handle("/me/avatar", middleware.AuthMiddleware(http.HandlerFunc(utilisateurController.UpdateAvatar))).Methods("PUT")
 
-	// Route protegee (admin) : bannir un utilisateur.
+	// Routes protegees (admin) : lister les utilisateurs et bannir un compte.
+	r.Handle("/users", middleware.AuthMiddleware(middleware.AdminMiddleware(http.HandlerFunc(utilisateurController.GetAllUsers)))).Methods("GET")
 	r.Handle("/users/{id}/ban", middleware.AuthMiddleware(middleware.AdminMiddleware(http.HandlerFunc(utilisateurController.BanUser)))).Methods("PUT")
 }

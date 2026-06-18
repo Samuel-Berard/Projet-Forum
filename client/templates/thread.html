@@ -20,6 +20,7 @@
       <nav>
         <a href="/">Accueil</a>
         <a href="/forum">Forums</a>
+        {{ if and .Connecte .Utilisateur }}{{ if eq .Utilisateur.Role "admin" }}<a href="/admin">Admin</a>{{ end }}{{ end }}
         {{ if and .Connecte .Utilisateur }}
         <a class="nav-profile-link" href="/settings" title="Mon Profil">
           {{ if .Utilisateur.Avatar }}

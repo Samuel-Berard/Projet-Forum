@@ -20,6 +20,7 @@ func RegisterFilRoutes(r *mux.Router, filController *controllers.FilControllers)
 	r.Handle("/threads/{id}", middleware.AuthMiddleware(http.HandlerFunc(filController.UpdateFil))).Methods("PUT")
 	r.Handle("/threads/{id}", middleware.AuthMiddleware(http.HandlerFunc(filController.DeleteFil))).Methods("DELETE")
 
-	// Route protegee (admin) : changer l'etat d'un fil.
+	// Routes protegees (admin) : lister tous les fils et changer l'etat d'un fil.
+	r.Handle("/admin/threads", middleware.AuthMiddleware(middleware.AdminMiddleware(http.HandlerFunc(filController.GetAllFilsAdmin)))).Methods("GET")
 	r.Handle("/threads/{id}/state", middleware.AuthMiddleware(middleware.AdminMiddleware(http.HandlerFunc(filController.ChangeState)))).Methods("PUT")
 }

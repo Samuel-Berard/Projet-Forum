@@ -32,4 +32,7 @@ func RegisterForumRoutes(r *mux.Router, forumController *controllers.ForumContro
 	r.HandleFunc("/messages/{id}/react", forumController.ReactToMessage).Methods("POST")
 	r.HandleFunc("/threads/{id}/state", forumController.ChangeThreadState).Methods("POST")
 	r.HandleFunc("/users/{id}/ban", forumController.BanUser).Methods("POST")
+
+	// Tableau de bord d'administration (FT-12) : accès réservé aux admins (vérifié dans le contrôleur).
+	r.HandleFunc("/admin", forumController.DisplayAdmin).Methods("GET")
 }

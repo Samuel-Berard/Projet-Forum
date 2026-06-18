@@ -212,6 +212,36 @@ func (api *ForumApi) BanUser(token string, userID int) error {
 	return err
 }
 
+// GetUsers récupère la liste de tous les utilisateurs (réservé aux admins → token Bearer).
+func (api *ForumApi) GetUsers(token string) ([]dto.Utilisateur, error) {
+	req, err := http.NewRequest(http.MethodGet, api.baseURL+"/users", nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	var users []dto.Utilisateur
+	if _, err := api.executeRequest(req, &users); err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
+// GetAllThreadsAdmin récupère tous les fils, tous états confondus (réservé aux admins).
+func (api *ForumApi) GetAllThreadsAdmin(token string) ([]dto.FilDeDiscussion, error) {
+	req, err := http.NewRequest(http.MethodGet, api.baseURL+"/admin/threads", nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	var fils []dto.FilDeDiscussion
+	if _, err := api.executeRequest(req, &fils); err != nil {
+		return nil, err
+	}
+	return fils, nil
+}
+
 // Register envoie une demande d'inscription (POST) à l'API.
 func (api *ForumApi) Register(username, email, password, avatar string) error {
 	corps, err := json.Marshal(map[string]string{

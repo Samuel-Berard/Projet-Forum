@@ -62,6 +62,26 @@ func (r *UtilisateurRepository) FindByID(id int) (*models.Utilisateur, error) {
 	return u, nil
 }
 
+// FindAll retourne tous les utilisateurs (sans le mot de passe), pour le tableau de bord admin.
+func (r *UtilisateurRepository) FindAll() ([]models.Utilisateur, error) {
+	query := `SELECT id, username, email, role, banned, avatar FROM utilisateurs ORDER BY id ASC`
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var utilisateurs []models.Utilisateur
+	for rows.Next() {
+		var u models.Utilisateur
+		if err := rows.Scan(&u.ID, &u.Username, &u.Email, &u.Role, &u.Banned, &u.Avatar); err != nil {
+			return nil, err
+		}
+		utilisateurs = append(utilisateurs, u)
+	}
+	return utilisateurs, nil
+}
+
 func (r *UtilisateurRepository) BanUser(id int) error {
 	query := `UPDATE utilisateurs SET banned = TRUE WHERE id = ?`
 	_, err := r.db.Exec(query, id)
