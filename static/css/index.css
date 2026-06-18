@@ -657,10 +657,7 @@ footer {
   margin-top: 8px;
 }
 
-/* ============================================================
-   Images de fond (extraites des styles "inline" du HTML).
-   .bg-cover = règles communes ; .img-* / .cover-* = l'image.
-   ============================================================ */
+
 .bg-cover {
   background-size: cover;
   background-position: center;
