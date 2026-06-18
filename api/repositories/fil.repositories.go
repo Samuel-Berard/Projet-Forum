@@ -50,7 +50,7 @@ func (r *FilRepository) Create(f *models.FilDeDiscussion, categoryIDs []int) err
 	return tx.Commit()
 }
 
-func (r *FilRepository) FindAll(page, limit int, search string, categoryID int) ([]models.FilDeDiscussion, error) {
+func (r *FilRepository) FindAll(page, limit int, search string, searchType string, categoryID int) ([]models.FilDeDiscussion, error) {
 	offset := (page - 1) * limit
 	args := []interface{}{}
 
@@ -67,7 +67,13 @@ func (r *FilRepository) FindAll(page, limit int, search string, categoryID int) 
 	query += ` WHERE f.etat != 'archive' `
 
 	if search != "" {
-		query += ` AND f.titre LIKE ? `
+		if searchType == "authors" {
+			query += ` AND u.username LIKE ? `
+		} else if searchType == "messages" {
+			query += ` AND f.id IN (SELECT DISTINCT fil_id FROM messages WHERE contenu LIKE ?) `
+		} else {
+			query += ` AND f.titre LIKE ? `
+		}
 		args = append(args, "%"+search+"%")
 	}
 
@@ -113,9 +119,13 @@ func (r *FilRepository) FindAll(page, limit int, search string, categoryID int) 
 	return fils, nil
 }
 
-func (r *FilRepository) CountAll(search string, categoryID int) (int, error) {
+func (r *FilRepository) CountAll(search string, searchType string, categoryID int) (int, error) {
 	args := []interface{}{}
-	query := `SELECT COUNT(DISTINCT f.id) FROM fils_de_discussion f`
+	query := `
+		SELECT COUNT(DISTINCT f.id) 
+		FROM fils_de_discussion f
+		LEFT JOIN utilisateurs u ON f.auteur_id = u.id
+	`
 
 	if categoryID > 0 {
 		query += ` INNER JOIN fils_categories fc ON f.id = fc.fil_id `
@@ -124,7 +134,13 @@ func (r *FilRepository) CountAll(search string, categoryID int) (int, error) {
 	query += ` WHERE f.etat != 'archive' `
 
 	if search != "" {
-		query += ` AND f.titre LIKE ? `
+		if searchType == "authors" {
+			query += ` AND u.username LIKE ? `
+		} else if searchType == "messages" {
+			query += ` AND f.id IN (SELECT DISTINCT fil_id FROM messages WHERE contenu LIKE ?) `
+		} else {
+			query += ` AND f.titre LIKE ? `
+		}
 		args = append(args, "%"+search+"%")
 	}
 

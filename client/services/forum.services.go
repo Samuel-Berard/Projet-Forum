@@ -17,8 +17,8 @@ func InitForumService(forumApi *api.ForumApi) *ForumService {
 }
 
 // GetFils retourne la liste paginée des fils depuis l'API.
-func (s *ForumService) GetFils(page int, limit int) (*dto.ThreadResponse, error) {
-	return s.forumApi.GetFils(page, limit)
+func (s *ForumService) GetFils(page int, limit int, search string, searchType string, categoryID int) (*dto.ThreadResponse, error) {
+	return s.forumApi.GetFils(page, limit, search, searchType, categoryID)
 }
 
 // GetLastActus retourne les actualités depuis l'API.
@@ -31,9 +31,44 @@ func (s *ForumService) GetFil(id int) (*dto.FilDeDiscussion, error) {
 	return s.forumApi.GetFil(id)
 }
 
-// GetMessages retourne les messages d'un fil de discussion.
-func (s *ForumService) GetMessages(id int) ([]dto.Message, error) {
-	return s.forumApi.GetMessages(id)
+// GetMessages retourne les messages d'un fil de discussion avec pagination, tri et réactions.
+func (s *ForumService) GetMessages(id int, page, limit int, sort string, currentUserID int) (*dto.MessageResponse, error) {
+	return s.forumApi.GetMessages(id, page, limit, sort, currentUserID)
+}
+
+// DeleteThread supprime un fil de discussion.
+func (s *ForumService) DeleteThread(token string, id int) error {
+	return s.forumApi.DeleteThread(token, id)
+}
+
+// UpdateThread modifie le titre d'un fil.
+func (s *ForumService) UpdateThread(token string, id int, titre string) error {
+	return s.forumApi.UpdateThread(token, id, titre)
+}
+
+// DeleteMessage supprime un message.
+func (s *ForumService) DeleteMessage(token string, id int) error {
+	return s.forumApi.DeleteMessage(token, id)
+}
+
+// UpdateMessage modifie le contenu d'un message.
+func (s *ForumService) UpdateMessage(token string, id int, contenu string) error {
+	return s.forumApi.UpdateMessage(token, id, contenu)
+}
+
+// ReactToMessage ajoute ou modifie une réaction sur un message.
+func (s *ForumService) ReactToMessage(token string, messageID int, reactionType string) error {
+	return s.forumApi.ReactToMessage(token, messageID, reactionType)
+}
+
+// ChangeThreadState change l'état d'un fil.
+func (s *ForumService) ChangeThreadState(token string, id int, state string) error {
+	return s.forumApi.ChangeThreadState(token, id, state)
+}
+
+// BanUser bannit un utilisateur.
+func (s *ForumService) BanUser(token string, userID int) error {
+	return s.forumApi.BanUser(token, userID)
 }
 
 // Register transmet la demande d'inscription à l'API (avatar = URL de l'image, vide si aucun).
@@ -65,3 +100,9 @@ func (s *ForumService) GetMe(token string) (*dto.Utilisateur, error) {
 func (s *ForumService) UpdateAvatar(token, avatarURL string) error {
 	return s.forumApi.UpdateAvatar(token, avatarURL)
 }
+
+// CreateFil transmet la création du fil de discussion à l'API (nécessite le token).
+func (s *ForumService) CreateFil(token string, titre string, categoriesID []int) (*dto.FilDeDiscussion, error) {
+	return s.forumApi.CreateFil(token, titre, categoriesID)
+}
+

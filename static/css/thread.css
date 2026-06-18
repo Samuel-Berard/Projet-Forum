@@ -104,6 +104,7 @@
    border: 1px solid var(--border);
    border-radius: var(--r);
    padding: 18px 20px;
+   position: relative;
 }
 
 .msg-head {
@@ -199,9 +200,14 @@
 }
 
 .reply-error {
-   margin-top: 24px;
-   color: #c0392b;
+   color: #ef4444;
+   background: #fef2f2;
+   border: 1px solid #fee2e2;
+   padding: 10px 14px;
+   border-radius: 6px;
+   font-size: 13px;
    font-weight: 600;
+   margin-top: 24px;
 }
 
 .reply-login {
@@ -212,4 +218,484 @@
 .reply-login a {
    color: var(--accent-ink);
    font-weight: 600;
+}
+
+/* Boutons de réactions et modération */
+.btn-react:hover {
+  background: var(--surface-2) !important;
+  color: var(--ink) !important;
+}
+.btn-react.like.active {
+  color: #27ae60 !important; /* Green */
+  background: #e8f8f0 !important;
+}
+.btn-react.dislike.active {
+  color: #c0392b !important; /* Red */
+  background: #fdeaea !important;
+}
+.btn-action-meta:hover {
+  background: var(--surface-2) !important;
+}
+.btn-action-meta.text-danger:hover {
+  background: #fdf0f0 !important;
+}
+.msg-actions button:hover {
+  background: var(--surface-2) !important;
+}
+.msg-actions button.text-danger:hover {
+  background: #fdf0f0 !important;
+}
+.thread-controls a {
+  transition: all 0.2s;
+}
+.thread-controls a:hover {
+  opacity: 0.8;
+}
+
+/* ============================================================
+   Classes extraites des styles "inline" de thread.html
+   ============================================================ */
+
+/* Barre d'infos sous le titre (état + actions) */
+.thread-meta-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.cap {
+  text-transform: capitalize;
+}
+
+/* Boutons d'action sous le titre */
+.btn-action-meta {
+  background: none;
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: var(--ink-2);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-action-meta.text-danger {
+  border-color: #fee2e2;
+  color: #ef4444;
+}
+
+.inline-form {
+  display: inline;
+}
+
+/* Sélecteur d'état (admin) */
+.state-form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.state-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+
+.state-select {
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Encadrés d'édition (titre du fil / message) — cachés, .open les affiche */
+.edit-thread-box {
+  display: none;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: var(--surface-2);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+}
+
+.edit-msg-box {
+  display: none;
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--surface-2);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+}
+
+.edit-thread-box.open,
+.edit-msg-box.open {
+  display: block;
+}
+
+.msg-body.hidden {
+  display: none;
+}
+
+.edit-form-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.edit-form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-title-input {
+  flex: 1;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  outline: none;
+}
+
+.edit-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: inherit;
+  resize: vertical;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-save {
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-save-sm {
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-weight: 600;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.btn-cancel-sm {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-weight: 600;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+/* Barre de contrôles (tri + nb par page) */
+.thread-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--surface-2);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  margin-bottom: 24px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.control-sort,
+.control-limit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-muted {
+  color: var(--muted);
+}
+
+.sort-link,
+.limit-link {
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--ink-2);
+}
+
+.sort-link {
+  padding: 4px 10px;
+}
+
+.limit-link {
+  padding: 4px 8px;
+}
+
+.sort-link.active,
+.limit-link.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* Badge "banni" + bouton bannir */
+.badge-banned {
+  color: #ef4444;
+  font-size: 11px;
+  font-weight: 700;
+  margin-left: 5px;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.ban-form {
+  display: inline;
+  margin-left: 10px;
+}
+
+.btn-ban {
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  color: #ef4444;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* En-tête droit d'un message (actions + réactions) */
+.msg-head-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.msg-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-icon {
+  background: none;
+  border: 1px solid var(--border);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: 0.1s;
+}
+
+.btn-icon i {
+  font-size: 11.5px;
+}
+
+.btn-icon.text-danger {
+  border-color: #fee2e2;
+  color: #ef4444;
+}
+
+/* Réactions */
+.msg-reactions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2px 4px;
+}
+
+.btn-react {
+  background: none;
+  border: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  cursor: pointer;
+  outline: none;
+  transition: 0.1s;
+}
+
+.btn-react i {
+  font-size: 12px;
+}
+
+.react-score {
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--ink);
+  padding: 0 4px;
+  min-width: 14px;
+  text-align: center;
+}
+
+/* Pagination des messages */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.pagination-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 30px;
+}
+
+.pagination-nav .page-prev,
+.pagination-nav .page-next,
+.pagination-nav .page-item {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 600;
+  transition: 0.15s;
+}
+
+.pagination-nav .page-prev.disabled,
+.pagination-nav .page-next.disabled {
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.pagination-nav .page-item.current {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  border-color: var(--accent);
+}
+
+/* Fil fermé */
+.thread-closed {
+  margin-top: 28px;
+  padding: 16px;
+  background: var(--surface-2);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  text-align: center;
+  font-weight: 600;
+}
+
+.thread-closed i {
+  margin-right: 8px;
+}
+
+/* Rendu "BBcode" généré par thread.js */
+.code-preview {
+  background: #1d1e20;
+  color: #fff;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+  margin-top: 0.5rem;
+}
+
+.btn-spoil-red {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 11px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.spoil-text {
+  filter: blur(4px);
+  background: #222;
+  color: transparent;
+  transition: all 0.2s;
+}
+
+.spoil-text.revealed {
+  filter: none;
+  background: transparent;
+  color: inherit;
+}
+
+.msg-img {
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+.video-embed {
+  background: #1d1e20;
+  color: #4a8bed;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+}
+
+.video-embed a {
+  color: #4a8bed;
+  text-decoration: underline;
 }

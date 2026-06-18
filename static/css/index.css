@@ -656,3 +656,71 @@ footer {
   padding-top: 16px;
   margin-top: 8px;
 }
+
+/* ============================================================
+   Images de fond (extraites des styles "inline" du HTML).
+   .bg-cover = règles communes ; .img-* / .cover-* = l'image.
+   ============================================================ */
+.bg-cover {
+  background-size: cover;
+  background-position: center;
+}
+
+.img-gta6 { background-image: url('/static/img/gta6.png'); }
+.img-mh-wilds { background-image: url('/static/img/mh_wilds.png'); }
+.img-metroid { background-image: url('/static/img/metroid.png'); }
+.img-news-featured { background-image: url('/static/img/news_featured.png'); }
+.img-news-item { background-image: url('/static/img/news_item.png'); }
+.img-logo { background-image: url('/static/img/logo.png'); }
+
+/* Couvertures du "Top forums" (numéro 1 à 5) */
+.cover-1 { background-image: url('/static/img/bento_cover_1.png'); }
+.cover-2 { background-image: url('/static/img/bento_cover_2.png'); }
+.cover-3 { background-image: url('/static/img/bento_cover_3.png'); }
+.cover-4 { background-image: url('/static/img/bento_cover_4.png'); }
+.cover-5 { background-image: url('/static/img/bento_cover_5.png'); }
+
+/* L'avatar d'auteur (image) doit remplir son cadre */
+.thread-row .thread-avatar {
+  object-fit: cover;
+}
+
+/* Carte "Topic du moment" (hero) : image de fond + dégradé + texte blanc */
+.featured-topic.topic-cover {
+  position: relative;
+  overflow: hidden;
+  border: none;
+}
+
+.topic-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.25) 100%);
+  z-index: 1;
+}
+
+.featured-topic.topic-cover .tag {
+  position: relative;
+  z-index: 2;
+}
+
+.featured-topic.topic-cover h3 {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  margin-top: 16px;
+}
+
+.featured-topic.topic-cover .topic-meta {
+  position: relative;
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.featured-topic.topic-cover .topic-meta b {
+  color: #fff;
+}

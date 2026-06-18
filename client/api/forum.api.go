@@ -8,6 +8,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 	"time"
 
 	"projet-forum/client/dto"
@@ -55,8 +56,8 @@ func (api *ForumApi) executeRequest(req *http.Request, result interface{}) (int,
 }
 
 // GetFils récupère la liste paginée des fils de discussion depuis l'API.
-func (api *ForumApi) GetFils(page int, limit int) (*dto.ThreadResponse, error) {
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/threads?page=%d&limit=%d", api.baseURL, page, limit), nil)
+func (api *ForumApi) GetFils(page int, limit int, search string, searchType string, categoryID int) (*dto.ThreadResponse, error) {
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/threads?page=%d&limit=%d&search=%s&type=%s&category=%d", api.baseURL, page, limit, url.QueryEscape(search), url.QueryEscape(searchType), categoryID), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -102,20 +103,113 @@ func (api *ForumApi) GetFil(id int) (*dto.FilDeDiscussion, error) {
 	return &fil, nil
 }
 
-// GetMessages récupère les messages d'un fil de discussion.
-func (api *ForumApi) GetMessages(filID int) ([]dto.Message, error) {
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/threads/%d/messages", api.baseURL, filID), nil)
+// GetMessages récupère les messages d'un fil de discussion avec pagination, tri et réactions.
+func (api *ForumApi) GetMessages(filID int, page, limit int, sort string, currentUserID int) (*dto.MessageResponse, error) {
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/threads/%d/messages?page=%d&limit=%d&sort=%s&current_user_id=%d", api.baseURL, filID, page, limit, url.QueryEscape(sort), currentUserID), nil)
 	if err != nil {
 		return nil, err
 	}
 
-	var messages []dto.Message
-	_, err = api.executeRequest(req, &messages)
+	var response dto.MessageResponse
+	_, err = api.executeRequest(req, &response)
 	if err != nil {
 		return nil, err
 	}
 
-	return messages, nil
+	return &response, nil
+}
+
+// DeleteThread supprime un fil de discussion.
+func (api *ForumApi) DeleteThread(token string, id int) error {
+	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/threads/%d", api.baseURL, id), nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+	_, err = api.executeRequest(req, nil)
+	return err
+}
+
+// UpdateThread modifie le titre d'un fil.
+func (api *ForumApi) UpdateThread(token string, id int, titre string) error {
+	corps, err := json.Marshal(map[string]string{"titre": titre})
+	if err != nil {
+		return err
+	}
+	req, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/threads/%d", api.baseURL, id), bytes.NewBuffer(corps))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+	_, err = api.executeRequest(req, nil)
+	return err
+}
+
+// DeleteMessage supprime un message.
+func (api *ForumApi) DeleteMessage(token string, id int) error {
+	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/messages/%d", api.baseURL, id), nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+	_, err = api.executeRequest(req, nil)
+	return err
+}
+
+// UpdateMessage modifie le contenu d'un message.
+func (api *ForumApi) UpdateMessage(token string, id int, contenu string) error {
+	corps, err := json.Marshal(map[string]string{"contenu": contenu})
+	if err != nil {
+		return err
+	}
+	req, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/messages/%d", api.baseURL, id), bytes.NewBuffer(corps))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+	_, err = api.executeRequest(req, nil)
+	return err
+}
+
+// ReactToMessage ajoute ou modifie une réaction sur un message.
+func (api *ForumApi) ReactToMessage(token string, messageID int, reactionType string) error {
+	corps, err := json.Marshal(map[string]string{"type": reactionType})
+	if err != nil {
+		return err
+	}
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/messages/%d/react", api.baseURL, messageID), bytes.NewBuffer(corps))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+	_, err = api.executeRequest(req, nil)
+	return err
+}
+
+// ChangeThreadState change l'état d'un fil (réservé aux admins).
+func (api *ForumApi) ChangeThreadState(token string, id int, state string) error {
+	corps, err := json.Marshal(map[string]string{"etat": state})
+	if err != nil {
+		return err
+	}
+	req, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/threads/%d/state", api.baseURL, id), bytes.NewBuffer(corps))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+	_, err = api.executeRequest(req, nil)
+	return err
+}
+
+// BanUser bannit un utilisateur (réservé aux admins).
+func (api *ForumApi) BanUser(token string, userID int) error {
+	req, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/users/%d/ban", api.baseURL, userID), nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+	_, err = api.executeRequest(req, nil)
+	return err
 }
 
 // Register envoie une demande d'inscription (POST) à l'API.
@@ -265,3 +359,32 @@ func (api *ForumApi) UpdateAvatar(token, avatarURL string) error {
 	_, err = api.executeRequest(req, nil)
 	return err
 }
+
+// CreateFil crée un nouveau fil de discussion (route protégée -> token Bearer).
+func (api *ForumApi) CreateFil(token string, titre string, categoriesID []int) (*dto.FilDeDiscussion, error) {
+	corps, err := json.Marshal(map[string]interface{}{
+		"titre":         titre,
+		"categories_id": categoriesID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, api.baseURL+"/threads", bytes.NewBuffer(corps))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	var reponse struct {
+		Message string              `json:"message"`
+		Fil     dto.FilDeDiscussion `json:"fil"`
+	}
+
+	if _, err := api.executeRequest(req, &reponse); err != nil {
+		return nil, err
+	}
+
+	return &reponse.Fil, nil
+}
+

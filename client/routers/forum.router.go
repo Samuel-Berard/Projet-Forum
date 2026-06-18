@@ -22,4 +22,14 @@ func RegisterForumRoutes(r *mux.Router, forumController *controllers.ForumContro
 	r.HandleFunc("/upload", forumController.HandleUpload).Methods("POST")
 	r.HandleFunc("/settings", forumController.DisplaySettings).Methods("GET")
 	r.HandleFunc("/settings", forumController.UpdateAvatarSettings).Methods("POST")
+	r.HandleFunc("/threads/new", forumController.CreateThread).Methods("POST")
+
+	// Routes d'action modération/édition
+	r.HandleFunc("/threads/{id}/delete", forumController.DeleteThread).Methods("POST")
+	r.HandleFunc("/threads/{id}/edit", forumController.EditThread).Methods("POST")
+	r.HandleFunc("/messages/{id}/delete", forumController.DeleteMessage).Methods("POST")
+	r.HandleFunc("/messages/{id}/edit", forumController.EditMessage).Methods("POST")
+	r.HandleFunc("/messages/{id}/react", forumController.ReactToMessage).Methods("POST")
+	r.HandleFunc("/threads/{id}/state", forumController.ChangeThreadState).Methods("POST")
+	r.HandleFunc("/users/{id}/ban", forumController.BanUser).Methods("POST")
 }

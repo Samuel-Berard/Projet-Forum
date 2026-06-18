@@ -33,20 +33,39 @@ func (c *MessageControllers) GetMessages(w http.ResponseWriter, r *http.Request)
 	}
 
 	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	if page == 0 {
+		page = 1
+	}
 	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
+	if limit == 0 {
+		limit = 10
+	}
 	sortBy := r.URL.Query().Get("sort")
-
 	if sortBy == "" {
-		sortBy = "chronologique"
+		sortBy = "recent"
 	}
 
-	messages, err := c.service.GetMessagesByFil(filID, page, limit, sortBy)
+	currentUserID, _ := strconv.Atoi(r.URL.Query().Get("current_user_id"))
+
+	messages, err := c.service.GetMessagesByFil(filID, page, limit, sortBy, currentUserID)
 	if err != nil {
 		helper.WriteError(w, http.StatusInternalServerError, "Erreur lors de la récupération des messages")
 		return
 	}
 
-	helper.WriteJSON(w, http.StatusOK, messages)
+	totalPages, err := c.service.GetTotalPagesForFil(filID, limit)
+	if err != nil {
+		totalPages = 1
+	}
+
+	response := map[string]interface{}{
+		"messages":   messages,
+		"totalPages": totalPages,
+		"page":       page,
+		"limit":      limit,
+	}
+
+	helper.WriteJSON(w, http.StatusOK, response)
 }
 
 func (c *MessageControllers) CreateMessage(w http.ResponseWriter, r *http.Request) {
