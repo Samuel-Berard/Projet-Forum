@@ -71,6 +71,16 @@ func (s *ForumService) BanUser(token string, userID int) error {
 	return s.forumApi.BanUser(token, userID)
 }
 
+// GetUsers retourne la liste de tous les utilisateurs (admin).
+func (s *ForumService) GetUsers(token string) ([]dto.Utilisateur, error) {
+	return s.forumApi.GetUsers(token)
+}
+
+// GetAllThreadsAdmin retourne tous les fils tous états confondus (admin).
+func (s *ForumService) GetAllThreadsAdmin(token string) ([]dto.FilDeDiscussion, error) {
+	return s.forumApi.GetAllThreadsAdmin(token)
+}
+
 // Register transmet la demande d'inscription à l'API (avatar = URL de l'image, vide si aucun).
 func (s *ForumService) Register(username, email, password, avatar string) error {
 	return s.forumApi.Register(username, email, password, avatar)

@@ -76,6 +76,14 @@ func isValidPassword(password string) bool {
 	return hasUppercase && hasSpecial
 }
 
+// GetAllUsers retourne la liste de tous les utilisateurs, reserve aux administrateurs.
+func (s *UtilisateurService) GetAllUsers(role string) ([]models.Utilisateur, error) {
+	if role != "admin" {
+		return nil, errors.New("accès refusé, rôle administrateur requis")
+	}
+	return s.repo.FindAll()
+}
+
 // BanUser bannit un utilisateur, reserve aux administrateurs.
 func (s *UtilisateurService) BanUser(id int, role string) error {
 	if role != "admin" {

@@ -634,6 +634,46 @@ func (c *ForumControllers) UpdateAvatarSettings(w http.ResponseWriter, r *http.R
 	http.Redirect(w, r, "/settings", http.StatusSeeOther)
 }
 
+// AdminData regroupe les données affichées sur le tableau de bord d'administration.
+type AdminData struct {
+	Utilisateur *dto.Utilisateur
+	Users       []dto.Utilisateur
+	Fils        []dto.FilDeDiscussion
+	Erreur      string
+}
+
+// DisplayAdmin affiche le tableau de bord d'administration (réservé aux administrateurs).
+func (c *ForumControllers) DisplayAdmin(w http.ResponseWriter, r *http.Request) {
+	token := tokenDuCookie(r)
+	if token == "" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	user, err := c.service.GetMe(token)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	// Seul un administrateur peut accéder au tableau de bord.
+	if user.Role != "admin" {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	// On récupère les utilisateurs et les fils (tous états confondus) via l'API.
+	users, _ := c.service.GetUsers(token)
+	fils, _ := c.service.GetAllThreadsAdmin(token)
+
+	c.template.RenderTemplate(w, r, "admin", AdminData{
+		Utilisateur: user,
+		Users:       users,
+		Fils:        fils,
+		Erreur:      r.URL.Query().Get("erreur"),
+	})
+}
+
 // DeleteThread supprime un fil de discussion (créateur ou admin).
 func (c *ForumControllers) DeleteThread(w http.ResponseWriter, r *http.Request) {
 	token := tokenDuCookie(r)
@@ -646,11 +686,16 @@ func (c *ForumControllers) DeleteThread(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "Identifiant du fil invalide", http.StatusBadRequest)
 		return
 	}
+	// redirect : page de retour après l'action (ex. "/admin"), sinon le forum.
+	redirect := r.URL.Query().Get("redirect")
+	if redirect == "" {
+		redirect = "/forum"
+	}
 	if err := c.service.DeleteThread(token, id); err != nil {
-		http.Redirect(w, r, "/threads/"+strconv.Itoa(id)+"?erreur="+url.QueryEscape(err.Error()), http.StatusSeeOther)
+		http.Redirect(w, r, redirect+"?erreur="+url.QueryEscape(err.Error()), http.StatusSeeOther)
 		return
 	}
-	http.Redirect(w, r, "/forum", http.StatusSeeOther)
+	http.Redirect(w, r, redirect, http.StatusSeeOther)
 }
 
 // EditThread modifie le titre d'un fil (créateur ou admin).
@@ -769,11 +814,16 @@ func (c *ForumControllers) ChangeThreadState(w http.ResponseWriter, r *http.Requ
 		return
 	}
 	state := r.FormValue("state")
+	// redirect : page de retour après l'action (ex. "/admin"), sinon le fil concerné.
+	redirect := r.URL.Query().Get("redirect")
+	if redirect == "" {
+		redirect = "/threads/" + strconv.Itoa(id)
+	}
 	if err := c.service.ChangeThreadState(token, id, state); err != nil {
-		http.Redirect(w, r, "/threads/"+strconv.Itoa(id)+"?erreur="+url.QueryEscape(err.Error()), http.StatusSeeOther)
+		http.Redirect(w, r, redirect+"?erreur="+url.QueryEscape(err.Error()), http.StatusSeeOther)
 		return
 	}
-	http.Redirect(w, r, "/threads/"+strconv.Itoa(id), http.StatusSeeOther)
+	http.Redirect(w, r, redirect, http.StatusSeeOther)
 }
 
 // BanUser bannit un utilisateur (admin uniquement).
@@ -788,10 +838,14 @@ func (c *ForumControllers) BanUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Identifiant de l'utilisateur invalide", http.StatusBadRequest)
 		return
 	}
-	filIDStr := r.URL.Query().Get("fil_id")
+	// redirect : page de retour après l'action (ex. "/admin"), sinon le fil concerné.
+	redirect := r.URL.Query().Get("redirect")
+	if redirect == "" {
+		redirect = "/threads/" + r.URL.Query().Get("fil_id")
+	}
 	if err := c.service.BanUser(token, userID); err != nil {
-		http.Redirect(w, r, "/threads/"+filIDStr+"?erreur="+url.QueryEscape(err.Error()), http.StatusSeeOther)
+		http.Redirect(w, r, redirect+"?erreur="+url.QueryEscape(err.Error()), http.StatusSeeOther)
 		return
 	}
-	http.Redirect(w, r, "/threads/"+filIDStr, http.StatusSeeOther)
+	http.Redirect(w, r, redirect, http.StatusSeeOther)
 }

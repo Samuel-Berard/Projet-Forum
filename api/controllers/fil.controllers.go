@@ -61,6 +61,23 @@ func (c *FilControllers) GetFils(w http.ResponseWriter, r *http.Request) {
 	helper.WriteJSON(w, http.StatusOK, response)
 }
 
+// GetAllFilsAdmin retourne tous les fils tous etats confondus (admin uniquement).
+func (c *FilControllers) GetAllFilsAdmin(w http.ResponseWriter, r *http.Request) {
+	claims := utils.GetClaims(r)
+	if claims == nil {
+		helper.WriteError(w, http.StatusUnauthorized, "Non autorisé")
+		return
+	}
+
+	fils, err := c.service.GetAllFilsAdmin(claims.Role)
+	if err != nil {
+		helper.WriteError(w, http.StatusForbidden, err.Error())
+		return
+	}
+
+	helper.WriteJSON(w, http.StatusOK, fils)
+}
+
 func (c *FilControllers) GetFil(w http.ResponseWriter, r *http.Request) {
 	idFil, err := readFilId(r)
 	if err != nil {

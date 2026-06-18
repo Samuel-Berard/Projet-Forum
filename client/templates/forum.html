@@ -25,6 +25,7 @@
         <nav class="nav-menu">
           <a href="/">Accueil</a>
           <a href="/forum" class="active">Forums</a>
+          {{ if and .Connecte .Utilisateur }}{{ if eq .Utilisateur.Role "admin" }}<a href="/admin">Admin</a>{{ end }}{{ end }}
         </nav>
         <div class="header-actions">
           {{ if and .Connecte .Utilisateur }}

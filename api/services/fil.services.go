@@ -65,6 +65,14 @@ func (s *FilService) GetTotalPages(limit int, search string, searchType string, 
 	return totalPages, nil
 }
 
+// GetAllFilsAdmin retourne tous les fils tous etats confondus, reserve aux administrateurs.
+func (s *FilService) GetAllFilsAdmin(role string) ([]models.FilDeDiscussion, error) {
+	if role != "admin" {
+		return nil, errors.New("accès refusé, rôle administrateur requis")
+	}
+	return s.repo.FindAllAdmin()
+}
+
 func (s *FilService) GetFilByID(id int) (*models.FilDeDiscussion, error) {
 	fil, err := s.repo.FindByID(id)
 	if err != nil {

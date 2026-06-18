@@ -121,6 +121,23 @@ func (c *UtilisateurControllers) UpdateAvatar(w http.ResponseWriter, r *http.Req
 	})
 }
 
+// GetAllUsers retourne la liste de tous les utilisateurs (admin uniquement).
+func (c *UtilisateurControllers) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	claims := utils.GetClaims(r)
+	if claims == nil {
+		helper.WriteError(w, http.StatusUnauthorized, "Non autorisé")
+		return
+	}
+
+	users, err := c.service.GetAllUsers(claims.Role)
+	if err != nil {
+		helper.WriteError(w, http.StatusForbidden, err.Error())
+		return
+	}
+
+	helper.WriteJSON(w, http.StatusOK, users)
+}
+
 // BanUser bannit un utilisateur, reserve aux administrateurs.
 func (c *UtilisateurControllers) BanUser(w http.ResponseWriter, r *http.Request) {
 	claims := utils.GetClaims(r)

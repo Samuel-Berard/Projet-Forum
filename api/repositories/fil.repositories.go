@@ -157,6 +157,48 @@ func (r *FilRepository) CountAll(search string, searchType string, categoryID in
 	return count, nil
 }
 
+// FindAllAdmin retourne tous les fils, quel que soit leur etat (y compris archives),
+// pour le tableau de bord d'administration.
+func (r *FilRepository) FindAllAdmin() ([]models.FilDeDiscussion, error) {
+	query := `
+		SELECT f.id, f.titre, f.etat, f.auteur_id, f.created_at, f.updated_at, u.username, u.email, u.role, u.banned
+		FROM fils_de_discussion f
+		LEFT JOIN utilisateurs u ON f.auteur_id = u.id
+		ORDER BY f.created_at DESC
+	`
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var fils []models.FilDeDiscussion
+	for rows.Next() {
+		var f models.FilDeDiscussion
+		var createdAt, updatedAt []uint8
+		var authorUsername, authorEmail, authorRole string
+		var authorBanned bool
+		if err := rows.Scan(&f.ID, &f.Titre, &f.Etat, &f.AuteurID, &createdAt, &updatedAt, &authorUsername, &authorEmail, &authorRole, &authorBanned); err != nil {
+			return nil, err
+		}
+		if t, err := time.Parse("2006-01-02 15:04:05", string(createdAt)); err == nil {
+			f.CreatedAt = t
+		}
+		if t, err := time.Parse("2006-01-02 15:04:05", string(updatedAt)); err == nil {
+			f.UpdatedAt = t
+		}
+		f.Auteur = &models.Utilisateur{
+			ID:       f.AuteurID,
+			Username: authorUsername,
+			Email:    authorEmail,
+			Role:     authorRole,
+			Banned:   authorBanned,
+		}
+		fils = append(fils, f)
+	}
+	return fils, nil
+}
+
 func (r *FilRepository) FindByID(id int) (*models.FilDeDiscussion, error) {
 	query := `
 		SELECT f.id, f.titre, f.etat, f.auteur_id, f.created_at, f.updated_at, u.username, u.email, u.role, u.banned
