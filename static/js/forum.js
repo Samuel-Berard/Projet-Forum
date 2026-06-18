@@ -268,10 +268,95 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Simulation de l'upload local (drag and drop / click)
+    // Upload de fichier local vers le serveur
+    const uploadFile = (file) => {
+        if (!file) return;
+
+        // Indication visuelle du chargement dans la zone de drop
+        const originalText = uploadDropzone.innerHTML;
+        uploadDropzone.innerHTML = `<p><i class="fa-solid fa-spinner fa-spin"></i> Envoi en cours...</p>`;
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        fetch("/upload", {
+            method: "POST",
+            body: formData
+        })
+        .then(res => {
+            if (!res.ok) throw new Error("Erreur serveur lors de l'upload.");
+            return res.text();
+        })
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+            const img = doc.querySelector(".upload-result img");
+            const errorEl = doc.querySelector(".upload-error");
+
+            if (img) {
+                const url = img.getAttribute("src");
+                
+                // Insérer la syntaxe de l'image dans l'éditeur
+                const start = textarea.selectionStart;
+                const textBefore = textarea.value.substring(0, start);
+                const textAfter = textarea.value.substring(textarea.selectionEnd, textarea.value.length);
+                const imgSyntax = `![image](${url})`;
+                
+                textarea.value = textBefore + imgSyntax + textAfter;
+                textarea.selectionStart = textarea.selectionEnd = start + imgSyntax.length;
+                textarea.focus();
+                updatePreview();
+                
+                // Fermer la modale
+                if (imageModal) imageModal.style.display = "none";
+            } else if (errorEl) {
+                alert("Erreur : " + errorEl.textContent.trim());
+            } else {
+                alert("Erreur inconnue lors du transfert de l'image.");
+            }
+        })
+        .catch(err => {
+            alert(err.message || "Erreur de connexion lors du transfert.");
+        })
+        .finally(() => {
+            uploadDropzone.innerHTML = originalText;
+        });
+    };
+
     if (uploadDropzone) {
+        // Clic pour sélectionner un fichier
         uploadDropzone.addEventListener("click", () => {
-            alert("L'upload d'image vers le disque n'est pas encore branché au backend. Utilisez l'ajout par URL en attendant !");
+            const fileInput = document.createElement("input");
+            fileInput.type = "file";
+            fileInput.accept = "image/*";
+            fileInput.addEventListener("change", () => {
+                if (fileInput.files.length > 0) {
+                    uploadFile(fileInput.files[0]);
+                }
+            });
+            fileInput.click();
+        });
+
+        // Glisser-déposer (Drag & Drop)
+        uploadDropzone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            uploadDropzone.style.borderColor = "var(--color-accent)";
+            uploadDropzone.style.background = "var(--surface-2)";
+        });
+
+        uploadDropzone.addEventListener("dragleave", (e) => {
+            e.preventDefault();
+            uploadDropzone.style.borderColor = "var(--color-border)";
+            uploadDropzone.style.background = "var(--color-bg-surface)";
+        });
+
+        uploadDropzone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            uploadDropzone.style.borderColor = "var(--color-border)";
+            uploadDropzone.style.background = "var(--color-bg-surface)";
+            if (e.dataTransfer.files.length > 0) {
+                uploadFile(e.dataTransfer.files[0]);
+            }
         });
     }
 
@@ -310,6 +395,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 videoUrlInput.value = "";
                 videoModal.style.display = "none";
             }
+        });
+    }
+});
+
+// Boutons de la barre d'actions du forum (déplacés depuis les "onclick" du HTML).
+document.addEventListener("DOMContentLoaded", () => {
+    const btnNewTopic = document.querySelector(".btn-new-topic");
+    if (btnNewTopic) {
+        btnNewTopic.addEventListener("click", () => {
+            document.getElementById("topic-editor")?.scrollIntoView({ behavior: "smooth" });
+        });
+    }
+
+    const btnRefresh = document.querySelector(".btn-refresh");
+    if (btnRefresh) {
+        btnRefresh.addEventListener("click", () => {
+            window.location.reload();
         });
     }
 });

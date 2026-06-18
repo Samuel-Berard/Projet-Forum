@@ -62,7 +62,14 @@ func (r *MessageRepository) FindByID(id int) (*models.Message, error) {
 	return m, nil
 }
 
-func (r *MessageRepository) FindByFilID(filID int, page, limit int, sortBy string) ([]models.Message, error) {
+func (r *MessageRepository) CountByFilID(filID int) (int, error) {
+	query := `SELECT COUNT(*) FROM messages WHERE fil_id = ?`
+	var count int
+	err := r.db.QueryRow(query, filID).Scan(&count)
+	return count, err
+}
+
+func (r *MessageRepository) FindByFilID(filID int, page, limit int, sortBy string, currentUserID int) ([]models.Message, error) {
 	offset := (page - 1) * limit
 	orderBy := "m.created_at DESC"
 	if sortBy == "popularite" {
@@ -72,14 +79,17 @@ func (r *MessageRepository) FindByFilID(filID int, page, limit int, sortBy strin
 	}
 
 	query := `
-		SELECT m.id, m.contenu, m.fil_id, m.auteur_id, m.score_popularite, m.created_at, u.username, u.email, u.role, u.banned, u.avatar
+		SELECT m.id, m.contenu, m.fil_id, m.auteur_id, m.score_popularite, m.created_at, 
+		       u.username, u.email, u.role, u.banned, u.avatar,
+		       COALESCE(rec.type, '') AS user_reaction
 		FROM messages m
 		LEFT JOIN utilisateurs u ON m.auteur_id = u.id
+		LEFT JOIN reactions rec ON m.id = rec.message_id AND rec.utilisateur_id = ?
 		WHERE m.fil_id = ?
 		ORDER BY ` + orderBy + `
 		LIMIT ? OFFSET ?
 	`
-	rows, err := r.db.Query(query, filID, limit, offset)
+	rows, err := r.db.Query(query, currentUserID, filID, limit, offset)
 	if err != nil {
 		return nil, err
 	}
@@ -91,12 +101,14 @@ func (r *MessageRepository) FindByFilID(filID int, page, limit int, sortBy strin
 		var createdAt []uint8
 		var authorUsername, authorEmail, authorRole, authorAvatar string
 		var authorBanned bool
-		if err := rows.Scan(&m.ID, &m.Contenu, &m.FilID, &m.AuteurID, &m.ScorePopularite, &createdAt, &authorUsername, &authorEmail, &authorRole, &authorBanned, &authorAvatar); err != nil {
+		var userReaction string
+		if err := rows.Scan(&m.ID, &m.Contenu, &m.FilID, &m.AuteurID, &m.ScorePopularite, &createdAt, &authorUsername, &authorEmail, &authorRole, &authorBanned, &authorAvatar, &userReaction); err != nil {
 			return nil, err
 		}
 		if t, err := time.Parse("2006-01-02 15:04:05", string(createdAt)); err == nil {
 			m.CreatedAt = t
 		}
+		m.UserReaction = userReaction
 		m.Auteur = &models.Utilisateur{
 			ID:       m.AuteurID,
 			Username: authorUsername,

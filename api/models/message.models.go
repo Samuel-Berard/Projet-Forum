@@ -8,6 +8,7 @@ type Message struct {
 	FilID           int          `json:"fil_id"`
 	AuteurID        int          `json:"auteur_id"`
 	ScorePopularite int          `json:"score_popularite"`
+	UserReaction    string       `json:"user_reaction"`
 	CreatedAt       time.Time    `json:"created_at"`
 	UpdatedAt       time.Time    `json:"updated_at"`
 	Auteur          *Utilisateur `json:"auteur,omitempty"`

@@ -35,15 +35,19 @@ func (c *FilControllers) GetFils(w http.ResponseWriter, r *http.Request) {
 		limit = 20
 	}
 	search := r.URL.Query().Get("search")
+	searchType := r.URL.Query().Get("type")
+	if searchType == "" {
+		searchType = "topics"
+	}
 	categoryID, _ := strconv.Atoi(r.URL.Query().Get("category"))
 
-	fils, err := c.service.GetFils(page, limit, search, categoryID)
+	fils, err := c.service.GetFils(page, limit, search, searchType, categoryID)
 	if err != nil {
 		helper.WriteError(w, http.StatusInternalServerError, "Erreur lors de la récupération des fils de discussion")
 		return
 	}
 
-	totalPages, err := c.service.GetTotalPages(limit, search, categoryID)
+	totalPages, err := c.service.GetTotalPages(limit, search, searchType, categoryID)
 	if err != nil {
 		totalPages = 1
 	}

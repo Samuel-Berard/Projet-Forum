@@ -6,6 +6,7 @@ import (
 
 	"projet-forum/api/config"
 	"projet-forum/api/controllers"
+	"projet-forum/api/middleware"
 	"projet-forum/api/repositories"
 	"projet-forum/api/routers"
 	"projet-forum/api/services"
@@ -24,6 +25,9 @@ func InitApp() *App {
 
 	// Initialisation de la connexion à la base de données
 	db := config.InitDB()
+
+	// Initialisation de la connexion DB pour le middleware
+	middleware.Init(db)
 
 	// Initialisation des repositories
 	utilisateurRepository := repositories.InitUtilisateurRepository(db)

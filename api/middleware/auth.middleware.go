@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"database/sql"
 	"net/http"
 	"strings"
 
@@ -10,7 +11,14 @@ import (
 	"projet-forum/api/utils"
 )
 
-// AuthMiddleware protege une route en exigeant un JWT valide.
+var DB *sql.DB
+
+// Init initialise la connexion de base de données pour le middleware.
+func Init(db *sql.DB) {
+	DB = db
+}
+
+// AuthMiddleware protege une route en exigeant un JWT valide et en verifiant que l'utilisateur n'est pas banni.
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Le token doit etre envoye dans le header Authorization.
@@ -32,6 +40,24 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		if err != nil {
 			helper.WriteError(w, http.StatusUnauthorized, "Token invalide ou expiré")
 			return
+		}
+
+		// On verifie en temps reel si l'utilisateur est banni en base de donnees.
+		if DB != nil {
+			var banned bool
+			err := DB.QueryRow("SELECT banned FROM utilisateurs WHERE id = ?", claims.UserID).Scan(&banned)
+			if err != nil {
+				if err == sql.ErrNoRows {
+					helper.WriteError(w, http.StatusUnauthorized, "Utilisateur introuvable")
+				} else {
+					helper.WriteError(w, http.StatusInternalServerError, "Erreur serveur lors de la vérification de l'utilisateur")
+				}
+				return
+			}
+			if banned {
+				helper.WriteError(w, http.StatusForbidden, "Ce compte a été banni")
+				return
+			}
 		}
 
 		// Les claims sont ajoutes au contexte pour etre reutilises par les handlers suivants.

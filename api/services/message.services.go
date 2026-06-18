@@ -44,7 +44,7 @@ func (s *MessageService) CreateMessage(contenu string, filID, auteurID int) (*mo
 	return msg, nil
 }
 
-func (s *MessageService) GetMessagesByFil(filID, page, limit int, sortBy string) ([]models.Message, error) {
+func (s *MessageService) GetMessagesByFil(filID, page, limit int, sortBy string, currentUserID int) ([]models.Message, error) {
 	if page < 1 {
 		page = 1
 	}
@@ -52,7 +52,25 @@ func (s *MessageService) GetMessagesByFil(filID, page, limit int, sortBy string)
 		limit = 10
 	}
 
-	return s.repo.FindByFilID(filID, page, limit, sortBy)
+	return s.repo.FindByFilID(filID, page, limit, sortBy, currentUserID)
+}
+
+func (s *MessageService) GetTotalPagesForFil(filID, limit int) (int, error) {
+	if limit <= 0 {
+		limit = 10
+	}
+	totalMessages, err := s.repo.CountByFilID(filID)
+	if err != nil {
+		return 0, err
+	}
+	totalPages := totalMessages / limit
+	if totalMessages%limit > 0 {
+		totalPages++
+	}
+	if totalPages == 0 {
+		totalPages = 1
+	}
+	return totalPages, nil
 }
 
 func (s *MessageService) UpdateMessage(id int, contenu string, userID int) error {

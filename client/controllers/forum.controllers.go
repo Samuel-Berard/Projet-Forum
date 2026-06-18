@@ -4,6 +4,7 @@ package controllers
 import (
 	"io"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -53,7 +54,7 @@ type AccueilData struct {
 
 // DisplayAccueil affiche la page d'accueil.
 func (c *ForumControllers) DisplayAccueil(w http.ResponseWriter, r *http.Request) {
-	res, err := c.service.GetFils(1, 10)
+	res, err := c.service.GetFils(1, 10, "", "", 0)
 	var fils []dto.FilDeDiscussion
 	if err == nil && res != nil {
 		fils = res.Fils
@@ -117,6 +118,9 @@ type ForumData struct {
 	NextPage    int
 	Connecte    bool
 	Utilisateur *dto.Utilisateur
+	Erreur      string
+	Search      string
+	SearchType  string
 }
 
 // DisplayForum affiche la liste des fils avec pagination.
@@ -126,8 +130,23 @@ func (c *ForumControllers) DisplayForum(w http.ResponseWriter, r *http.Request) 
 		page = p
 	}
 
+	search := strings.TrimSpace(r.URL.Query().Get("q"))
+	if search == "" {
+		search = strings.TrimSpace(r.URL.Query().Get("recherche"))
+	}
+
+	searchType := strings.TrimSpace(r.URL.Query().Get("type"))
+	if searchType == "" {
+		searchType = "topics"
+	}
+
+	categoryID := 0
+	if cat, err := strconv.Atoi(r.URL.Query().Get("category")); err == nil && cat > 0 {
+		categoryID = cat
+	}
+
 	limit := 20
-	res, err := c.service.GetFils(page, limit)
+	res, err := c.service.GetFils(page, limit, search, searchType, categoryID)
 
 	var fils []dto.FilDeDiscussion
 	totalPages := 1
@@ -156,9 +175,51 @@ func (c *ForumControllers) DisplayForum(w http.ResponseWriter, r *http.Request) 
 		NextPage:    page + 1,
 		Connecte:    estConnecte(r),
 		Utilisateur: c.getConnecteUser(r),
+		Erreur:      r.URL.Query().Get("erreur"),
+		Search:      search,
+		SearchType:  searchType,
 	}
 
 	c.template.RenderTemplate(w, r, "forum", data)
+}
+
+// CreateThread traite la création d'un nouveau sujet (thread) depuis le formulaire.
+func (c *ForumControllers) CreateThread(w http.ResponseWriter, r *http.Request) {
+	token := tokenDuCookie(r)
+	if token == "" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	title := strings.TrimSpace(r.FormValue("title"))
+	if title == "" {
+		http.Redirect(w, r, "/forum?erreur=Le titre ne peut pas être vide.", http.StatusSeeOther)
+		return
+	}
+
+	categoryStr := r.FormValue("category")
+	var categoriesID []int
+	if catID, err := strconv.Atoi(categoryStr); err == nil && catID > 0 {
+		categoriesID = append(categoriesID, catID)
+	} else {
+		categoriesID = append(categoriesID, 1) // catégorie "Général" par défaut
+	}
+
+	// 1. Créer le fil de discussion
+	fil, err := c.service.CreateFil(token, title, categoriesID)
+	if err != nil {
+		http.Redirect(w, r, "/forum?erreur="+err.Error(), http.StatusSeeOther)
+		return
+	}
+
+	// 2. Si un premier message est saisi, on le poste dans le fil
+	messageContent := strings.TrimSpace(r.FormValue("message_topic"))
+	if messageContent != "" {
+		_ = c.service.CreateMessage(token, fil.ID, messageContent)
+	}
+
+	// Rediriger vers le fil de discussion nouvellement créé
+	http.Redirect(w, r, "/threads/"+strconv.Itoa(fil.ID), http.StatusSeeOther)
 }
 
 // LoginData regroupe les données du formulaire de connexion (pour réafficher en cas d'erreur).
@@ -345,25 +406,60 @@ type ThreadData struct {
 	Connecte    bool
 	Erreur      string
 	Utilisateur *dto.Utilisateur
+	Page        int
+	Limit       int
+	Sort        string
+	TotalPages  int
+	Pages       []PageLien
+	HasPrev     bool
+	PrevPage    int
+	HasNext     bool
+	NextPage    int
 }
 
 // renderThread récupère un fil + ses messages et affiche la page (avec un éventuel message d'erreur).
-func (c *ForumControllers) renderThread(w http.ResponseWriter, r *http.Request, id int, erreur string) {
+func (c *ForumControllers) renderThread(w http.ResponseWriter, r *http.Request, id int, page, limit int, sort string, erreur string) {
 	fil, err := c.service.GetFil(id)
 	if err != nil || fil == nil {
 		http.Error(w, "Fil de discussion introuvable", http.StatusNotFound)
 		return
 	}
 
+	var currentUserID int
+	user := c.getConnecteUser(r)
+	if user != nil {
+		currentUserID = user.ID
+	}
+
 	// On récupère les messages ; en cas d'erreur on affiche le fil sans messages.
-	messages, _ := c.service.GetMessages(id)
+	res, err := c.service.GetMessages(id, page, limit, sort, currentUserID)
+	var messages []dto.Message
+	totalPages := 1
+	if err == nil && res != nil {
+		messages = res.Messages
+		totalPages = res.TotalPages
+	}
+
+	var pages []PageLien
+	for i := 1; i <= totalPages; i++ {
+		pages = append(pages, PageLien{Num: i, Courante: i == page})
+	}
 
 	c.template.RenderTemplate(w, r, "thread", ThreadData{
 		Fil:         fil,
 		Messages:    messages,
 		Connecte:    estConnecte(r),
 		Erreur:      erreur,
-		Utilisateur: c.getConnecteUser(r),
+		Utilisateur: user,
+		Page:        page,
+		Limit:       limit,
+		Sort:        sort,
+		TotalPages:  totalPages,
+		Pages:       pages,
+		HasPrev:     page > 1,
+		PrevPage:    page - 1,
+		HasNext:     page < totalPages,
+		NextPage:    page + 1,
 	})
 }
 
@@ -375,7 +471,20 @@ func (c *ForumControllers) DisplayThread(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	c.renderThread(w, r, id, "")
+	page := 1
+	if p, err := strconv.Atoi(r.URL.Query().Get("page")); err == nil && p > 0 {
+		page = p
+	}
+	limit := 10
+	if l, err := strconv.Atoi(r.URL.Query().Get("limit")); err == nil && l > 0 {
+		limit = l
+	}
+	sort := r.URL.Query().Get("sort")
+	if sort == "" {
+		sort = "recent"
+	}
+
+	c.renderThread(w, r, id, page, limit, sort, r.URL.Query().Get("erreur"))
 }
 
 // CreateMessage traite l'envoi du formulaire de réponse dans un fil (action protégée).
@@ -395,13 +504,13 @@ func (c *ForumControllers) CreateMessage(w http.ResponseWriter, r *http.Request)
 
 	contenu := strings.TrimSpace(r.FormValue("contenu"))
 	if contenu == "" {
-		c.renderThread(w, r, id, "Le message ne peut pas être vide.")
+		c.renderThread(w, r, id, 1, 10, "recent", "Le message ne peut pas être vide.")
 		return
 	}
 
 	// On envoie le token à l'API (Authorization: Bearer ...).
 	if err := c.service.CreateMessage(token, id, contenu); err != nil {
-		c.renderThread(w, r, id, err.Error())
+		c.renderThread(w, r, id, 1, 10, "recent", err.Error())
 		return
 	}
 
@@ -523,4 +632,166 @@ func (c *ForumControllers) UpdateAvatarSettings(w http.ResponseWriter, r *http.R
 
 	// 3. Redirection vers la page Paramètres, qui affiche le nouvel avatar.
 	http.Redirect(w, r, "/settings", http.StatusSeeOther)
+}
+
+// DeleteThread supprime un fil de discussion (créateur ou admin).
+func (c *ForumControllers) DeleteThread(w http.ResponseWriter, r *http.Request) {
+	token := tokenDuCookie(r)
+	if token == "" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		http.Error(w, "Identifiant du fil invalide", http.StatusBadRequest)
+		return
+	}
+	if err := c.service.DeleteThread(token, id); err != nil {
+		http.Redirect(w, r, "/threads/"+strconv.Itoa(id)+"?erreur="+url.QueryEscape(err.Error()), http.StatusSeeOther)
+		return
+	}
+	http.Redirect(w, r, "/forum", http.StatusSeeOther)
+}
+
+// EditThread modifie le titre d'un fil (créateur ou admin).
+func (c *ForumControllers) EditThread(w http.ResponseWriter, r *http.Request) {
+	token := tokenDuCookie(r)
+	if token == "" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		http.Error(w, "Identifiant du fil invalide", http.StatusBadRequest)
+		return
+	}
+	titre := strings.TrimSpace(r.FormValue("title"))
+	if titre == "" {
+		http.Redirect(w, r, "/threads/"+strconv.Itoa(id)+"?erreur="+url.QueryEscape("Le titre ne peut pas être vide."), http.StatusSeeOther)
+		return
+	}
+	if err := c.service.UpdateThread(token, id, titre); err != nil {
+		http.Redirect(w, r, "/threads/"+strconv.Itoa(id)+"?erreur="+url.QueryEscape(err.Error()), http.StatusSeeOther)
+		return
+	}
+	http.Redirect(w, r, "/threads/"+strconv.Itoa(id), http.StatusSeeOther)
+}
+
+// DeleteMessage supprime un message (auteur ou admin).
+func (c *ForumControllers) DeleteMessage(w http.ResponseWriter, r *http.Request) {
+	token := tokenDuCookie(r)
+	if token == "" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+	id, err := strconv.Atoi(mux.Vars(r)["id"]) // message id
+	if err != nil {
+		http.Error(w, "Identifiant du message invalide", http.StatusBadRequest)
+		return
+	}
+	filIDStr := r.URL.Query().Get("fil_id")
+	if err := c.service.DeleteMessage(token, id); err != nil {
+		http.Redirect(w, r, "/threads/"+filIDStr+"?erreur="+url.QueryEscape(err.Error()), http.StatusSeeOther)
+		return
+	}
+	http.Redirect(w, r, "/threads/"+filIDStr, http.StatusSeeOther)
+}
+
+// EditMessage modifie un message (auteur ou admin).
+func (c *ForumControllers) EditMessage(w http.ResponseWriter, r *http.Request) {
+	token := tokenDuCookie(r)
+	if token == "" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+	id, err := strconv.Atoi(mux.Vars(r)["id"]) // message id
+	if err != nil {
+		http.Error(w, "Identifiant du message invalide", http.StatusBadRequest)
+		return
+	}
+	contenu := strings.TrimSpace(r.FormValue("contenu"))
+	filIDStr := r.URL.Query().Get("fil_id")
+	if contenu == "" {
+		http.Redirect(w, r, "/threads/"+filIDStr+"?erreur="+url.QueryEscape("Le message ne peut pas être vide."), http.StatusSeeOther)
+		return
+	}
+	if err := c.service.UpdateMessage(token, id, contenu); err != nil {
+		http.Redirect(w, r, "/threads/"+filIDStr+"?erreur="+url.QueryEscape(err.Error()), http.StatusSeeOther)
+		return
+	}
+	http.Redirect(w, r, "/threads/"+filIDStr, http.StatusSeeOther)
+}
+
+// ReactToMessage gère la réaction AJAX (like/dislike).
+func (c *ForumControllers) ReactToMessage(w http.ResponseWriter, r *http.Request) {
+	token := tokenDuCookie(r)
+	if token == "" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(`{"erreur":"Vous devez être connecté pour réagir."}`))
+		return
+	}
+	id, err := strconv.Atoi(mux.Vars(r)["id"]) // message id
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`{"erreur":"Identifiant du message invalide."}`))
+		return
+	}
+	reactionType := r.URL.Query().Get("type")
+	if reactionType != "like" && reactionType != "dislike" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`{"erreur":"Type de réaction invalide."}`))
+		return
+	}
+	if err := c.service.ReactToMessage(token, id, reactionType); err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`{"erreur":"` + err.Error() + `"}`))
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"success":true}`))
+}
+
+// ChangeThreadState change l'état du fil (admin uniquement).
+func (c *ForumControllers) ChangeThreadState(w http.ResponseWriter, r *http.Request) {
+	token := tokenDuCookie(r)
+	if token == "" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		http.Error(w, "Identifiant du fil invalide", http.StatusBadRequest)
+		return
+	}
+	state := r.FormValue("state")
+	if err := c.service.ChangeThreadState(token, id, state); err != nil {
+		http.Redirect(w, r, "/threads/"+strconv.Itoa(id)+"?erreur="+url.QueryEscape(err.Error()), http.StatusSeeOther)
+		return
+	}
+	http.Redirect(w, r, "/threads/"+strconv.Itoa(id), http.StatusSeeOther)
+}
+
+// BanUser bannit un utilisateur (admin uniquement).
+func (c *ForumControllers) BanUser(w http.ResponseWriter, r *http.Request) {
+	token := tokenDuCookie(r)
+	if token == "" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+	userID, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		http.Error(w, "Identifiant de l'utilisateur invalide", http.StatusBadRequest)
+		return
+	}
+	filIDStr := r.URL.Query().Get("fil_id")
+	if err := c.service.BanUser(token, userID); err != nil {
+		http.Redirect(w, r, "/threads/"+filIDStr+"?erreur="+url.QueryEscape(err.Error()), http.StatusSeeOther)
+		return
+	}
+	http.Redirect(w, r, "/threads/"+filIDStr, http.StatusSeeOther)
 }

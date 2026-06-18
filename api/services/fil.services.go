@@ -34,7 +34,7 @@ func (s *FilService) CreateFil(titre string, auteurID int, categoryIDs []int) (*
 	return fil, nil
 }
 
-func (s *FilService) GetFils(page, limit int, search string, categoryID int) ([]models.FilDeDiscussion, error) {
+func (s *FilService) GetFils(page, limit int, search string, searchType string, categoryID int) ([]models.FilDeDiscussion, error) {
 	if page < 1 {
 		page = 1
 	}
@@ -42,14 +42,14 @@ func (s *FilService) GetFils(page, limit int, search string, categoryID int) ([]
 		limit = 10
 	}
 
-	return s.repo.FindAll(page, limit, search, categoryID)
+	return s.repo.FindAll(page, limit, search, searchType, categoryID)
 }
 
-func (s *FilService) GetTotalPages(limit int, search string, categoryID int) (int, error) {
+func (s *FilService) GetTotalPages(limit int, search string, searchType string, categoryID int) (int, error) {
 	if limit <= 0 {
 		limit = 10
 	}
-	totalFils, err := s.repo.CountAll(search, categoryID)
+	totalFils, err := s.repo.CountAll(search, searchType, categoryID)
 	if err != nil {
 		return 0, err
 	}
