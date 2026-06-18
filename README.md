@@ -12,7 +12,7 @@ administrateurs disposent d'un tableau de bord de modération.
 | Nom | Rôle |
 |-----|------|
 | **Clément Belmondo** | Développement |
-| **Samuel Bérard** | Développement |
+| **Samuel Berard** | Développement |
 
 ---
 
