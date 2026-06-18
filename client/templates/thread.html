@@ -1,0 +1,250 @@
+{{define "thread"}}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ .Fil.Titre }} — Forum Gaming</title>
+  <link rel="stylesheet" href="/static/css/theme.css">
+  <link rel="stylesheet" href="/static/css/thread.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+  <header class="thread-top">
+    <div class="container">
+      <a class="logo" href="/">
+        Gaming<b>Forum</b>
+      </a>
+      <nav>
+        <a href="/">Accueil</a>
+        <a href="/forum">Forums</a>
+        {{ if and .Connecte .Utilisateur }}{{ if eq .Utilisateur.Role "admin" }}<a href="/admin">Admin</a>{{ end }}{{ end }}
+        {{ if and .Connecte .Utilisateur }}
+        <a class="nav-profile-link" href="/settings" title="Mon Profil">
+          {{ if .Utilisateur.Avatar }}
+          <img class="nav-avatar" src="{{ .Utilisateur.Avatar }}" alt="Avatar">
+          {{ else }}
+          <span class="nav-avatar-ph">{{ slice .Utilisateur.Username 0 1 }}</span>
+          {{ end }}
+        </a>
+        <a class="btn-secondary" href="/logout">Déconnexion</a>
+        {{ else }}
+        <a class="btn-secondary" href="/login">Connexion</a>
+        <a class="btn-primary" href="/signup">Inscription</a>
+        {{ end }}
+      </nav>
+    </div>
+  </header>
+
+  <main class="container thread">
+    <a class="back" href="/forum">← Retour aux forums</a>
+
+    <h1 class="thread-title">
+      {{ .Fil.Titre }}
+      {{ if eq .Fil.Etat "ferme" }}<span class="badge">Fermé</span>{{ end }}
+    </h1>
+
+    <div class="thread-meta thread-meta-bar">
+      <span>Fil n°{{ .Fil.ID }} · État : <b class="cap">{{ .Fil.Etat }}</b></span>
+
+      {{ if and .Connecte .Utilisateur }}
+      {{ if or (eq .Utilisateur.ID .Fil.AuteurID) (eq .Utilisateur.Role "admin") }}
+      <button class="btn-action-meta" data-action="toggle-thread-title"><i class="fa-solid fa-pen"></i> Modifier le titre</button>
+      <form class="inline-form" action="/threads/{{ .Fil.ID }}/delete" method="post" data-confirm="Voulez-vous vraiment supprimer ce sujet ?">
+        <button class="btn-action-meta text-danger"><i class="fa-solid fa-trash"></i> Supprimer le sujet</button>
+      </form>
+      {{ end }}
+
+      {{ if eq .Utilisateur.Role "admin" }}
+      <form class="state-form" action="/threads/{{ .Fil.ID }}/state" method="post">
+        <label class="state-label">État du fil :</label>
+        <select class="state-select" name="state" data-autosubmit>
+          <option value="ouvert" {{ if eq .Fil.Etat "ouvert" }}selected{{ end }}>Ouvert</option>
+          <option value="ferme" {{ if eq .Fil.Etat "ferme" }}selected{{ end }}>Fermé</option>
+          <option value="archive" {{ if eq .Fil.Etat "archive" }}selected{{ end }}>Archivé</option>
+        </select>
+      </form>
+      {{ end }}
+      {{ end }}
+    </div>
+
+    <!-- Modif du titre (caché par défaut, affiché via la classe .open) -->
+    <div id="edit-thread-title-box" class="edit-thread-box">
+      <form class="edit-form-row" action="/threads/{{ .Fil.ID }}/edit" method="post">
+        <input class="edit-title-input" type="text" name="title" value="{{ .Fil.Titre }}" required>
+        <button class="btn-save" type="submit">Enregistrer</button>
+        <button class="btn-cancel" type="button" data-action="toggle-thread-title">Annuler</button>
+      </form>
+    </div>
+
+    <!-- Sélecteurs de tri et de taille de page (FT-8 & FT-9) -->
+    <div class="thread-controls">
+      <div class="control-sort">
+        <i class="fa-solid fa-filter icon-muted"></i>
+        <span>Trier par :</span>
+        <a class="sort-link {{ if or (eq .Sort "recent") (eq .Sort "") }}active{{ end }}" href="?page=1&limit={{ .Limit }}&sort=recent">Plus récents</a>
+        <a class="sort-link {{ if eq .Sort "popularite" }}active{{ end }}" href="?page=1&limit={{ .Limit }}&sort=popularite">Popularité</a>
+        <a class="sort-link {{ if eq .Sort "chronologique" }}active{{ end }}" href="?page=1&limit={{ .Limit }}&sort=chronologique">Chronologique</a>
+      </div>
+      <div class="control-limit">
+        <i class="fa-solid fa-list-ol icon-muted"></i>
+        <span>Messages par page :</span>
+        <a class="limit-link {{ if eq .Limit 10 }}active{{ end }}" href="?page=1&limit=10&sort={{ .Sort }}">10</a>
+        <a class="limit-link {{ if eq .Limit 20 }}active{{ end }}" href="?page=1&limit=20&sort={{ .Sort }}">20</a>
+        <a class="limit-link {{ if eq .Limit 30 }}active{{ end }}" href="?page=1&limit=30&sort={{ .Sort }}">30</a>
+        <a class="limit-link {{ if eq .Limit 9999 }}active{{ end }}" href="?page=1&limit=9999&sort={{ .Sort }}">Tout</a>
+      </div>
+    </div>
+
+    <section class="messages">
+      {{ if .Messages }}
+      {{ range .Messages }}
+      <article class="msg">
+        <div class="msg-head">
+          <div class="msg-author">
+            {{ if .Auteur }}
+            {{ if .Auteur.Avatar }}
+            <img class="msg-avatar" src="{{ .Auteur.Avatar }}" alt="">
+            {{ else }}
+            <span class="msg-avatar msg-avatar-ph">{{ slice .Auteur.Username 0 1 }}</span>
+            {{ end }}
+            {{ else }}
+            <span class="msg-avatar msg-avatar-ph">?</span>
+            {{ end }}
+            <span class="msg-name">
+              {{ if .Auteur }}{{ .Auteur.Username }}{{ else }}Utilisateur n°{{ .AuteurID }}{{ end }}
+              {{ if .Auteur }}
+              {{ if .Auteur.Banned }}
+              <span class="badge-banned">(Banni)</span>
+              {{ end }}
+              {{ end }}
+            </span>
+
+            <!-- Bouton de bannissement (admin uniquement) -->
+            {{ if $.Connecte }}
+            {{ if $.Utilisateur }}
+            {{ if eq $.Utilisateur.Role "admin" }}
+            {{ if .Auteur }}
+            {{ if not (eq .Auteur.Role "admin") }}
+            {{ if not .Auteur.Banned }}
+            <form class="ban-form" action="/users/{{ .AuteurID }}/ban?fil_id={{ $.Fil.ID }}" method="post" data-confirm="Bannir définitivement cet utilisateur ?">
+              <button class="btn-ban" type="submit"><i class="fa-solid fa-ban"></i> Bannir</button>
+            </form>
+            {{ end }}
+            {{ end }}
+            {{ end }}
+            {{ end }}
+            {{ end }}
+            {{ end }}
+          </div>
+
+          <div class="msg-head-right">
+            <!-- Boutons d'édition/suppression message (auteur ou admin) -->
+            {{ if $.Connecte }}
+            {{ if $.Utilisateur }}
+            {{ if or (eq $.Utilisateur.ID .AuteurID) (eq $.Utilisateur.Role "admin") }}
+            <div class="msg-actions">
+              {{ if eq $.Utilisateur.ID .AuteurID }}
+              <button class="btn-icon" data-action="toggle-edit-msg" data-msg-id="{{ .ID }}"><i class="fa-solid fa-pen"></i></button>
+              {{ end }}
+              <form class="inline-form" action="/messages/{{ .ID }}/delete?fil_id={{ $.Fil.ID }}" method="post" data-confirm="Supprimer ce message définitivement ?">
+                <button class="btn-icon text-danger" type="submit"><i class="fa-solid fa-trash"></i></button>
+              </form>
+            </div>
+            {{ end }}
+            {{ end }}
+            {{ end }}
+
+            <!-- Bloc réactions Like/Dislike (FT-6) -->
+            <div class="msg-reactions">
+              <button class="btn-react like {{ if eq .UserReaction "like" }}active{{ end }}" data-action="react" data-msg-id="{{ .ID }}" data-reaction="like" {{ if not $.Connecte }}disabled title="Connectez-vous pour aimer" {{ end }}>
+                <i class="fa-solid fa-thumbs-up"></i>
+              </button>
+              <span class="react-score" id="score-{{ .ID }}">{{ if gt .ScorePopularite 0 }}+{{ end }}{{ .ScorePopularite }}</span>
+              <button class="btn-react dislike {{ if eq .UserReaction "dislike" }}active{{ end }}" data-action="react" data-msg-id="{{ .ID }}" data-reaction="dislike" {{ if not $.Connecte }}disabled title="Connectez-vous pour désapprouver" {{ end }}>
+                <i class="fa-solid fa-thumbs-down"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p class="msg-body" id="msg-body-{{ .ID }}">{{ .Contenu }}</p>
+
+        <!-- Éditeur de message inline (caché par défaut, affiché via .open) -->
+        {{ if $.Connecte }}
+        {{ if $.Utilisateur }}
+        {{ if eq $.Utilisateur.ID .AuteurID }}
+        <div id="edit-box-{{ .ID }}" class="edit-msg-box">
+          <form class="edit-form-col" action="/messages/{{ .ID }}/edit?fil_id={{ $.Fil.ID }}" method="post">
+            <textarea class="edit-textarea" name="contenu" rows="3" required>{{ .Contenu }}</textarea>
+            <div class="edit-actions">
+              <button class="btn-save-sm" type="submit">Enregistrer</button>
+              <button class="btn-cancel-sm" type="button" data-action="toggle-edit-msg" data-msg-id="{{ .ID }}">Annuler</button>
+            </div>
+          </form>
+        </div>
+        {{ end }}
+        {{ end }}
+        {{ end }}
+      </article>
+      {{ end }}
+
+      <!-- Pagination des messages (FT-9) -->
+      {{ if gt .TotalPages 1 }}
+      <div class="pagination-container">
+        <nav class="pagination-nav">
+          {{ if .HasPrev }}
+          <a class="page-prev" href="?page={{ .PrevPage }}&limit={{ .Limit }}&sort={{ .Sort }}"><i class="fa-solid fa-angle-left"></i></a>
+          {{ else }}
+          <span class="page-prev disabled"><i class="fa-solid fa-angle-left"></i></span>
+          {{ end }}
+
+          {{ range .Pages }}
+          {{ if .Courante }}
+          <span class="page-item current">{{ .Num }}</span>
+          {{ else }}
+          <a class="page-item" href="?page={{ .Num }}&limit={{ $.Limit }}&sort={{ $.Sort }}">{{ .Num }}</a>
+          {{ end }}
+          {{ end }}
+
+          {{ if .HasNext }}
+          <a class="page-next" href="?page={{ .NextPage }}&limit={{ .Limit }}&sort={{ .Sort }}"><i class="fa-solid fa-angle-right"></i></a>
+          {{ else }}
+          <span class="page-next disabled"><i class="fa-solid fa-angle-right"></i></span>
+          {{ end }}
+        </nav>
+      </div>
+      {{ end }}
+
+      {{ else }}
+      <div class="empty">Aucun message dans ce fil pour le moment.</div>
+      {{ end }}
+    </section>
+
+    {{ if .Erreur }}
+    <div class="reply-error">{{ .Erreur }}</div>
+    {{ end }}
+
+    {{ if and .Connecte .Utilisateur }}
+    {{ if eq .Fil.Etat "ouvert" }}
+    <form class="reply-form" action="/threads/{{ .Fil.ID }}/messages" method="post">
+      <textarea name="contenu" rows="4" required placeholder="Écris ta réponse…"></textarea>
+      <button type="submit">Publier</button>
+    </form>
+    {{ else }}
+    <div class="thread-closed">
+      <i class="fa-solid fa-lock"></i> Ce fil de discussion est fermé. Il n'est plus possible d'y répondre.
+    </div>
+    {{ end }}
+    {{ else }}
+    <p class="reply-login"><a href="/login">Connecte-toi</a> pour répondre.</p>
+    {{ end }}
+  </main>
+
+  <script src="/static/js/thread.js"></script>
+</body>
+
+</html>
+{{end}}

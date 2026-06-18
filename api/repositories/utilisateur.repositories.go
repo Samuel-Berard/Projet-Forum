@@ -1,0 +1,95 @@
+package repositories
+
+import (
+	"database/sql"
+	"errors"
+
+	"projet-forum/api/models"
+)
+
+type UtilisateurRepository struct {
+	db *sql.DB
+}
+
+func InitUtilisateurRepository(db *sql.DB) *UtilisateurRepository {
+	return &UtilisateurRepository{db: db}
+}
+
+func (r *UtilisateurRepository) Create(u *models.Utilisateur) error {
+	query := `INSERT INTO utilisateurs (username, email, password_hash, avatar) VALUES (?, ?, ?, ?)`
+	result, err := r.db.Exec(query, u.Username, u.Email, u.PasswordHash, u.Avatar)
+	if err != nil {
+		return err
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		return err
+	}
+	u.ID = int(id)
+	return nil
+}
+
+func (r *UtilisateurRepository) FindByUsernameOrEmail(identifiant string) (*models.Utilisateur, error) {
+	query := `SELECT id, username, email, password_hash, role, banned, created_at FROM utilisateurs WHERE username = ? OR email = ?`
+	row := r.db.QueryRow(query, identifiant, identifiant)
+
+	u := &models.Utilisateur{}
+	var createdAt []uint8
+	err := row.Scan(&u.ID, &u.Username, &u.Email, &u.PasswordHash, &u.Role, &u.Banned, &createdAt)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.New("utilisateur introuvable")
+		}
+		return nil, err
+	}
+
+	return u, nil
+}
+
+func (r *UtilisateurRepository) FindByID(id int) (*models.Utilisateur, error) {
+	query := `SELECT id, username, email, password_hash, role, banned, avatar FROM utilisateurs WHERE id = ?`
+	row := r.db.QueryRow(query, id)
+
+	u := &models.Utilisateur{}
+	err := row.Scan(&u.ID, &u.Username, &u.Email, &u.PasswordHash, &u.Role, &u.Banned, &u.Avatar)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.New("utilisateur introuvable")
+		}
+		return nil, err
+	}
+	return u, nil
+}
+
+// FindAll retourne tous les utilisateurs (sans le mot de passe), pour le tableau de bord admin.
+func (r *UtilisateurRepository) FindAll() ([]models.Utilisateur, error) {
+	query := `SELECT id, username, email, role, banned, avatar FROM utilisateurs ORDER BY id ASC`
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var utilisateurs []models.Utilisateur
+	for rows.Next() {
+		var u models.Utilisateur
+		if err := rows.Scan(&u.ID, &u.Username, &u.Email, &u.Role, &u.Banned, &u.Avatar); err != nil {
+			return nil, err
+		}
+		utilisateurs = append(utilisateurs, u)
+	}
+	return utilisateurs, nil
+}
+
+func (r *UtilisateurRepository) BanUser(id int) error {
+	query := `UPDATE utilisateurs SET banned = TRUE WHERE id = ?`
+	_, err := r.db.Exec(query, id)
+	return err
+}
+
+func (r *UtilisateurRepository) UpdateAvatar(id int, avatar string) error {
+	query := `UPDATE utilisateurs SET avatar = ? WHERE id = ?`
+	_, err := r.db.Exec(query, avatar, id)
+	return err
+}

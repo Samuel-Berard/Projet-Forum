@@ -1,0 +1,121 @@
+{{define "admin"}}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration — GamingForum</title>
+  <link rel="stylesheet" href="/static/css/theme.css">
+  <link rel="stylesheet" href="/static/css/admin.css">
+
+</head>
+
+<body>
+  <div class="admin-wrap">
+    <p class="admin-nav">
+      <a href="/">Accueil</a>
+      <a href="/forum">Forums</a>
+      <a href="/logout">Déconnexion</a>
+    </p>
+
+    <h1>Tableau de bord d'administration</h1>
+    <p>Connecté en tant que <b>{{ .Utilisateur.Username }}</b> (administrateur).</p>
+
+    {{ if .Erreur }}
+    <p class="admin-error">{{ .Erreur }}</p>
+    {{ end }}
+
+    
+    <h2>Utilisateurs</h2>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom d'utilisateur</th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Statut</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ if .Users }}
+        {{ range .Users }}
+        <tr>
+          <td>{{ .ID }}</td>
+          <td>{{ .Username }}</td>
+          <td>{{ .Email }}</td>
+          <td>{{ .Role }}</td>
+          <td>{{ if .Banned }}Banni{{ else }}Actif{{ end }}</td>
+          <td>
+            {{ if eq .Role "admin" }}
+            —
+            {{ else if .Banned }}
+            Déjà banni
+            {{ else }}
+            <form action="/users/{{ .ID }}/ban?redirect=/admin" method="post">
+              <button type="submit">Bannir</button>
+            </form>
+            {{ end }}
+          </td>
+        </tr>
+        {{ end }}
+        {{ else }}
+        <tr>
+          <td colspan="6">Aucun utilisateur.</td>
+        </tr>
+        {{ end }}
+      </tbody>
+    </table>
+
+   
+    <h2>Fils de discussion</h2>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Titre</th>
+          <th>Auteur</th>
+          <th>État</th>
+          <th>Changer l'état</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ if .Fils }}
+        {{ range .Fils }}
+        <tr>
+          <td>{{ .ID }}</td>
+          <td><a href="/threads/{{ .ID }}">{{ .Titre }}</a></td>
+          <td>{{ if .Auteur }}{{ .Auteur.Username }}{{ else }}Inconnu{{ end }}</td>
+          <td>{{ .Etat }}</td>
+          <td>
+            <form action="/threads/{{ .ID }}/state?redirect=/admin" method="post">
+              <select name="state">
+                <option value="ouvert" {{ if eq .Etat "ouvert" }}selected{{ end }}>Ouvert</option>
+                <option value="ferme" {{ if eq .Etat "ferme" }}selected{{ end }}>Fermé</option>
+                <option value="archive" {{ if eq .Etat "archive" }}selected{{ end }}>Archivé</option>
+              </select>
+              <button type="submit">Appliquer</button>
+            </form>
+          </td>
+          <td>
+            <form action="/threads/{{ .ID }}/delete?redirect=/admin" method="post">
+              <button type="submit">Supprimer</button>
+            </form>
+          </td>
+        </tr>
+        {{ end }}
+        {{ else }}
+        <tr>
+          <td colspan="6">Aucun fil de discussion.</td>
+        </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>
+{{end}}

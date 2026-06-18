@@ -1,0 +1,220 @@
+{{define "index"}}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GamingForum — Communauté jeux vidéo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/static/css/theme.css">
+  <link rel="stylesheet" href="/static/css/index.css">
+</head>
+
+<body>
+
+  <header class="header-wrapper">
+    <div class="container">
+      <div class="header-bar">
+        <a class="logo" href="/">
+          <img src="/static/img/logo.png" alt="GamingForum" class="logo-img">
+          Gaming<b>Forum</b>
+        </a>
+        <nav class="nav-menu">
+          <a href="/" class="active">Accueil</a>
+          <a href="/forum">Forums</a>
+        </nav>
+        <div class="header-actions">
+          {{ if and .Connecte .Utilisateur }}
+          <a class="nav-profile-link" href="/settings" title="Mon Profil">
+            {{ if .Utilisateur.Avatar }}
+            <img class="nav-avatar" src="{{ .Utilisateur.Avatar }}" alt="Avatar">
+            {{ else }}
+            <span class="nav-avatar-ph">{{ slice .Utilisateur.Username 0 1 }}</span>
+            {{ end }}
+          </a>
+          <a class="btn-secondary" href="/logout">Déconnexion</a>
+          {{ else }}
+          <a class="btn-secondary" href="/login">Connexion</a>
+          <a class="btn-primary" href="/signup">Inscription</a>
+          {{ end }}
+        </div>
+      </div>
+      <div class="categories-bar">
+        <a href="#" class="active">PC</a>
+        <a href="#">PS5</a>
+        <a href="#">Xbox Series</a>
+        <a href="#">Nintendo Switch</a>
+        <a href="#">iOS</a>
+        <a href="#">Android</a>
+        <a href="#">Actus</a>
+        <a href="#">Guides</a>
+        <a href="#">Rumeurs</a>
+        <a href="#">FPS</a>
+        <a href="#">RPG</a>
+        <a href="#">Indés</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">COMMUNAUTÉ GAMING</div>
+        <h1>Partage ta passion du jeu vidéo.</h1>
+        <p class="hero-description">Rejoins une communauté de passionnés : débats, guides, entraide et actualités sur
+          vos jeux préférés.</p>
+        <form class="hero-search" action="/forum" method="get">
+          <input type="text" name="recherche" placeholder="Rechercher un jeu, un guide, un membre…">
+          <button type="submit">Rechercher</button>
+        </form>
+      </div>
+      <div class="hero-featured">
+        <a class="featured-topic topic-cover bg-cover img-gta6" href="/threads/6">
+          <div class="topic-overlay"></div>
+          <span class="tag">TOPIC DU MOMENT</span>
+          <h3>GTA 6 : vos attentes après la dernière bande-annonce</h3>
+          <div class="topic-meta">dans <b>Discussions Générales</b> · 1 428 réponses</div>
+        </a>
+      </div>
+    </section>
+
+    <div class="section-header">
+      <h2>Top forums de jeux</h2>
+      <a class="link" href="/forum">
+        Voir le classement
+        <span>→</span>
+      </a>
+    </div>
+    <div class="bento-grid">
+      {{ if .CartesForum }}
+      {{ range .CartesForum }}
+      <a class="bento-card{{ if .EnAvant }} featured{{ end }}" href="/threads/{{ .ID }}">
+        <div class="card-cover placeholder bg-cover cover-{{ .Rang }}"></div>
+        <div class="card-overlay"></div>
+        <span class="card-rank">{{ .Rang }}</span>
+        <div class="card-body">
+          <h3>{{ .Titre }}</h3>
+          <div class="card-meta"><span class="status-dot"></span> {{ .Etat }}</div>
+        </div>
+      </a>
+      {{ end }}
+      {{ else }}
+      <div class="empty">Aucun forum pour le moment.</div>
+      {{ end }}
+    </div>
+
+    <div class="section-header">
+      <h2>Le fil de la commu'</h2>
+      <a class="link" href="/forum">
+        Tous les topics
+        <span>→</span>
+      </a>
+    </div>
+    <div class="split-layout">
+      <div class="threads-card">
+        {{ if .TopForums }}
+        {{ range .TopForums }}
+        <a class="thread-row" href="/threads/{{ .ID }}">
+          {{ if and .Auteur .Auteur.Avatar }}
+          <img class="thread-avatar" src="{{ .Auteur.Avatar }}" alt="Avatar">
+          {{ else }}
+          <div class="thread-avatar placeholder bg-cover img-logo"></div>
+          {{ end }}
+          <div class="thread-details">
+            <div class="thread-title">
+              {{ if eq .Etat "ferme" }}<span class="tag-closed">FERMÉ</span>{{ end }}
+              {{ .Titre }}
+            </div>
+            <div class="thread-meta">dans <b>Forums</b></div>
+          </div>
+        </a>
+        {{ end }}
+        {{ else }}
+        <div class="empty">Aucun forum pour le moment.</div>
+        {{ end }}
+      </div>
+      <div class="news-card">
+        {{ if .CartesActu }}
+        {{ range .CartesActu }}
+        {{ if .EnAvant }}
+        <a class="featured-news" href="/threads/{{ .ID }}">
+          <div class="news-image placeholder bg-cover img-news-featured"></div>
+          <div class="news-body">
+            <div class="news-category">À la une</div>
+            <h4>{{ .Titre }}</h4>
+          </div>
+        </a>
+        {{ else }}
+        <a class="news-item" href="/threads/{{ .ID }}">
+          <div class="news-thumbnail placeholder bg-cover img-news-item"></div>
+          <div class="news-body">
+            <h5>{{ .Titre }}</h5>
+            <div class="news-meta">actualité</div>
+          </div>
+        </a>
+        {{ end }}
+        {{ end }}
+        {{ else }}
+        <div class="empty">Aucune actualité pour le moment.</div>
+        {{ end }}
+      </div>
+    </div>
+
+    <div class="section-header">
+      <h2>Nouveautés & sorties</h2>
+      <a class="link" href="#">
+        Calendrier
+        <span>→</span>
+      </a>
+    </div>
+    <div class="releases-grid">
+      <article class="release-card">
+        <div class="release-cover placeholder bg-cover img-mh-wilds"></div>
+        <div class="release-body">
+          <div class="date">18 FÉV. 2025</div>
+          <h3>Monster Hunter Wilds</h3>
+          <div class="platforms">PC · PS5 · Xbox Series</div>
+        </div>
+      </article>
+      <article class="release-card">
+        <div class="release-cover placeholder bg-cover img-gta6"></div>
+        <div class="release-body">
+          <div class="date">AUTOMNE 2025</div>
+          <h3>Grand Theft Auto VI</h3>
+          <div class="platforms">PS5 · Xbox Series</div>
+        </div>
+      </article>
+      <article class="release-card">
+        <div class="release-cover placeholder bg-cover img-metroid"></div>
+        <div class="release-body">
+          <div class="date">COURANT 2025</div>
+          <h3>Metroid Prime 4: Beyond</h3>
+          <div class="platforms">Nintendo Switch</div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-container">
+      <a class="logo" href="/">
+        <img src="/static/img/logo.png" alt="GamingForum" class="logo-img">
+        Gaming<b>Forum</b>
+      </a>
+      <div class="footer-links">
+        <a href="#">À propos</a>
+        <a href="#">Règles</a>
+        <a href="#">Aide</a>
+        <a href="#">Contact</a>
+        <a href="#">Mentions légales</a>
+      </div>
+      <div class="footer-copyright">© 2026 GamingForum — Espace communautaire indépendant.</div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
+{{end}}

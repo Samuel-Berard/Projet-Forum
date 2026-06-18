@@ -1,0 +1,91 @@
+/* upload.css — page de démonstration d'upload d'image.
+   Couleurs, police et reset viennent de theme.css. */
+
+.upload-wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.back {
+  display: inline-block;
+  color: var(--accent-ink);
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.back:hover {
+  text-decoration: underline;
+}
+
+.upload-wrap h1 {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 8px 0 24px;
+}
+
+.upload-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px;
+}
+
+.upload-form input[type="file"] {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+}
+
+.upload-form button {
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.upload-form button:hover {
+  background: var(--accent);
+}
+
+.upload-error {
+  margin-top: 20px;
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.upload-result {
+  margin-top: 28px;
+}
+
+.upload-result p {
+  font-size: 14px;
+  color: var(--ink-2);
+  word-break: break-all;
+}
+
+.upload-result a {
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.upload-result img {
+  margin-top: 16px;
+  max-width: 100%;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+}
